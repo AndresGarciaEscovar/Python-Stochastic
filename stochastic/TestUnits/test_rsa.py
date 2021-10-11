@@ -18,6 +18,100 @@ from stochastic.RSA.rsa import RSA
 
 class TestRSA(unittest.TestCase):
 
+    def test_can_adsorb(self):
+        """ Checks the function that determines whether a particle can be
+            adsorbed is valid.
+        """
+
+        # ----------------------------------------------------------------------
+        # Get the simulation.
+        # ----------------------------------------------------------------------
+
+        # Define the length.
+        length = 50
+
+        # Define the maximum time.
+        maximum_time = 0.15
+
+        # Create a simulation; the seed doesn't matter.
+        simulation = RSA(length=length, maximum_time=maximum_time)
+
+        # ----------------------------------------------------------------------
+        # With an empty lattice, it must be possible to adsorb anywhere.
+        # ----------------------------------------------------------------------
+
+        # Test every site.
+        for i in range(simulation.length):
+            self.assertTrue(simulation._get_can_adsorb(i))
+
+        # ----------------------------------------------------------------------
+        # Set a particle in a site.
+        # ----------------------------------------------------------------------
+
+        # Set the site.
+        site = 34
+
+        # Set a particle in the site.
+        simulation.lattice[site] = RSA.OCCUPIED
+
+        # Test every site.
+        for i in range(simulation.length):
+            # Particles cannot be adsorbed in these sites.
+            if i == site - 1 or i == site or i == site + 1:
+                self.assertFalse(simulation._get_can_adsorb(i))
+                continue
+
+            # Otherwise they can be adsorbed.
+            self.assertTrue(simulation._get_can_adsorb(i))
+
+        # Remember to empty the site.
+        simulation.lattice[site] = RSA.EMPTY
+
+        # ----------------------------------------------------------------------
+        # Set a particle at the origin a site.
+        # ----------------------------------------------------------------------
+
+        # Set the site.
+        site = 0
+
+        # Set a particle in the site.
+        simulation.lattice[site] = RSA.OCCUPIED
+
+        # Test every site.
+        for i in range(simulation.length):
+            # Particles cannot be adsorbed in these sites.
+            if i == simulation._fix_index(site - 1) or i == simulation._fix_index(site) or i == simulation._fix_index(site + 1):
+                self.assertFalse(simulation._get_can_adsorb(i))
+
+                continue
+
+            # Otherwise they can be adsorbed.
+            self.assertTrue(simulation._get_can_adsorb(i))
+
+        # Set a particle in the site.
+        simulation.lattice[site] = RSA.EMPTY
+
+        # ----------------------------------------------------------------------
+        # Set a particle at the last site.
+        # ----------------------------------------------------------------------
+
+        # Set the site.
+        site = -1
+
+        # Set a particle in the site.
+        simulation.lattice[site] = RSA.OCCUPIED
+
+        # Test every site.
+        for i in range(simulation.length):
+            # Particles cannot be adsorbed in these sites.
+            if i == simulation._fix_index(site - 1) or i == simulation._fix_index(site) or i == simulation._fix_index(site + 1):
+                self.assertFalse(simulation._get_can_adsorb(i))
+
+                continue
+
+            # Otherwise they can be adsorbed.
+            self.assertTrue(simulation._get_can_adsorb(i))
+
     def test_count_doublets(self):
         """ Tests that counting empty triplets is valid.
         """

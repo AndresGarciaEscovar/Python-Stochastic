@@ -6,9 +6,9 @@
 # Imports.
 # ------------------------------------------------------------------------------
 
-# Module to get random numbers.
+# Imports: General.
+import numpy as np
 import random
-
 
 # ------------------------------------------------------------------------------
 # Classes
@@ -18,12 +18,16 @@ import random
 class RSA:
     """ Class to simulate random sequential adsorption with nearest neighbor
         exclusion for a periodic one-dimensional lattice.
+
         - self.attemps: An integer that represents the number of attempts at
           adsorbing a particle.
+
         - self.attempts_successful: An integer that represents the number of
           successful attempts at adsorbing a particle.
+
         - self.lattice: A list that represents the lattice where the particles
           live.
+
         - self.length: A positive integer that represents the length of the
           lattice.
     """
@@ -45,6 +49,7 @@ class RSA:
     @property
     def attempts(self) -> int:
         """ Returns the number of attempts to place a particle in the lattice.
+
             :return: The number of attempts to place a particle in the lattice.
         """
         return self.__attempts
@@ -52,6 +57,7 @@ class RSA:
     @attempts.setter
     def attempts(self, attempts: int):
         """ Sets the number of attempts.
+
             :param attempts: The number of attempts.
         """
 
@@ -73,6 +79,7 @@ class RSA:
     def attempts_successful(self) -> int:
         """ Returns the number of successful attempts to place a particle in the
             lattice.
+
             :return: The number of successful attempts to place a particle in
              the lattice.
         """
@@ -81,6 +88,7 @@ class RSA:
     @attempts_successful.setter
     def attempts_successful(self, attempts_successful: int):
         """ Sets the number of successful attempts.
+
             :param attempts_successful: The number of successful attempts.
         """
 
@@ -101,6 +109,7 @@ class RSA:
     @property
     def generator(self) -> type(random.randint):
         """ Returns the seeded random number generator.
+
             :return: The seeded random number generator.
         """
         return self.__generator
@@ -108,6 +117,7 @@ class RSA:
     @generator.setter
     def generator(self, seed: int):
         """ Sets the random number generator.
+
             :param seed: To be used to get the generator.
         """
 
@@ -126,13 +136,14 @@ class RSA:
     def generator(self):
         """ Deletes the parameter.
         """
-        del self.__attempts_successful
+        del self.__generator
 
     # --------------------------------------------------------------------------
 
     @property
     def lattice(self) -> list:
         """ Returns the list that represents the lattice.
+
             :return: The list that represents the lattice.
         """
         return self.__lattice
@@ -140,6 +151,7 @@ class RSA:
     @lattice.setter
     def lattice(self, length: int):
         """ Creates the lattice. Only sets the lattice once.
+
             :param length: The length of the lattice. A positive integer number.
         """
         try:
@@ -168,6 +180,7 @@ class RSA:
     @property
     def length(self) -> int:
         """ Returns the length of the lattice.
+
             :return: The length of the lattice.
         """
         return self.__length
@@ -175,6 +188,7 @@ class RSA:
     @length.setter
     def length(self, length: int):
         """ Sets the length of the lattice. Only sets the length once.
+
             :param length: The length of the lattice. A positive integer number.
         """
         try:
@@ -203,6 +217,7 @@ class RSA:
     @property
     def maximum_time(self) -> float:
         """ Returns the maximum simulation time.
+
             :return: The maximum simulation time.
         """
         return self.__maximum_time
@@ -211,6 +226,7 @@ class RSA:
     def maximum_time(self, maximum_time: float):
         """ Sets the maximum simulation time. If the provided time is negative
             it will be turned into a positive number. Only set once.
+
             :param maximum_time: The maximum simulation time; a positive number.
         """
         try:
@@ -227,11 +243,45 @@ class RSA:
         """
         del self.__maximum_time
 
+        # --------------------------------------------------------------------------
+
+    # --------------------------------------------------------------------------
+
+    @property
+    def repetitions(self) -> int:
+        """ Returns the number of times that the simulation must be averaged to
+            get statistically significant results.
+
+            :return: The number of times that the simulation must be averaged to
+             get statistically significant results.
+        """
+        return self.__repetitions
+
+    @repetitions.setter
+    def repetitions(self, repetitions: int):
+        """ Sets the number of times that the simulation must be averaged to get
+            statistically significant results.
+
+            :param repetitions: The number of times that the simulation must be
+             averaged to get statistically significant results. If the number is
+             negative, the absolute value will be taken.
+        """
+
+        # Set the number of repetitions.
+        self.__repetitions = int(abs(repetitions))
+
+    @repetitions.deleter
+    def repetitions(self):
+        """ Deletes the parameter.
+        """
+        del self.__repetitions
+
     # --------------------------------------------------------------------------
 
     @property
     def seed(self) -> int:
         """ Returns the seed used in the random number generator.
+
             :return: The seed used in the random number generator.
         """
         return self.__seed
@@ -239,6 +289,7 @@ class RSA:
     @seed.setter
     def seed(self, seed: int):
         """ Sets the seed used in the random number generator.
+
             :param seed: The seed to be used in the random number generator.
         """
         try:
@@ -255,71 +306,203 @@ class RSA:
         """
         del self.__seed
 
+    # --------------------------------------------------------------------------
+
+    @property
+    def statistics_table(self) -> list:
+        """ Returns the statistics table.
+
+            :return: The statistics table.
+        """
+        return self.__statistics_table
+
+    @statistics_table.setter
+    def statistics_table(self, _):
+        """ Initializes the statistics table to an empty list. Can only be
+            manipulated, not changed.
+        """
+        # Initialize to an empty array.
+        self.__statistics_table = []
+
+    @statistics_table.deleter
+    def statistics_table(self):
+        """ Deletes the parameter.
+        """
+        del self.__statistics_table
+
+    # --------------------------------------------------------------------------
+
+    @property
+    def tolerance(self) -> float:
+        """ Returns the tolerance to compare floating point numbers.
+
+            :return: The tolerance to compare floating point numbers.
+        """
+        return self.__tolerance
+
+    @tolerance.setter
+    def tolerance(self, tolerance: float):
+        """ Sets the tolerance to compare floating point numbers.
+        """
+        # Set the tolerance to a positive number.
+        self.__tolerance = abs(float(tolerance))
+
+    @tolerance.deleter
+    def tolerance(self):
+        """ Deletes the parameter.
+        """
+        del self.__tolerance
+
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     # Public Interface.
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-    def run_simulation(self, simulation_number: int):
-        """ Runs a single simulation.
-            :param simulation_number: The identification of the simulation; must
-             be zero or a positive number.
+    # --------------------------------------------------------------------------
+    # Plot Results.
+    # --------------------------------------------------------------------------
+
+    def print_results(self, file_path: str):
+        """ Saves the results, with the information, to the given file.
+
+            :param file_path: The string with the full path of where the file
+             with the information must be stored.
         """
 
         # ----------------------------------------------------------------------
-        # Auxiliary functions.
+        # Auxiliary variables.
         # ----------------------------------------------------------------------
 
-        def validate_parameters(simulation_number0: int):
-            """ Validates that the simulation number is a positive integer.
-                :param simulation_number0: The identification of the simulation;
-                 must be zero or a positive number.
+        def get_colum_widths(header0, statistics_table0):
+            """ Gets the width of all the columns for it to be properly
+                formatted.
+
+                :param header0: The header titles.
+
+                :param statistics_table0: The table of statistics.
+
+                :return: The values with the widths of the columns in the proper
+                 format.
             """
 
-            # Check it is an integer.
-            if not isinstance(simulation_number0, (int,)):
-                raise TypeError("The simulation number must be an integer.")
+            # Get an array with the column widths of the header strings.
+            columns_width0 = [max(len(column0), 10) for column0 in header0]
 
-            # Check it is an integer.
-            elif not simulation_number0 >= 0:
-                raise ValueError("The simulation number must be a zero or"
-                                 "positive number.")
+            # Get each statistic.
+            for statistic0 in statistics_table0:
+                # Get the maximum column width with the proper formatting.
+                for i0, entry in enumerate(statistic0):
+                    # The first entry if formatted differently.
+                    if i0 > 0:
+                        # At most 10 significant figures.
+                        columns_width0[i0] = max(columns_width0[i0], len(f"{statistic0[i0]:0.10f}"))\
+
+                        continue
+
+                    # At most three significant figures.
+                    columns_width0[i0] = max(columns_width0[i0], len(f"{statistic0[i0]:0.3f}"))
+
+            return columns_width0
 
         # ----------------------------------------------------------------------
         # Implementation.
         # ----------------------------------------------------------------------
 
-        # Validate the parameters.
-        validate_parameters(simulation_number)
+        # Auxiliary variables.
+        h_string = []
+
+        # Set the table preheader.
+        preheader = ",".join([f"seed={self.seed}", f"repetitions(n)={self.repetitions}",
+                              f"maximum time={self.maximum_time}", f"length={self.length}"
+                              ])
+
+        # Set the table header.
+        header = ["attemps/n", "successes/n", "singlets/n", "doublets/n", "triplets/n"]
+
+        # Get the column widths.
+        colum_widths = get_colum_widths(header, self.statistics_table)
+
+        # Open the file and write it.
+        with open(file_path, "w") as fl:
+            # Write the pre-header string.
+            fl.write(preheader + "\n")
+
+            # Format the header string.
+            for i, value in enumerate(colum_widths):
+                # Get each formatted entry
+                h_string.append(f"{header[i]:<{value + 2}}")
+
+            # Write the header string.
+            fl.write(",".join(h_string) + "\n")
+
+            # Write the statistics.
+            for statistic in self.statistics_table:
+                # Declare an empty array.
+                h_string = []
+                # Format the header string.
+                for i, value in enumerate(colum_widths):
+                    # Get each formatted entry
+                    h_string.append(f"{statistic[i]:<0.{value}f}")
+
+                # Write the statistic string.
+                fl.write(",".join(h_string) + "\n")
+
+
+
+    # --------------------------------------------------------------------------
+    # Run Simulation Methods.
+    # --------------------------------------------------------------------------
+
+    def run_simulation(self):
+        """ Runs the simulation the number of specified times by the repetition
+            parameter.
+        """
 
         # ----------------------------------------------------------------------
-        # Set the initial values.
+        # Auxiliary variables.
         # ----------------------------------------------------------------------
 
-        # Reset the number of attempts.
-        self.attempts = 0
+        def run_single_simulation():
+            """ Runs a single simulation.
+            """
 
-        # Reset the number of successful attempts.
-        self.attempts_successful = 0
+            # ----------------------------------------------------------------------
+            # Set the initial values.
+            # ----------------------------------------------------------------------
 
-        # Reset the lattice particles.
-        for i in range(self.length):
-            self.lattice[i] = RSA.EMPTY
+            # Reset the simulation variables.
+            self._reset_simulation_variables()
 
-        # Initialize the elapsed time.
-        elapsed_time = 0
+            # Initialize the elapsed time.
+            elapsed_time = 0
+
+            # ----------------------------------------------------------------------
+            # Run the simulation.
+            # ----------------------------------------------------------------------
+
+            while elapsed_time < self.maximum_time:
+                # Try to adsorb a particle.
+                self._adsorb()
+
+                # Always try to record the statistics.
+                self._record_statistics()
+
+                # Get the elapsed time.
+                elapsed_time = self.attempts / self.length
 
         # ----------------------------------------------------------------------
-        # Run the simulation.
+        # Implementation.
         # ----------------------------------------------------------------------
 
-        while elapsed_time < self.maximum_time:
-            # Try to adsorb a particle.
-            self._adsorb()
+        # Always empty the statistics array.
+        self.statistics_table = None
 
-            # Get the elapsed time.
-            elapsed_time = self.attempts / self.length
+        # For the requested number of times.
+        for _ in range(self.repetitions):
+            # Run a single simulation.
+            run_single_simulation()
 
-            print(f"{elapsed_time:1.5f}")
+        # Normalize the statistics.
+        self._record_statistics(self.repetitions)
 
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     # Private Interface.
@@ -349,6 +532,24 @@ class RSA:
     # --------------------------------------------------------------------------
     # Get Methods.
     # --------------------------------------------------------------------------
+
+    def _get_almost_equal(self, number0: float, number1: float):
+        """ Determines if two numbers are equal within the tolerance limit.
+
+            :param number0: The base number for comparison.
+
+            :param number1: The other number for comparison.
+
+            :return: True if the numbers are equal within the given tolerance.
+             False, otherwise.
+        """
+
+        # If the first number is zero.
+        if number0 == 0.0:
+            return abs(number1) <= self.tolerance
+
+        # Otherwise.
+        return abs((number0 - number1)/ number1) <= self.tolerance
 
     def _get_can_adsorb(self, site: int) -> bool:
         """ Determines if the given site can adsorb a particle.
@@ -474,6 +675,116 @@ class RSA:
             # Add to the successful adsorption counter.
             self.attempts_successful += 1
 
+    def _record_statistics(self, number_simulations: int = None):
+        """ Records the statistics.
+
+            :param number_simulations: The number of simulationms with
+             which to take the average.
+        """
+
+        # ----------------------------------------------------------------------
+        # Auxiliary functions.
+        # ----------------------------------------------------------------------
+
+        def normalize_results(number_simulations0: int):
+            """ Averages the final results with the number of simulations.
+
+                :param number_simulations0: The number of simulationms with
+                 which to take the average.
+            """
+
+            # For all the entries.
+            for i, _ in enumerate(self.statistics_table):
+                # Divide the number of successful attempts by the number of simulations.
+                self.statistics_table[i][1] /= number_simulations0
+
+                # Divide the number of remaining singlets by the number of simulations.
+                self.statistics_table[i][2] /= number_simulations0
+
+                # Divide the number of remaining doublets by the number of simulations.
+                self.statistics_table[i][3] /= number_simulations0
+
+                # Divide the number of remaining triplets by the number of simulations.
+                self.statistics_table[i][4] /= number_simulations0
+
+        # ----------------------------------------------------------------------
+        # Implementation.
+        # ----------------------------------------------------------------------
+
+        # If the normalization is requested.
+        if number_simulations is not None:
+            # Normalize the results.
+            normalize_results(number_simulations)
+
+            return
+
+        # Only take statistics so often.
+        if not (10 * self.attempts) % self.length == 0:
+            return
+
+        # ----------------------------------------------------------------------
+        # Set the proper variables.
+        # ----------------------------------------------------------------------
+
+        # Get the elapsed time.
+        elapsed_time = self.attempts / self.length
+
+        # Successful Attempts.
+        successful = self.attempts_successful / self.length
+
+        # Get the number of empty singlets.
+        singlets = self._get_empty_singlets() / self.length
+
+        # Get the number of doublets.
+        doublets = self._get_empty_doublets() / self.length
+
+        # Get the number of triplets.
+        triplets = self._get_empty_triplets() / self.length
+
+        # Go through all the entries.
+        for i, statistic in enumerate(self.statistics_table):
+            # If the time already exists, add it to the simulation.
+            if self._get_almost_equal(elapsed_time, statistic[0]):
+                # Add to the successful attempts.
+                self.statistics_table[i][1] += successful
+
+                # Add to the singlets.
+                self.statistics_table[i][2] += singlets
+
+                # Add to the doublets.
+                self.statistics_table[i][3] += doublets
+
+                # Add to the triplets.
+                self.statistics_table[i][4] += triplets
+
+                return
+
+        # Add an entry.
+        self.statistics_table.append([elapsed_time, successful, singlets, doublets, triplets])
+
+    # --------------------------------------------------------------------------
+    # Reset Methods.
+    # --------------------------------------------------------------------------
+
+    def _reset_simulation_variables(self):
+        """ Resets the variables for a single simulation to their initial state.
+        """
+
+        # Reset the lattice.
+        for i in range(self.length):
+            # Set all the particles to empty.
+            self.lattice[i] = RSA.EMPTY
+
+        # ----------------------------------------------------------------------
+        # Reset the counters.
+        # ----------------------------------------------------------------------
+
+        # The attempts counter.
+        self.attempts = 0
+
+        # The successful attempts counter.
+        self.attempts_successful = 0
+
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     # Constructor and Dunder Methods.
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -482,12 +793,15 @@ class RSA:
     # Constructor.
     # --------------------------------------------------------------------------
 
-    def __init__(self, length: int, maximum_time: float, seed: int = None):
+    def __init__(self, length: int, maximum_time: float, repetitions: int = 1000, seed: int = None):
         """ Initializes the simulation parameters.
 
             :param length: The number of cells the lattice must have.
 
             :param maximum_time: The maximum time the simulation will run for.
+
+            :param repetitions: The number of times over which to average the
+             simulations.
 
             :param seed: The seed to be used in the random number generator;
              None, by default.
@@ -503,7 +817,11 @@ class RSA:
         # Set the number of successful attempts counter.
         self.attempts_successful = 0
 
+        # Set the maximum simulation time.
         self.maximum_time = maximum_time
+
+        # Set the number of times the simulation must be performed.
+        self.repetitions = repetitions
 
         # ----------------------------------------------------------------------
         # Lattice parameters.
@@ -524,6 +842,16 @@ class RSA:
 
         # Initialize the random number generator.
         self.generator = seed
+
+        # ----------------------------------------------------------------------
+        # Other simulation parameters.
+        # ----------------------------------------------------------------------
+
+        # Empty the statictics list.
+        self.statistics_table = None
+
+        # Set the tolerance.
+        self.tolerance = 1.0 * 10**(-5)
 
     # --------------------------------------------------------------------------
     # Dunder Methods.
