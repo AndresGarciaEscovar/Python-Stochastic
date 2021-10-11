@@ -10,3 +10,6 @@
 
 # From the setup.
 stochastic.egg-info
+
+# Ignore text file.
+**.txt
