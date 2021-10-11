@@ -1,4 +1,4 @@
-""" File that contains the tests for the Cell class."""
+""" File that contains the tests for the RSA class."""
 
 # ------------------------------------------------------------------------------
 # Imports
