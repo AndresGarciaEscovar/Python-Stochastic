@@ -1,8 +1,12 @@
 # Files and folders to ignore.
 
 # ----------------------------
-# Editor Folders.
+# Configuration Folders.
 # ----------------------------
 
+# From the editor.
 .idea
 **/.idea/**
+
+# From the setup.
+stochastic.egg-info
