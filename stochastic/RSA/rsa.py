@@ -7,6 +7,7 @@
 # ------------------------------------------------------------------------------
 
 # Imports: General.
+import copy as cp
 import numpy as np
 import random
 import time
@@ -54,11 +55,14 @@ class RSAResultsAnalysis:
         # Get the data to plot.
         data = np.array(data[2:], dtype=float)
 
+        # Get the maximum x plotting range.
+        xmax = max(data[:, 0])
+
         # Get the axis where to make the plots.
         fig, axes = plt.subplots(2, 2)
 
         # Set the title of the plot.
-        plt.suptitle(plot_title, fontsize=8)
+        plt.suptitle(plot_title, fontsize=6)
 
         # ----------------------------------------------------------------------
         # Format the graph of the data for the success/n vs attemps/n
@@ -67,7 +71,7 @@ class RSAResultsAnalysis:
         axes[0][0].plot(data[:, 0], data[:, 1])
         axes[0][0].spines['left'].set_position('zero')
         axes[0][0].spines['bottom'].set_position('zero')
-        axes[0][0].set_xlim(0, 6.0)
+        axes[0][0].set_xlim(0, xmax)
         axes[0][0].set_ylim(0, 1.0)
         axes[0][0].set_xlabel(axis_names[0])
         axes[0][0].set_ylabel(axis_names[1])
@@ -79,7 +83,7 @@ class RSAResultsAnalysis:
         axes[0][1].plot(data[:, 0], data[:, 2])
         axes[0][1].spines['left'].set_position('zero')
         axes[0][1].spines['bottom'].set_position('zero')
-        axes[0][1].set_xlim(0, 6.0)
+        axes[0][1].set_xlim(0, xmax)
         axes[0][1].set_ylim(0, 1.0)
         axes[0][1].set_xlabel(axis_names[0])
         axes[0][1].set_ylabel(axis_names[2])
@@ -91,7 +95,7 @@ class RSAResultsAnalysis:
         axes[1][0].plot(data[:, 0], data[:, 3])
         axes[1][0].spines['left'].set_position('zero')
         axes[1][0].spines['bottom'].set_position('zero')
-        axes[1][0].set_xlim(0, 6.0)
+        axes[1][0].set_xlim(0, xmax)
         axes[1][0].set_ylim(0, 1.0)
         axes[1][0].set_xlabel(axis_names[0])
         axes[1][0].set_ylabel(axis_names[3])
@@ -103,7 +107,7 @@ class RSAResultsAnalysis:
         axes[1][1].plot(data[:, 0], data[:, 4])
         axes[1][1].spines['left'].set_position('zero')
         axes[1][1].spines['bottom'].set_position('zero')
-        axes[1][1].set_xlim(0, 6.0)
+        axes[1][1].set_xlim(0, xmax)
         axes[1][1].set_ylim(0, 1.0)
         axes[1][1].set_xlabel(axis_names[0])
         axes[1][1].set_ylabel(axis_names[4])
@@ -126,8 +130,112 @@ class RSAResultsAnalysis:
         plt.savefig(file_path)
 
     @staticmethod
-    def plot_lattices(fil):
-        pass
+    def plot_lattices(file_path: str):
+        """ Plots the lattices configuration from the configuration folder.
+        """
+
+        # ----------------------------------------------------------------------
+        # Auxiliary functions.
+        # ----------------------------------------------------------------------
+
+        def get_data_frames(data0: list) -> list:
+            """ Splits the data into individual data frames and returns the list
+                of the data frames.
+
+                :param data0: The data to be split into different data frames.
+
+                :return: The data to be split into the data frames.
+            """
+
+            # Create an empty list.
+            data_frames0 = []
+
+            # List where the data can be stored.
+            tmp_list0 = []
+
+            # Scan the data frame.
+            for i0, line0 in enumerate(data0):
+                # A new data frame is produced.
+                if line0[0][0] == "-":
+                    # Append the data frame.
+                    data_frames0.append(cp.deepcopy(tmp_list0))
+
+                    # Empty the temporary data frame.
+                    tmp_list0 = []
+
+                    continue
+
+                # Append thes line.
+                tmp_list0.append(line0)
+
+            return data_frames0
+
+        # ----------------------------------------------------------------------
+        # Implementation.
+        # ----------------------------------------------------------------------
+
+        # List where the data will be stored.
+        data = []
+
+        # Import the data from the file.
+        with open(file_path, "r") as fl:
+            # Read the data.
+            lines = fl.readlines()
+
+            # Get each line.
+            for line in lines:
+                # Split the data.
+                data.append(line.split(","))
+
+        # Change the data to individual data frames.
+        data = get_data_frames(data)
+
+        # For every frame.
+        for i, frame in enumerate(data):
+            # Get the frame details; i.e., the plot title.
+            plot_title = ", ".join(frame[0])
+
+            # Get the data into a numpy array.
+            frame_data = np.array(frame[2:][:], dtype=float)
+
+            # Get the time intervals.
+            times = frame_data[:, 0]
+
+            # Get the configurations placement.
+            configurations = frame_data[:, 1:]
+
+            # Get a single axis for the particles.
+            fig, axis = plt.subplots(nrows=1)
+
+            # For each configuration
+            for j, configuration in enumerate(configurations):
+                # Get the placement of the non-zero particles.
+                x_placement = [1.0 * (k + 1) for k, particle in enumerate(configuration) if not particle == 0.0]
+
+                # Set the vertical placement of the particles.
+                y_placement = [3.0 * j for _ in x_placement]
+
+                # Plot in the axis.
+                axis.scatter(x_placement, y_placement)
+
+            xticks_minor = [k + 0.5 for k, _ in enumerate(configurations[0])]
+
+            # Set the x ticks.
+            axis.set_xticks([k + 1 for k, _ in enumerate(configurations[0])], minor=False)
+            axis.set_xticks(xticks_minor, minor=True)
+
+            # Set the axis positions.
+            axis.spines['left'].set_position(('data', xticks_minor[0]))
+            axis.spines['right'].set_position(('data', xticks_minor[-1] + 1.0))
+
+            # Set the limits.
+            axis.set_xlim(xticks_minor[0], xticks_minor[-1] + 1.0)
+
+            axis.xaxis.grid(True, which='minor')
+
+        plt.show()
+
+
 
 
 @dataclass
@@ -682,6 +790,9 @@ class RSA:
 
                 # Get the elapsed time.
                 elapsed_time = self.attempts / self.length
+
+            # There might be one more to record.
+            self._record_statistics()
 
             # Get the final lattice.
             if simulation_number == 0:
@@ -1635,6 +1746,9 @@ class RSADimer:
                 # Get the elapsed time.
                 elapsed_time = self.attempts / self.length
 
+            # There might be one more to record.
+            self._record_statistics()
+
             # Get the final lattice.
             if simulation_number == 0:
                 # Print the pore and the headers.
@@ -1819,7 +1933,7 @@ class RSADimer:
         # Set the table preheader.
         preheader = ", ".join([f"RSA Dimer", f"seed={self.seed}", f"repetitions(n)={self.repetitions}",
                               f"maximum time={self.maximum_time}", f"length={self.length}"
-                              ])
+                               ])
 
         # Set the table header.
         header = ["time\\site"]
