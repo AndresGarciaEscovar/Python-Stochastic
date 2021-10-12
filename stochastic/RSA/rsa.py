@@ -213,16 +213,23 @@ class RSAResultsAnalysis:
                 x_placement = [1.0 * (k + 1) for k, particle in enumerate(configuration) if not particle == 0.0]
 
                 # Set the vertical placement of the particles.
-                y_placement = [3.0 * j for _ in x_placement]
+                y_placement = [times[j] for _ in x_placement]
 
                 # Plot in the axis.
-                axis.scatter(x_placement, y_placement)
+                axis.scatter(x_placement, y_placement, s=10)
 
-            xticks_minor = [k + 0.5 for k, _ in enumerate(configurations[0])]
+            # Set the title.
+            plt.suptitle(plot_title, fontsize=12)
 
             # Set the x ticks.
+            xticks_minor = [k + 0.5 for k, _ in enumerate(configurations[0])]
             axis.set_xticks([k + 1 for k, _ in enumerate(configurations[0])], minor=False)
             axis.set_xticks(xticks_minor, minor=True)
+
+            # Set the y ticks.
+            yticks_minor = [(times[j] + times[j + 1]) / 2.0 for j in range(len(times) - 1)]
+            axis.set_yticks(times, minor=False)
+            axis.set_yticks(yticks_minor, minor=True)
 
             # Set the axis positions.
             axis.spines['left'].set_position(('data', xticks_minor[0]))
@@ -231,8 +238,18 @@ class RSAResultsAnalysis:
             # Set the limits.
             axis.set_xlim(xticks_minor[0], xticks_minor[-1] + 1.0)
 
-            axis.xaxis.grid(True, which='minor')
+            # Set the limits.
+            axis.set_ylim(-0.05, max(times) + 0.1)
 
+            # Set the grid.
+            axis.xaxis.grid(True, which='minor')
+            axis.yaxis.grid(True, which='minor')
+
+            # Set the labels.
+            axis.set_xlabel('Site Number')
+            axis.set_ylabel('Elapsed Simulation Time')
+
+        plt.tight_layout()
         plt.show()
 
 
