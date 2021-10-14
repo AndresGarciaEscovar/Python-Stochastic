@@ -9,7 +9,7 @@ import random
 import unittest
 
 # Imports: User-defined classes.
-from stochastic.RSA1D.rsa import RSA
+from stochastic.RSA1D.rsa import RSA, RSAParameters
 
 # ------------------------------------------------------------------------------
 # Classes.
@@ -33,8 +33,24 @@ class TestRSA(unittest.TestCase):
         # Define the maximum time.
         maximum_time = 0.15
 
+        # Setup the simulation parameters.
+        parameters = RSAParameters()
+
+        # The length of the lattice.
+        parameters.length = length
+
+        # The maximum time of the simulation.
+        parameters.maximum_time = maximum_time
+
+        # Set the number of repetitions to 10_000
+        parameters.repetitions = 10_000
+
+        # ----------------------------------------------------------------------
+        # Create the simulation.
+        # ----------------------------------------------------------------------
+
         # Create a simulation; the seed doesn't matter.
-        simulation = RSA(length=length, maximum_time=maximum_time)
+        simulation = RSA(parameters)
 
         # ----------------------------------------------------------------------
         # With an empty lattice, it must be possible to adsorb anywhere.
@@ -126,8 +142,24 @@ class TestRSA(unittest.TestCase):
         # Define the maximum time.
         maximum_time = 0.15
 
+        # Setup the simulation parameters.
+        parameters = RSAParameters()
+
+        # The length of the lattice.
+        parameters.length = length
+
+        # The maximum time of the simulation.
+        parameters.maximum_time = maximum_time
+
+        # Set the number of repetitions to 10_000
+        parameters.repetitions = 10_000
+
+        # ----------------------------------------------------------------------
+        # Create the simulation.
+        # ----------------------------------------------------------------------
+
         # Create a simulation; the seed doesn't matter.
-        simulation = RSA(length=length, maximum_time=maximum_time)
+        simulation = RSA(parameters)
 
         # ----------------------------------------------------------------------
         # Count the doublets when all the sites are empty.
@@ -206,8 +238,24 @@ class TestRSA(unittest.TestCase):
         # Define the maximum time.
         maximum_time = 0.15
 
+        # Setup the simulation parameters.
+        parameters = RSAParameters()
+
+        # The length of the lattice.
+        parameters.length = length
+
+        # The maximum time of the simulation.
+        parameters.maximum_time = maximum_time
+
+        # Set the number of repetitions to 10_000
+        parameters.repetitions = 10_000
+
+        # ----------------------------------------------------------------------
+        # Create the simulation.
+        # ----------------------------------------------------------------------
+
         # Create a simulation; the seed doesn't matter.
-        simulation = RSA(length=length, maximum_time=maximum_time)
+        simulation = RSA(parameters)
 
         # ----------------------------------------------------------------------
         # Count the singlets when all the sites are empty.
@@ -286,8 +334,24 @@ class TestRSA(unittest.TestCase):
         # Define the maximum time.
         maximum_time = 0.15
 
+        # Setup the simulation parameters.
+        parameters = RSAParameters()
+
+        # The length of the lattice.
+        parameters.length = length
+
+        # The maximum time of the simulation.
+        parameters.maximum_time = maximum_time
+
+        # Set the number of repetitions to 10_000
+        parameters.repetitions = 10_000
+
+        # ----------------------------------------------------------------------
+        # Create the simulation.
+        # ----------------------------------------------------------------------
+
         # Create a simulation; the seed doesn't matter.
-        simulation = RSA(length=length, maximum_time=maximum_time)
+        simulation = RSA(parameters)
 
         # ----------------------------------------------------------------------
         # Count the triplets when all the sites are empty.
@@ -367,8 +431,24 @@ class TestRSA(unittest.TestCase):
         # Define the maximum time.
         maximum_time = 0.15
 
+        # Setup the simulation parameters.
+        parameters = RSAParameters()
+
+        # The length of the lattice.
+        parameters.length = length
+
+        # The maximum time of the simulation.
+        parameters.maximum_time = maximum_time
+
+        # Set the number of repetitions to 10_000
+        parameters.repetitions = 10_000
+
+        # ----------------------------------------------------------------------
+        # Create the simulation.
+        # ----------------------------------------------------------------------
+
         # Create a simulation; the seed doesn't matter.
-        simulation = RSA(length=length, maximum_time=maximum_time)
+        simulation = RSA(parameters)
 
         # ----------------------------------------------------------------------
         # Test a site.
