@@ -12,9 +12,9 @@ import numpy as np
 import random
 import time
 
+from dataclasses import dataclass
 from matplotlib import pyplot as plt
 
-from dataclasses import dataclass
 
 # ------------------------------------------------------------------------------
 # Classes
