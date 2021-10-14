@@ -4,7 +4,7 @@ from stochastic.RSA.rsa import RSA, RSADimer, RSAParameters, RSAResultsAnalysis
 parameters = RSAParameters()
 
 # Set the length.
-parameters.length = 50
+parameters.length = 25
 
 # Set the maximum time.
 parameters.maximum_time = 6.0
