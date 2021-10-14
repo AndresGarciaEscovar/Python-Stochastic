@@ -1,4 +1,4 @@
-""" File that contains the tests for the RSA class."""
+""" File that contains the tests for the RSA1D class."""
 
 # ------------------------------------------------------------------------------
 # Imports
@@ -9,7 +9,7 @@ import random
 import unittest
 
 # Imports: User-defined classes.
-from stochastic.RSA.rsa import RSA
+from stochastic.RSA1D.rsa import RSA
 
 # ------------------------------------------------------------------------------
 # Classes.

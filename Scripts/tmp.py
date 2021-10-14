@@ -1,5 +1,5 @@
 import copy as cp
-from stochastic.RSA.rsa import RSA, RSADimer, RSAParameters, RSAResultsAnalysis
+from stochastic.RSA1D.rsa import RSA, RSADimer, RSAParameters, RSAResultsAnalysis
 
 parameters = RSAParameters()
 
