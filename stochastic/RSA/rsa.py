@@ -253,8 +253,6 @@ class RSAResultsAnalysis:
         plt.show()
 
 
-
-
 @dataclass
 class RSAParameters:
     """ A data class where the parameters of the system are defined.
