@@ -1,4 +1,3 @@
-import copy as cp
 from stochastic.Classes.dimers import Dimers
 from stochastic.Utilities.RSA_analysis import RSAResultsAnalysis
 from stochastic.Utilities.RSA_parameters import RSAParameters
