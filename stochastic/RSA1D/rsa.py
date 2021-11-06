@@ -262,7 +262,7 @@ class RSAParameters:
     length: int = 1
 
     # Define the maximum simulation time.
-    maximum_time: float = 0.1
+    maximum_time: float = 0.16
 
     # Define the number of times the simulation must be executed.
     repetitions: int = 1000
