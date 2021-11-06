@@ -11,5 +11,12 @@
 # From the setup.
 stochastic.egg-info
 
-# Ignore text file.
+# Ignore pycache files.
+
+**__pycache__
+__pycache__**
+
+
+# Ignore text and image files.
 **.txt
+**.png
