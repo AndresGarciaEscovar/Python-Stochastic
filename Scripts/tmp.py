@@ -21,6 +21,3 @@ simulation = Dimers(parameters)
 simulation.run_simulation()
 RSAResultsAnalysis.plot_results("results.txt")
 RSAResultsAnalysis.plot_lattices("lattice.txt")
-
-
-print(simulation.validate_adsorb(0))
