@@ -7,17 +7,18 @@
 # Imports: General.
 import numpy
 
+from abc import ABCMeta, abstractmethod
 from typing import Any
 
 # Imports: User-defined.
-from stochastic.Classes.RSA_parameters import RSAParameters
+from stochastic.Utilities.RSA_parameters import RSAParameters
 
 # ------------------------------------------------------------------------------
 # Classes.
 # ------------------------------------------------------------------------------
 
 
-class RSA:
+class RSA(metaclass=ABCMeta):
     """ Class to simulate random sequential adsorption with nearest neighbor
         exclusion for a one-dimensional lattice.
 
@@ -55,11 +56,8 @@ class RSA:
     # Constants
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-    # Represents the empty value.
-    EMPTY = 0
-
-    # Represents the occupied value.
-    OCCUPIED = 1
+    EMPTY = 0  # type: int
+    OCCUPIED = 1  # type: int
 
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     # Getters/Setters/Deleters
@@ -334,13 +332,13 @@ class RSA:
         return self.__tolerance
 
     @tolerance.setter
-    def tolerance(self, tolerance: float):
+    def tolerance(self, tolerance: float) -> None:
         """ Sets the tolerance to compare floating point numbers.
         """
         self.__tolerance = abs(float(tolerance))
 
     @tolerance.deleter
-    def tolerance(self):
+    def tolerance(self) -> None:
         """ Deletes the parameter."""
         raise PermissionError("The tolerance variable must not be deleted.")
 
@@ -397,6 +395,15 @@ class RSA:
 
         return counter
 
+    @abstractmethod
+    def get_preheader(self) -> str:
+        """ Returns the pre-header, i.e., the string that contains the
+            simulation information.
+
+            :return: The string that represents the pre-header.
+        """
+        ...
+
     # --------------------------------------------------------------------------
     # Normalize Methods.
     # --------------------------------------------------------------------------
@@ -419,7 +426,7 @@ class RSA:
     # Print Results.
     # --------------------------------------------------------------------------
 
-    def print_results(self, file_path: str = "results.txt"):
+    def print_results(self, file_path: str = "results.txt") -> None:
         """ Saves the results, with the information, to the given file.
 
             :param file_path: The string with the full path of where the file
@@ -447,16 +454,11 @@ class RSA:
 
             # Get each statistic.
             for statistic0 in statistics_table0:
-                # Get the maximum column width with the proper formatting.
                 for i0, entry in enumerate(statistic0):
-                    # The first entry if formatted differently.
                     if i0 > 0:
-                        # At most 10 significant figures.
-                        columns_width0[i0] = max(columns_width0[i0], len(f"{statistic0[i0]:0.10f}"))\
-
+                        columns_width0[i0] = max(columns_width0[i0], len(f"{statistic0[i0]:0.10f}"))
                         continue
 
-                    # At most three significant figures.
                     columns_width0[i0] = max(columns_width0[i0], len(f"{statistic0[i0]:0.3f}"))
 
             return columns_width0
@@ -466,10 +468,7 @@ class RSA:
         # ----------------------------------------------------------------------
 
         h_string = []
-        preheader = ",".join([
-            f"RSA Nearest Neighbor Exclusion", f"seed={self.seed}", f"repetitions(n)={self.repetitions}",
-            f"maximum time={self.maximum_time}", f"length={self.length}", f"periodic={self.periodic}"
-        ])
+        preheader = self.get_preheader()
         header = ["attemps/n", "successes/n", "singlets/n", "doublets/n", "triplets/n"]
         colum_widths = get_colum_widths(header, self.statistics_table)
 
@@ -490,22 +489,18 @@ class RSA:
     # Process Methods.
     # --------------------------------------------------------------------------
 
-    def process_adsorb(self):
+    @abstractmethod
+    def process_adsorb(self) -> None:
         """ Tries to perform an adsorption operation; i.e., select a random site
             in the lattice onto which to adsorb.
         """
-
-        site = self.random_generator.integers(0, self.length)
-        self.attempts += 1
-        if self.validate_adsorb(site):
-            self.lattice[site] = RSA.OCCUPIED
-            self.attempts_successful += 1
+        ...
 
     # --------------------------------------------------------------------------
     # Reset Methods.
     # --------------------------------------------------------------------------
 
-    def reset_simulation_variables(self):
+    def reset_simulation_variables(self) -> None:
         """ Resets the variables for a single simulation to their initial state.
         """
 
@@ -521,7 +516,7 @@ class RSA:
     # Run Methods.
     # --------------------------------------------------------------------------
 
-    def run_simulation(self):
+    def run_simulation(self) -> None:
         """ Runs the simulation the number of specified times by the repetition
             parameter.
         """
@@ -538,7 +533,7 @@ class RSA:
         self.statistics_record(self.repetitions)
         self.print_results()
 
-    def run_simulation_single(self, number: int):
+    def run_simulation_single(self, number: int) -> None:
 
         self.reset_simulation_variables()
         elapsed_time = 0
@@ -563,7 +558,7 @@ class RSA:
     # Save Methods.
     # --------------------------------------------------------------------------
 
-    def save_lattice(self, initial=True, last=False):
+    def save_lattice(self, initial=True, last=False) -> None:
         """ Prints the lattice to the given file.
 
             :param initial: True, if it is the first lattice to be printed.
@@ -574,10 +569,7 @@ class RSA:
         """
 
         # Set the table preheader.
-        preheader = ",".join([
-            f"RSA Nearest Neighbor Exclusion", f"seed={self.seed}", f"repetitions(n)={self.repetitions}",
-            f"maximum time={self.maximum_time}", f"length={self.length}", f"periodic={self.periodic}"
-        ])
+        preheader = self.get_preheader()
 
         # Set the table header.
         header = ["time\\site"]
@@ -601,7 +593,7 @@ class RSA:
     # Statistics Methods.
     # --------------------------------------------------------------------------
 
-    def statistics_record(self, number_simulations: int = None):
+    def statistics_record(self, number_simulations: int = None) -> None:
         """ Records the statistics.
 
             :param number_simulations: The number of simulationms with
@@ -658,7 +650,7 @@ class RSA:
     # Validate Methods.
     # --------------------------------------------------------------------------
 
-    def validate_almost_equal(self, number0: float, number1: float):
+    def validate_almost_equal(self, number0: float, number1: float) -> bool:
         """ Determines if two numbers are equal within the tolerance limit.
 
             :param number0: The base number for comparison.
@@ -674,6 +666,7 @@ class RSA:
 
         return abs((number0 - number1) / number0) <= self.tolerance
 
+    @abstractmethod
     def validate_adsorb(self, site: int) -> bool:
         """ Determines if the given site can adsorb a particle.
 
@@ -681,24 +674,7 @@ class RSA:
 
             :return: If the site is empty and its inmediate neighbors are empty.
         """
-
-        site_ = self.normalize_site(site)
-        if not self.lattice[site_] == RSA.EMPTY:
-            return False
-
-        examined = {site_}
-        if ((site - 1) < 0 and self.periodic) or site > 0:
-            site_ = self.normalize_site(site - 1)
-            if (site_ not in examined) and not self.lattice[site_] == RSA.EMPTY:
-                return False
-
-        examined.add(site_)
-        if ((site + 1) >= self.length and self.periodic) or (site + 1) < self.length:
-            site_ = self.normalize_site(site + 1)
-            if (site_ not in examined) and not self.lattice[site_] == RSA.EMPTY:
-                return False
-
-        return True
+        ...
 
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     # Constructor and Dunder Methods.
