@@ -24,6 +24,9 @@ class RSAParameters:
     # Defines the length of the lattice.
     length: int = 1
 
+    # File name to save the lattice.
+    results_file: str = "results.txt"   
+
     # Define the seed with which the generator must be seeded (i.e., the system time by default).
     seed: int = int(time.time())
 

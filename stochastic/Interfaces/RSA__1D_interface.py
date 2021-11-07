@@ -47,6 +47,12 @@ class RSA1D(metaclass=ABCMeta):
         - self.repetitions: The number of times the simulation must be run to
           get statistically significant data.
 
+        - self.save_lattice_file_name: The name of the file where to save the
+          lattice configuration.
+
+        - self.save_results_file_name: The name of the file where to save the
+          simulation results.
+
         - self.seed: The seed to seed the random number generator.
 
         - self.statistics_table: The list where the statistics are kept.
@@ -280,6 +286,34 @@ class RSA1D(metaclass=ABCMeta):
 
     # --------------------------------------------------------------------------
 
+
+    @property
+    def results_file(self) -> str:
+        """ Returns the name of the file where the simulation results are to be
+            saved.
+
+            :return: The name of the file where the simulation results are to be
+            saved.
+        """
+        return self.__results_file
+
+    @results_file.setter
+    def results_file(self, results_file: str) -> None:
+        """ Sets the name of the file where the simulation results are to be
+            saved.
+
+            :param results_file: The name of the file where the simulation
+            results are to be saved.
+        """
+        self.__results_file = results_file
+
+    @results_file.deleter
+    def results_file(self) -> None:
+        """ Deletes the parameter."""
+        raise PermissionError("The results_file variable must not be deleted.")
+
+    # --------------------------------------------------------------------------
+
     @property
     def seed(self) -> int:
         """ Returns the seed used in the random number generator.
@@ -428,7 +462,7 @@ class RSA1D(metaclass=ABCMeta):
     # Print Results.
     # --------------------------------------------------------------------------
 
-    def print_results(self, file_path: str = "results.txt") -> None:
+    def print_results(self) -> None:
         """ Saves the results, with the information, to the given file.
 
             :param file_path: The string with the full path of where the file
@@ -474,7 +508,7 @@ class RSA1D(metaclass=ABCMeta):
         header = ["attemps/n", "successes/n", "singlets/n", "doublets/n", "triplets/n"]
         colum_widths = get_colum_widths(header, self.statistics_table)
 
-        with open(file_path, "w") as fl:
+        with open(self.results_file, "w") as fl:
             fl.write(preheader + "\n")
             for i, value in enumerate(colum_widths):
                 h_string.append(f"{header[i]:<{value + 2}}")
@@ -710,5 +744,6 @@ class RSA1D(metaclass=ABCMeta):
         self.random_generator = None
 
         # Other simulation parameters.
+        self.results_file = parameters.results_file
         self.statistics_table = None
         self.tolerance = parameters.tolerance

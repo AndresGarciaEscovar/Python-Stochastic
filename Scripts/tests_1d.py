@@ -11,15 +11,31 @@ if __name__ == "__main__":
     parameters.repetitions = 1007
     parameters.periodic = True
     parameters.tolerance = 1.0*10**(-5)
+    parameters.lattice_file = "Dimers_lattice.txt"
+    parameters.results_file = "Dimers_results.txt"
 
     # Run the simulation.
-    # simulation = Dimers(parameters)
-    # simulation.run_simulation()
+    simulation = Dimers(parameters)
+    simulation.run_simulation()
+
+    # Plot the graphs.
+    RSA1DResultsAnalysis.plot_results("Dimers_results.txt")
+    RSA1DResultsAnalysis.plot_lattices("Dimers_lattice.txt")
+
+    # Set the parameters.
+    parameters = RSAParameters()
+    parameters.length = 25
+    parameters.maximum_time = 6.0
+    parameters.repetitions = 1007
+    parameters.periodic = True
+    parameters.tolerance = 1.0*10**(-5)
+    parameters.lattice_file = "NNExclusion_lattice.txt"
+    parameters.results_file = "NNExclusion_results.txt"
 
     # Run the simulation.
     simulation = NNExclusion(parameters)
     simulation.run_simulation()
 
     # Plot the graphs.
-    RSA1DResultsAnalysis.plot_results("results.txt")
-    RSA1DResultsAnalysis.plot_lattices("lattice.txt")
+    RSA1DResultsAnalysis.plot_results("NNExclusion_results.txt")
+    RSA1DResultsAnalysis.plot_lattices("NNExclusion_lattice.txt")
