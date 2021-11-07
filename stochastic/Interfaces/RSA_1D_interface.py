@@ -30,8 +30,6 @@ class RSA1D(metaclass=ABCMeta):
         - self.attempts_successful: An integer that represents the number of
           successful attempts at adsorbing a particle.
 
-        - self.generator: The random number generator.
-
         - self.lattice: A list that represents the lattice where the particles
           live.
 
@@ -43,6 +41,11 @@ class RSA1D(metaclass=ABCMeta):
 
         - self.maximum_time: The maximum time for which the simulation must be
           run.
+
+        - self.periodic: A boolean flag that indicates if the lattice is
+          periodic.
+
+        - self.random_generator: The random number generator.
 
         - self.repetitions: The number of times the simulation must be run to
           get statistically significant data.
@@ -227,7 +230,7 @@ class RSA1D(metaclass=ABCMeta):
     def periodic(self, periodic: bool) -> None:
         """ Sets the flag to indicate if the lattice is periodic.
 
-            :param periodic: the flag to indicate if the lattice is periodic.
+            :param periodic: The flag to indicate if the lattice is periodic.
         """
         self.__periodic = periodic
 
