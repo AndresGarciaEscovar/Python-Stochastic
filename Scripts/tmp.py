@@ -1,4 +1,4 @@
-from stochastic.Classes.dimers import Dimers
+from stochastic.Classes.RSA1D.dimers import Dimers
 from stochastic.Utilities.RSA_analysis import RSAResultsAnalysis
 from stochastic.Utilities.RSA_parameters import RSAParameters
 
