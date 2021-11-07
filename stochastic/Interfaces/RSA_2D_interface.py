@@ -1,7 +1,6 @@
 """ File that contains the random sequential adsorption (RSA) base classes, for
-    RSA in one dimension.
+    RSA in two dimensions.
 """
-
 # ------------------------------------------------------------------------------
 # Imports.
 # ------------------------------------------------------------------------------
@@ -20,7 +19,7 @@ from stochastic.Utilities.RSA_parameters import RSAParameters
 # ------------------------------------------------------------------------------
 
 
-class RSA1D(metaclass=ABCMeta):
+class RSA2D(metaclass=ABCMeta):
     """ Class to simulate random sequential adsorption with nearest neighbor
         exclusion for a one-dimensional lattice.
 
@@ -125,7 +124,7 @@ class RSA1D(metaclass=ABCMeta):
     @lattice.setter
     def lattice(self, _) -> None:
         """ Creates the lattice."""
-        self.__lattice = [RSA1D.EMPTY for _ in range(self.length)]
+        self.__lattice = [RSA.EMPTY for _ in range(self.length)]
 
     @lattice.deleter
     def lattice(self) -> None:
@@ -384,14 +383,14 @@ class RSA1D(metaclass=ABCMeta):
 
         counter = 0
         for site in range(self.length):
-            empty = self.lattice[site] == RSA1D.EMPTY
+            empty = self.lattice[site] == RSA.EMPTY
 
             if validate_continue(site, order):
                 break
 
             for site_ in range(1, order):
                 site_ = self.normalize_site(site_ + site)
-                empty = empty and self.lattice[site_] == RSA1D.EMPTY
+                empty = empty and self.lattice[site_] == RSA.EMPTY
 
             counter += 1 if empty else 0
 
@@ -508,7 +507,7 @@ class RSA1D(metaclass=ABCMeta):
 
         # Reset the lattice.
         for i in range(self.length):
-            self.lattice[i] = RSA1D.EMPTY
+            self.lattice[i] = RSA.EMPTY
 
         # Reset the counters.
         self.attempts = 0

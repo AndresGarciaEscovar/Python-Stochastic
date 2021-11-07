@@ -19,7 +19,7 @@ from matplotlib import pyplot as plt
 # ------------------------------------------------------------------------------
 
 
-class RSAResultsAnalysis:
+class RSA1DResultsAnalysis:
     """ Class that contains the functions to plot the results.
     """
 
@@ -44,8 +44,7 @@ class RSAResultsAnalysis:
         data = np.array(data[2:], dtype=float)
         xmax = max(data[:, 0])
         
-        # Close figures and start new ones.
-        plt.clf()
+        # New figure.
         fig, axes = plt.subplots(2, 2)
         plt.suptitle(plot_title, fontsize=6)
 

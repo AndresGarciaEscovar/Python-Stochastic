@@ -10,7 +10,7 @@
 from typing import Any
 
 # Imports: User-defined.
-from stochastic.Interfaces.RSA__1D_interface import RSA
+from stochastic.Interfaces.RSA__1D_interface import RSA1D
 from stochastic.Utilities.RSA_parameters import RSAParameters
 
 # ------------------------------------------------------------------------------
@@ -18,7 +18,7 @@ from stochastic.Utilities.RSA_parameters import RSAParameters
 # ------------------------------------------------------------------------------
 
 
-class Dimers(RSA):
+class Dimers(RSA1D):
     """ Class to simulate random sequential adsorption with nearest neighbor
         exclusion for a one-dimensional lattice.
 
@@ -89,8 +89,8 @@ class Dimers(RSA):
         self.attempts += 1
         if self.validate_adsorb(site):
             site_ = self.normalize_site(site + 1)
-            self.lattice[site] = RSA.OCCUPIED
-            self.lattice[site_] = RSA.OCCUPIED
+            self.lattice[site] = RSA1D.OCCUPIED
+            self.lattice[site_] = RSA1D.OCCUPIED
             self.attempts_successful += 1
 
     # --------------------------------------------------------------------------
@@ -106,13 +106,13 @@ class Dimers(RSA):
         """
 
         site_ = self.normalize_site(site)
-        if not self.lattice[site_] == RSA.EMPTY:
+        if not self.lattice[site_] == RSA1D.EMPTY:
             return False
 
         examined = {site_}
         if ((site + 1) >= self.length and self.periodic) or (site + 1) < self.length:
             site_ = self.normalize_site(site + 1)
-            if (site_ not in examined) and not self.lattice[site_] == RSA.EMPTY:
+            if (site_ not in examined) and not self.lattice[site_] == RSA1D.EMPTY:
                 return False
 
         return True
