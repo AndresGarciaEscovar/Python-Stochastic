@@ -10,7 +10,7 @@
 from typing import Any
 
 # Imports: User-defined.
-from stochastic.Interfaces.RSA_interface import RSA
+from stochastic.Interfaces.RSA__1D_interface import RSA
 from stochastic.Utilities.RSA_parameters import RSAParameters
 
 # ------------------------------------------------------------------------------
