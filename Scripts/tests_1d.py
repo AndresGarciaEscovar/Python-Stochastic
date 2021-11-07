@@ -1,11 +1,11 @@
 from stochastic.Classes.RSA1D.nn_exclusion import NNExclusion 
 from stochastic.Classes.RSA1D.dimers import Dimers
 from stochastic.Utilities.RSA_analysis import RSA1DResultsAnalysis
-from stochastic.Utilities.RSA_parameters import RSAParameters
+from stochastic.Utilities.RSA_parameters import RSA1DParameters
 
 if __name__ == "__main__":
     # Set the parameters.
-    parameters = RSAParameters()
+    parameters = RSA1DParameters()
     parameters.length = 25
     parameters.maximum_time = 6.0
     parameters.repetitions = 1007
@@ -23,7 +23,7 @@ if __name__ == "__main__":
     RSA1DResultsAnalysis.plot_lattices("Dimers_lattice.txt")
 
     # Set the parameters.
-    parameters = RSAParameters()
+    parameters = RSA1DParameters()
     parameters.length = 25
     parameters.maximum_time = 6.0
     parameters.repetitions = 1007

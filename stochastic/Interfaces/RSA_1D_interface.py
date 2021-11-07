@@ -13,7 +13,7 @@ from abc import ABCMeta, abstractmethod
 from typing import Any
 
 # Imports: User-defined.
-from stochastic.Utilities.RSA_parameters import RSAParameters
+from stochastic.Utilities.RSA_parameters import RSA1DParameters
 
 # ------------------------------------------------------------------------------
 # Classes.
@@ -720,7 +720,7 @@ class RSA1D(metaclass=ABCMeta):
     # Constructor.
     # --------------------------------------------------------------------------
 
-    def __init__(self, parameters: RSAParameters):
+    def __init__(self, parameters: RSA1DParameters):
         """ Initializes the simulation parameters.
 
             :param parameters: A dataclass that contains the adjustable

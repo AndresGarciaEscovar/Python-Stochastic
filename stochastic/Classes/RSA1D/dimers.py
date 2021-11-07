@@ -10,8 +10,8 @@
 from typing import Any
 
 # Imports: User-defined.
-from stochastic.Interfaces.RSA__1D_interface import RSA1D
-from stochastic.Utilities.RSA_parameters import RSAParameters
+from stochastic.Interfaces.RSA_1D_interface import RSA1D
+from stochastic.Utilities.RSA_parameters import RSA1DParameters
 
 # ------------------------------------------------------------------------------
 # Classes.
@@ -125,7 +125,7 @@ class Dimers(RSA1D):
     # Constructor.
     # --------------------------------------------------------------------------
 
-    def __init__(self, parameters: RSAParameters):
+    def __init__(self, parameters: RSA1DParameters):
         """ Initializes the simulation parameters.
 
             :param parameters: A dataclass that contains the adjustable
