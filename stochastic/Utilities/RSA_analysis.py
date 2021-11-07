@@ -43,6 +43,9 @@ class RSAResultsAnalysis:
         axis_names = list(map(lambda x: x.strip(), data[1]))
         data = np.array(data[2:], dtype=float)
         xmax = max(data[:, 0])
+        
+        # Close figures and start new ones.
+        plt.clf()
         fig, axes = plt.subplots(2, 2)
         plt.suptitle(plot_title, fontsize=6)
 
@@ -151,8 +154,8 @@ class RSAResultsAnalysis:
             frame_data = np.array(frame[2:][:], dtype=float)
             times = frame_data[:, 0]
             configurations = frame_data[:, 1:]
-            fig, axis = plt.subplots(nrows=1)
 
+            fig, axis = plt.subplots(nrows=1)
             for j, configuration in enumerate(configurations):
                 x_placement = [1.0 * (k + 1) for k, particle in enumerate(configuration) if not particle == 0.0]
                 y_placement = [times[j] for _ in x_placement]
@@ -167,6 +170,7 @@ class RSAResultsAnalysis:
             yticks_minor = [(times[j] + times[j + 1]) / 2.0 for j in range(len(times) - 1)]
             axis.set_yticks(times, minor=False)
             axis.set_yticks(yticks_minor, minor=True)
+            axis.yaxis.grid(True, which='minor')
 
             axis.set_xlim(xticks_minor[0], xticks_minor[-1] + 1.0)
             axis.set_ylim(-0.05, max(times) + 0.1)
