@@ -417,7 +417,7 @@ class RSA2D(metaclass=ABCMeta):
     # Normalize Methods.
     # --------------------------------------------------------------------------
 
-    def normalize_site(self, site: tuple) -> int:
+    def normalize_site(self, site: tuple) -> tuple:
         """ Given an scalar integer site, returns the site in the lattice, as it
             would correspond to the periodicity.
 
@@ -444,17 +444,17 @@ class RSA2D(metaclass=ABCMeta):
             while index0 < 0:
                 index0 += periodicity0
 
-            return index0
+            return index0 % periodicity0
 
         # //////////////////////////////////////////////////////////////////////
         # Implementation.
         # //////////////////////////////////////////////////////////////////////
 
         site_ = tuple(
-            get_periodic(site[i], self.dimensions[i]) if self.periodic else site[i] for i in range(2)
+            get_periodic(site[i], self.dimensions[i]) if self.periodic[i] else site[i] for i in range(2)
         )
 
-        return site
+        return site_
 
     # --------------------------------------------------------------------------
     # Print Results.

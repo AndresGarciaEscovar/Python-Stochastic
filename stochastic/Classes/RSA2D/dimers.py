@@ -69,7 +69,7 @@ class Dimers(RSA2D):
         """
 
         preheader = ",".join([
-            f"RSA Dimer", f"seed={self.seed}", f"repetitions(n)={self.repetitions}",
+            f"RSA-2D Dimer", f"seed={self.seed}", f"repetitions(n)={self.repetitions}",
             f"maximum time={self.maximum_time}", f"dimensions={self.dimensions}", f"periodic={self.periodic}"
         ])
 
@@ -85,17 +85,16 @@ class Dimers(RSA2D):
         """
 
         generator = self.random_generator
-        site = (generator.integers(0, self.dimensions[0]), generator.integers(0, self.dimensions[1]))
-        site_ = generator.choice(numpy.array([[1, 0], [-1, 0], [0, 1], [0, -1]], dtype=int))
-        site_ = tuple(int(component) for component in (site + site_))
+        site_0 = (generator.integers(0, self.dimensions[0]), generator.integers(0, self.dimensions[1]))
+
+        site_1 = generator.choice(numpy.array([[1, 0], [-1, 0], [0, 1], [0, -1]], dtype=int))
+        site_1 = map(int, site_0 + site_1)
+        site_1 = self.normalize_site(tuple(site_1))
 
         self.attempts += 1
-        if self.validate_adsorb(site):
-            site_ = tuple(
-                self.normalize_site(site + 1)
-            )
-            self.lattice[site] = RSA2D.OCCUPIED
-            self.lattice[site_] = RSA2D.OCCUPIED
+        if self.validate_adsorb(site_0, site_1):
+            self.lattice[site_0[0]][site_0[1]] = RSA2D.OCCUPIED
+            self.lattice[site_1[0]][site_1[1]] = RSA2D.OCCUPIED
             self.attempts_successful += 1
 
     # --------------------------------------------------------------------------
@@ -117,13 +116,9 @@ class Dimers(RSA2D):
         if not self.lattice[site_0[0]][site_0[1]] == RSA2D.EMPTY:
             return False
 
-        site_1_ = tuple(
-            self.normalize_site(site_1[i], self.dimensions[i]) if self.periodic[i] else site_1[i] for i in range(2)
-        )
-
         examined = {site_0}
-        if self.validate_in_lattice(site_1_) and site_1_ not in examined:
-            if self.lattice[site_1_[0]][site_1_[1]] == RSA2D.EMPTY:
+        if self.validate_in_lattice(site_1) and site_1 not in examined:
+            if self.lattice[site_1[0]][site_1[1]] == RSA2D.EMPTY:
                 return True
 
         return False

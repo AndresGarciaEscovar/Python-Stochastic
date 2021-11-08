@@ -30,8 +30,8 @@ class TestRSADimers(unittest.TestCase):
 
         # Define the length.
         parameters = RSA2DParameters()
-        parameters.dimensions = (10, 10)
-        parameters.periodic = (False, False)
+        parameters.dimensions = (20, 20)
+        parameters.periodic = (True, True)
         parameters.maximum_time = 0.15
         parameters.repetitions = 10_000
 
@@ -42,7 +42,7 @@ class TestRSADimers(unittest.TestCase):
         # Tests
         # //////////////////////////////////////////////////////////////////////
 
-        simulation.process_adsorb()
+        simulation.run_simulation()
 
     @unittest.skip("Skip while refactoring.")
     def test_normalize_site(self):
