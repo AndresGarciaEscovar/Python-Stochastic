@@ -6,6 +6,8 @@
 # ------------------------------------------------------------------------------
 
 # Imports: General.
+import numpy
+
 # Imports: User-defined.
 from stochastic.Interfaces.RSA_2D_interface import RSA2D
 from stochastic.Utilities.RSA_parameters import RSA2DParameters
@@ -81,12 +83,17 @@ class Dimers(RSA2D):
         """ Tries to perform an adsorption operation; i.e., select a random site
             in the lattice onto which to adsorb.
         """
+
         generator = self.random_generator
-        site = (self.random_generator.integers(self.dimensions[0]), self.random_generator.integers(self.dimensions[1]))
+        site = (generator.integers(0, self.dimensions[0]), generator.integers(0, self.dimensions[1]))
+        site_ = generator.choice(numpy.array([[1, 0], [-1, 0], [0, 1], [0, -1]], dtype=int))
+        site_ = tuple(int(component) for component in (site + site_))
 
         self.attempts += 1
         if self.validate_adsorb(site):
-            site_ = self.normalize_site(site + 1)
+            site_ = tuple(
+                self.normalize_site(site + 1)
+            )
             self.lattice[site] = RSA2D.OCCUPIED
             self.lattice[site_] = RSA2D.OCCUPIED
             self.attempts_successful += 1
@@ -110,14 +117,14 @@ class Dimers(RSA2D):
         if not self.lattice[site_0[0]][site_0[1]] == RSA2D.EMPTY:
             return False
 
-        examined = {site_0}
         site_1_ = tuple(
-            self.normalize_site(site_1[i], self.dimensions[i]) if self.periodic[i] else site_1[i] for i in site_1
+            self.normalize_site(site_1[i], self.dimensions[i]) if self.periodic[i] else site_1[i] for i in range(2)
         )
 
-        particle = self.lattice[site_1_[0]][site_1_[1]]
-        if self.validate_in_lattice(site_1_) and site_1_ not in examined and particle == RSA2D.EMPTY:
-            return True
+        examined = {site_0}
+        if self.validate_in_lattice(site_1_) and site_1_ not in examined:
+            if self.lattice[site_1_[0]][site_1_[1]] == RSA2D.EMPTY:
+                return True
 
         return False
 

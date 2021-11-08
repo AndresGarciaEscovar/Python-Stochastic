@@ -417,20 +417,44 @@ class RSA2D(metaclass=ABCMeta):
     # Normalize Methods.
     # --------------------------------------------------------------------------
 
-    def normalize_site(self, site: int, periodicity: int) -> int:
+    def normalize_site(self, site: tuple) -> int:
         """ Given an scalar integer site, returns the site in the lattice, as it
             would correspond to the periodicity.
 
             :param site: The site to be normalized.
 
-            :param periodicity: The periodicty of the dimension.
-
             :return: The normalized site.
         """
-        while site < 0:
-            site += periodicity
 
-        return site % periodicity
+        # //////////////////////////////////////////////////////////////////////
+        # Auxiliary functions.
+        # //////////////////////////////////////////////////////////////////////
+
+        def get_periodic(index0: int, periodicity0: int) -> int:
+            """ Given a scalar integer index, and its periodicity, returns the
+                proper index in the range 0 <= index0 < periodicity.
+
+                :param index0: The index to be normalized.
+
+                :param periodicity0: The periodicty of the dimension.
+
+                :return: The normalized site.
+            """
+
+            while index0 < 0:
+                index0 += periodicity0
+
+            return index0
+
+        # //////////////////////////////////////////////////////////////////////
+        # Implementation.
+        # //////////////////////////////////////////////////////////////////////
+
+        site_ = tuple(
+            get_periodic(site[i], self.dimensions[i]) if self.periodic else site[i] for i in range(2)
+        )
+
+        return site
 
     # --------------------------------------------------------------------------
     # Print Results.
