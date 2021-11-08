@@ -1,13 +1,9 @@
-""" File that contains the random sequential adsorption with nearest neighbors
-    exclusion.
+""" File that contains the random sequential adsorption of dimers.
 """
 
 # ------------------------------------------------------------------------------
 # Imports.
 # ------------------------------------------------------------------------------
-
-# Imports: General.
-from typing import Any
 
 # Imports: User-defined.
 from stochastic.Interfaces.RSA_1D_interface import RSA1D
@@ -19,8 +15,7 @@ from stochastic.Utilities.RSA_parameters import RSA1DParameters
 
 
 class Dimers(RSA1D):
-    """ Class to simulate random sequential adsorption with nearest neighbor
-        exclusion for a one-dimensional lattice.
+    """ Class to simulate random sequential adsorption of dimers.
 
         Inherited parameters:
 
