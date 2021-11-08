@@ -289,7 +289,6 @@ class RSA1D(metaclass=ABCMeta):
 
     # --------------------------------------------------------------------------
 
-
     @property
     def results_file(self) -> str:
         """ Returns the name of the file where the simulation results are to be
@@ -466,15 +465,11 @@ class RSA1D(metaclass=ABCMeta):
     # --------------------------------------------------------------------------
 
     def print_results(self) -> None:
-        """ Saves the results, with the information, to the given file.
+        """ Saves the results, with the information, to the given file."""
 
-            :param file_path: The string with the full path of where the file
-             with the information must be stored.
-        """
-
-        # ----------------------------------------------------------------------
-        # Auxiliary variables.
-        # ----------------------------------------------------------------------
+        # //////////////////////////////////////////////////////////////////////
+        # Auxiliary functions.
+        # //////////////////////////////////////////////////////////////////////
 
         def get_colum_widths(header0, statistics_table0):
             """ Gets the width of all the columns for it to be properly
@@ -502,9 +497,9 @@ class RSA1D(metaclass=ABCMeta):
 
             return columns_width0
 
-        # ----------------------------------------------------------------------
+        # //////////////////////////////////////////////////////////////////////
         # Implementation.
-        # ----------------------------------------------------------------------
+        # //////////////////////////////////////////////////////////////////////
 
         h_string = []
         preheader = self.get_preheader()
@@ -618,7 +613,7 @@ class RSA1D(metaclass=ABCMeta):
         # Always open in append mode.
         with open(self.lattice_file, "a") as fl:
             if initial:
-                fl.write(preheader + "\n" + header + "\n")
+                fl.write("\n".join([preheader, header, ""]))
 
             tmp_stats = [self.attempts / self.length]
             tmp_stats.extend(self.lattice)
@@ -738,7 +733,7 @@ class RSA1D(metaclass=ABCMeta):
 
         # Lattice parameters.
         self.length = parameters.length
-        self.lattice = self.length
+        self.lattice = None
         self.periodic = parameters.periodic
         self.lattice_file = parameters.lattice_file
 
