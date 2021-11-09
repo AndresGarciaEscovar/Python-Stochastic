@@ -217,13 +217,14 @@ class TestRSADimers(unittest.TestCase):
         # //////////////////////////////////////////////////////////////////////
 
         # Define the length.
-        parameters = RSA1DParameters()
-        parameters.length = 50
+        parameters = RSA2DParameters()
+        parameters.dimensions = (20, 20)
+        parameters.periodic = (False, False)
         parameters.maximum_time = 0.15
         parameters.repetitions = 10_000
 
         # Create the simulation.
-        simulation = NNExclusion(parameters)
+        simulation = Dimers(parameters)
 
         # //////////////////////////////////////////////////////////////////////
         # Tests
