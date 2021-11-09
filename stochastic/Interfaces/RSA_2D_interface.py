@@ -603,8 +603,9 @@ class RSA2D(metaclass=ABCMeta):
 
         # Set the table header.
         header = ["time\\index"]
+        product = itertools.product
         header.extend([
-            str(indexes) for indexes in itertools.product(*[range(dimension) for dimension in self.dimensions])
+            f"({indexes[0]}x{indexes[1]})" for indexes in product(*[range(dimension) for dimension in self.dimensions])
         ])
         header = ",".join(header)
 
@@ -694,14 +695,10 @@ class RSA2D(metaclass=ABCMeta):
         return abs((number0 - number1) / number0) <= self.tolerance
 
     @abstractmethod
-    def validate_adsorb(self, site_0: tuple, site_1: tuple) -> bool:
+    def validate_adsorb(self, *args) -> bool:
         """ Determines if the given site can adsorb a particle.
 
-            :param site_0: Number of the zeroth site where the dimer is going to
-             be adsorbed.
-
-             :param site_1: Number of the first site where the dimer is going to
-             be adsorbed.
+            :param args: The needed arguments to validate the adsorption.
 
             :return: If the site is empty and its inmediate neighbors are empty.
         """

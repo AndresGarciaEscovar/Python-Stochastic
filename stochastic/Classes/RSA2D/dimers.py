@@ -18,8 +18,8 @@ from stochastic.Utilities.RSA_parameters import RSA2DParameters
 
 
 class Dimers(RSA2D):
-    """ Class to simulate random sequential adsorption with nearest neighbor
-        exclusion for a one-dimensional lattice.
+    """ Class to simulate random sequential adsorption of dimers for a
+        two-dimensional lattice.
 
         Inherited parameters:
 
@@ -84,20 +84,23 @@ class Dimers(RSA2D):
             in the lattice onto which to adsorb.
         """
 
-        generator = self.random_generator.integers
+        generator = self.random_generator.choice
         site_0 = [0, 0]
-        if self.dimensions[0] > 1:
-            site_0[0] = generator(0, self.dimensions[0]) if self.periodic[0] else generator(0, self.dimensions[0] - 1)
-        if self.dimensions[1] > 1:
-            site_0[1] = generator(0, self.dimensions[1]) if self.periodic[1] else generator(0, self.dimensions[1] - 1)
-        site_0 = tuple(site_0)
+        site_1 = generator(numpy.array([[1, 0], [0, 1]], dtype=int))
 
-        generator = self.random_generator
-        site_1 = generator.choice(numpy.array([[1, 0], [0, 1]], dtype=int))
+        generator = self.random_generator.integers
+        if numpy.array_equal(site_1, numpy.array([1, 0], dtype=int)):
+            site_0[0] = generator(0, self.dimensions[0]) if self.periodic[0] else generator(0, self.dimensions[0] - 1)
+            site_0[1] = generator(0, self.dimensions[1])
+        else:
+            site_0[0] = generator(0, self.dimensions[0])
+            site_0[1] = generator(0, self.dimensions[1]) if self.periodic[1] else generator(0, self.dimensions[1] - 1)
+
         site_1 = tuple(map(int, site_0 + site_1))
         site_1 = self.normalize_site(site_1)
 
         self.attempts += 1
+        site_0 = tuple(site_0)
         if self.validate_adsorb(site_0, site_1):
             self.lattice[site_0[0]][site_0[1]] = RSA2D.OCCUPIED
             self.lattice[site_1[0]][site_1[1]] = RSA2D.OCCUPIED

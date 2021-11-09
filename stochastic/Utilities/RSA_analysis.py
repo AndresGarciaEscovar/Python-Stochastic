@@ -9,7 +9,6 @@
 import copy as cp
 import numpy as np
 
-from dataclasses import dataclass
 from matplotlib import pyplot as plt
 
 # ------------------------------------------------------------------------------
@@ -149,7 +148,7 @@ class RSA1DResultsAnalysis:
                 y_placement = [times[j] for _ in x_placement]
                 axis.scatter(x_placement, y_placement, s=10)
 
-            plt.suptitle(plot_title, fontsize=12)
+            plt.suptitle(plot_title, fontsize=6)
 
             xticks_minor = [k + 0.5 for k, _ in enumerate(configurations[0])]
             axis.set_xticks([k + 1 for k, _ in enumerate(configurations[0])], minor=False)
@@ -170,8 +169,13 @@ class RSA1DResultsAnalysis:
             axis.set_xlabel('Site Number')
             axis.set_ylabel('Elapsed Simulation Time')
 
-        plt.tight_layout()
-        plt.show()
+            file_path_ = file_path.split(".")
+            extension = ".png"
+            file_path_ = "".join([".".join(file_path_[:-1]), f"-frame_{i}", extension])
+
+            plt.tight_layout()
+            plt.savefig(file_path_)
+            plt.close(fig)
 
 
 class RSA2DResultsAnalysis:
@@ -246,7 +250,6 @@ class RSA2DResultsAnalysis:
                 :return: The data to be split into the data frames.
             """
 
-            # Create an empty list.
             data_frames0 = []
             tmp_list0 = []
             for i0, line0 in enumerate(data0):
@@ -272,38 +275,62 @@ class RSA2DResultsAnalysis:
 
         # Change the data to individual data frames.
         data = get_data_frames(data)
+
         for i, frame in enumerate(data):
-            plot_title = ", ".join(frame[0])
-            frame_data = np.array(frame[2:][:], dtype=float)
-            times = frame_data[:, 0]
-            configurations = frame_data[:, 1:]
+            times = [time[0] for time in frame[2:]]
+            indexes_list = [indexes for indexes in frame[1][1:]]
 
-            fig, axis = plt.subplots(nrows=1)
-            for j, configuration in enumerate(configurations):
-                x_placement = [1.0 * (k + 1) for k, particle in enumerate(configuration) if not particle == 0.0]
-                y_placement = [times[j] for _ in x_placement]
-                axis.scatter(x_placement, y_placement, s=10)
+            for j, indexes in enumerate(indexes_list):
+                indexes = indexes.split("x")
+                indexes_list[j] = [int(indexes[0].strip("(")), int(indexes[1].strip(")\n"))]
 
-            plt.suptitle(plot_title, fontsize=12)
+            indexes_x = [indexes[0] for indexes in indexes_list]
+            indexes_y = [indexes[1] for indexes in indexes_list]
 
-            xticks_minor = [k + 0.5 for k, _ in enumerate(configurations[0])]
-            axis.set_xticks([k + 1 for k, _ in enumerate(configurations[0])], minor=False)
-            axis.set_xticks(xticks_minor, minor=True)
+            frame_data = []
+            for row in frame[2:]:
+                row = map(int, row[1:])
+                frame_data.append(cp.deepcopy(list(row)))
 
-            yticks_minor = [(times[j] + times[j + 1]) / 2.0 for j in range(len(times) - 1)]
-            axis.set_yticks(times, minor=False)
-            axis.set_yticks(yticks_minor, minor=True)
-            axis.yaxis.grid(True, which='minor')
+            for j, time in enumerate(times):
+                row = frame_data[j]
+                x_placement = [1 * (indexes_x[k] + 1) for k, particles in enumerate(row) if particles == 1]
+                y_placement = [1 * (indexes_y[k] + 1) for k, particles in enumerate(row) if particles == 1]
 
-            axis.set_xlim(xticks_minor[0], xticks_minor[-1] + 1.0)
-            axis.set_ylim(-0.05, max(times) + 0.1)
-            axis.xaxis.grid(True, which='minor')
+                coverage = len(x_placement) / len(row)
 
-            axis.spines['left'].set_position(('data', xticks_minor[0]))
-            axis.spines['right'].set_position(('data', xticks_minor[-1] + 1.0))
+                fig, axis = plt.subplots(nrows=1)
+                axis.scatter(x_placement, y_placement, s=12)
 
-            axis.set_xlabel('Site Number')
-            axis.set_ylabel('Elapsed Simulation Time')
+                plot_title = ", ".join(frame[0])
+                plot_title = ", ".join([plot_title, f"Elapsed Time: {time}", f"Coverage = {coverage:.5f}"])
+                plt.suptitle(plot_title, fontsize=6)
 
-        plt.tight_layout()
-        plt.show()
+                xticks_minor = [k + 0.5 for k in indexes_x]
+                axis.set_xticks([k + 1 for k in indexes_x], minor=False)
+                axis.set_xticks(xticks_minor, minor=True)
+
+                yticks_minor = [k + 0.5 for k in indexes_y]
+                axis.set_yticks([k + 1 for k in indexes_y], minor=False)
+                axis.set_yticks(yticks_minor, minor=True)
+
+                axis.set_xlim(xticks_minor[0], xticks_minor[-1] + 1.0)
+                axis.set_ylim(yticks_minor[0], yticks_minor[-1] + 1.0)
+                axis.xaxis.grid(True, which='minor')
+                axis.yaxis.grid(True, which='minor')
+
+                axis.spines['left'].set_position(('data', xticks_minor[0]))
+                axis.spines['right'].set_position(('data', xticks_minor[-1] + 1.0))
+                axis.spines['bottom'].set_position(('data', yticks_minor[0]))
+                axis.spines['top'].set_position(('data', yticks_minor[-1] + 1.0))
+
+                axis.set_xlabel('x index')
+                axis.set_ylabel('y index')
+
+                file_path_ = file_path.split(".")
+                extension = ".png"
+                file_path_ = "".join([".".join(file_path_[:-1]), f"-frame_{i}-{j}", extension])
+
+                plt.tight_layout()
+                plt.savefig(file_path_)
+                plt.close(fig)

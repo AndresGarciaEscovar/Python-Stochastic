@@ -426,7 +426,7 @@ class TestRSADimers(unittest.TestCase):
 
         # Test a site.
         site = -1
-        self.assertEqual(parameters.length - 1,simulation.normalize_site(site))
+        self.assertEqual(parameters.length - 1, simulation.normalize_site(site))
 
         # Test another site.
         site = -1 - parameters.length

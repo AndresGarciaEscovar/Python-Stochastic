@@ -174,30 +174,30 @@ class TestRSADimers(unittest.TestCase):
         # No periodic indexes.
         simulation.periodic = (False, False)
         indexes_list = set()
-        dimensions = simulation.dimensions
+        dims = simulation.dimensions
         for i in range(50):
-            indexes_ = -random.randint(-10, -1), random.randint(0, dimensions[1] - 1)
+            indexes_ = -random.randint(-10, -1), random.randint(0, dims[1] - 1)
             indexes_list.add(copy.deepcopy(indexes_))
 
-            indexes_ = random.randint(dimensions[0], 2 * dimensions[0]), random.randint(0, dimensions[1] - 1)
+            indexes_ = random.randint(dims[0], 2 * dims[0]), random.randint(0, dims[1] - 1)
             indexes_list.add(copy.deepcopy(indexes_))
 
-            indexes_ = random.randint(0, dimensions[0] - 1), -random.randint(-10, -1)
+            indexes_ = random.randint(0, dims[0] - 1), -random.randint(-10, -1)
             indexes_list.add(copy.deepcopy(indexes_))
 
-            indexes_ = random.randint(0, dimensions[0] - 1), random.randint(dimensions[1], 2 * dimensions[1])
+            indexes_ = random.randint(0, dims[0] - 1), random.randint(dims[1], 2 * dims[1])
             indexes_list.add(copy.deepcopy(indexes_))
 
             indexes_ = random.randint(-10, -1), random.randint(-10, -1)
             indexes_list.add(copy.deepcopy(indexes_))
 
-            indexes_ = random.randint(dimensions[0], 2 * dimensions[0]), random.randint(dimensions[1], 2 * dimensions[1])
+            indexes_ = random.randint(dims[0], 2 * dims[0]), random.randint(dims[1], 2 * dims[1])
             indexes_list.add(copy.deepcopy(indexes_))
 
-            indexes_ = random.randint(-10, -1), random.randint(dimensions[1], 2 * dimensions[1])
+            indexes_ = random.randint(-10, -1), random.randint(dims[1], 2 * dims[1])
             indexes_list.add(copy.deepcopy(indexes_))
 
-            indexes_ = random.randint(dimensions[0], 2 * dimensions[0]), random.randint(-10, -1),
+            indexes_ = random.randint(dims[0], 2 * dims[0]), random.randint(-10, -1),
             indexes_list.add(copy.deepcopy(indexes_))
 
         for indexes in indexes_list:
