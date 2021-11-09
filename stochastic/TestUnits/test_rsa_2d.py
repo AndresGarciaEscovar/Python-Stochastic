@@ -5,6 +5,8 @@
 # ------------------------------------------------------------------------------
 
 # Imports: General.
+import copy
+import itertools
 import random
 import unittest
 
@@ -42,9 +44,17 @@ class TestRSADimers(unittest.TestCase):
         # Tests
         # //////////////////////////////////////////////////////////////////////
 
-        simulation.run_simulation()
+        # Choose 10 unique sites.
+        indexes_list = set()
+        while len(indexes_list) < 10:
+            indexes_ = random.randint(0, simulation.dimensions[0] - 1), random.randint(0, simulation.dimensions[1] - 1)
+            indexes_list.add(indexes_)
 
-    @unittest.skip("Skip while refactoring.")
+        for indexes in indexes_list:
+            simulation.lattice[indexes[0]][indexes[1]] = simulation.OCCUPIED
+
+        self.assertEqual(simulation.get_coverage(), len(indexes_list))
+
     def test_normalize_site(self):
         """ Tests that indexes are correctly fixed to indexes between the
             lattice.
@@ -55,37 +65,148 @@ class TestRSADimers(unittest.TestCase):
         # //////////////////////////////////////////////////////////////////////
 
         # Define the length.
-        parameters = RSA1DParameters()
-        parameters.length = 50
+        parameters = RSA2DParameters()
+        parameters.dimensions = (20, 20)
+        parameters.periodic = (False, False)
         parameters.maximum_time = 0.15
         parameters.repetitions = 10_000
 
         # Create the simulation.
-        simulation = NNExclusion(parameters)
+        simulation = Dimers(parameters)
 
         # //////////////////////////////////////////////////////////////////////
         # Tests
         # //////////////////////////////////////////////////////////////////////
 
-        # Set a site.
-        site = -1
-        self.assertEqual(parameters.length - 1, simulation.normalize_site(site))
+        # Change to both indexes periodic.
+        simulation.periodic = (True, True)
+        for indexes in itertools.product(*[range(i) for i in simulation.dimensions]):
+            indexes_ = simulation.normalize_site(indexes)
+            self.assertEqual(indexes, indexes_)
 
-        # This must yield the length.
-        site = -1 - parameters.length
-        self.assertEqual(parameters.length - 1,  simulation.normalize_site(site))
+        indexes = (-1, -1)
+        indexes_ = (simulation.dimensions[0] - 1, simulation.dimensions[1] - 1)
+        indexes = simulation.normalize_site(indexes)
+        self.assertEqual(indexes, indexes_)
 
-        # This must yield zero.
-        site = parameters.length
-        self.assertEqual(0,  simulation.normalize_site(site))
+        indexes = (20, -1)
+        indexes_ = 0, simulation.dimensions[1] - 1
+        indexes = simulation.normalize_site(indexes)
+        self.assertEqual(indexes, indexes_)
 
-        # This must yield 1.
-        site = parameters.length + 1
-        self.assertEqual(1,  simulation.normalize_site(site))
-        for i in range(100_000):
-            self.assertTrue(0 <= simulation.normalize_site(random.randint(-9000, 9000)) < parameters.length)
+        indexes = (-1, 20)
+        indexes_ = simulation.dimensions[0] - 1, 0
+        indexes = simulation.normalize_site(indexes)
+        self.assertEqual(indexes, indexes_)
 
-    @unittest.skip("Skip while refactoring.")
+        indexes = (20, 20)
+        indexes_ = 0, 0
+        indexes = simulation.normalize_site(indexes)
+        self.assertEqual(indexes, indexes_)
+
+        # Change to only x periodic index.
+        simulation.periodic = (True, False)
+
+        indexes = (-1, 4)
+        indexes_ = (simulation.dimensions[0] - 1, 4)
+        indexes = simulation.normalize_site(indexes)
+        self.assertEqual(indexes, indexes_)
+
+        indexes = (20, 4)
+        indexes_ = (0, 4)
+        indexes = simulation.normalize_site(indexes)
+        self.assertEqual(indexes, indexes_)
+
+        indexes = (-1, -1)
+        indexes_ = (simulation.dimensions[0] - 1, -1)
+        indexes = simulation.normalize_site(indexes)
+        self.assertEqual(indexes, indexes_)
+
+        indexes = (20, -1)
+        indexes_ = (0, -1)
+        indexes = simulation.normalize_site(indexes)
+        self.assertEqual(indexes, indexes_)
+
+        indexes = (-1, -1)
+        indexes_ = (simulation.dimensions[0] - 1, -1)
+        indexes = simulation.normalize_site(indexes)
+        self.assertEqual(indexes, indexes_)
+
+        indexes = (20, 30)
+        indexes_ = (0, 30)
+        indexes = simulation.normalize_site(indexes)
+        self.assertEqual(indexes, indexes_)
+
+        # Change to only y periodic index.
+        simulation.periodic = (False, True)
+
+        indexes = (4, -1)
+        indexes_ = (4, simulation.dimensions[1] - 1)
+        indexes = simulation.normalize_site(indexes)
+        self.assertEqual(indexes, indexes_)
+
+        indexes = (4, 20)
+        indexes_ = (4, 0)
+        indexes = simulation.normalize_site(indexes)
+        self.assertEqual(indexes, indexes_)
+
+        indexes = (-1, -1)
+        indexes_ = (-1, simulation.dimensions[1] - 1)
+        indexes = simulation.normalize_site(indexes)
+        self.assertEqual(indexes, indexes_)
+
+        indexes = (-1, 20)
+        indexes_ = (-1, 0)
+        indexes = simulation.normalize_site(indexes)
+        self.assertEqual(indexes, indexes_)
+
+        indexes = (-1, -1)
+        indexes_ = (-1, simulation.dimensions[1] - 1)
+        indexes = simulation.normalize_site(indexes)
+        self.assertEqual(indexes, indexes_)
+
+        indexes = (30, 20)
+        indexes_ = (30, 0)
+        indexes = simulation.normalize_site(indexes)
+        self.assertEqual(indexes, indexes_)
+
+        # No periodic indexes.
+        simulation.periodic = (False, False)
+        indexes_list = set()
+        dimensions = simulation.dimensions
+        for i in range(50):
+            indexes_ = -random.randint(-10, -1), random.randint(0, dimensions[1] - 1)
+            indexes_list.add(copy.deepcopy(indexes_))
+
+            indexes_ = random.randint(dimensions[0], 2 * dimensions[0]), random.randint(0, dimensions[1] - 1)
+            indexes_list.add(copy.deepcopy(indexes_))
+
+            indexes_ = random.randint(0, dimensions[0] - 1), -random.randint(-10, -1)
+            indexes_list.add(copy.deepcopy(indexes_))
+
+            indexes_ = random.randint(0, dimensions[0] - 1), random.randint(dimensions[1], 2 * dimensions[1])
+            indexes_list.add(copy.deepcopy(indexes_))
+
+            indexes_ = random.randint(-10, -1), random.randint(-10, -1)
+            indexes_list.add(copy.deepcopy(indexes_))
+
+            indexes_ = random.randint(dimensions[0], 2 * dimensions[0]), random.randint(dimensions[1], 2 * dimensions[1])
+            indexes_list.add(copy.deepcopy(indexes_))
+
+            indexes_ = random.randint(-10, -1), random.randint(dimensions[1], 2 * dimensions[1])
+            indexes_list.add(copy.deepcopy(indexes_))
+
+            indexes_ = random.randint(dimensions[0], 2 * dimensions[0]), random.randint(-10, -1),
+            indexes_list.add(copy.deepcopy(indexes_))
+
+        for indexes in indexes_list:
+            indexes_1 = simulation.normalize_site(indexes)
+            self.assertEqual(indexes, indexes_1)
+
+        for indexes in itertools.product(*[range(i) for i in simulation.dimensions]):
+            indexes_ = simulation.normalize_site(indexes)
+            self.assertEqual(indexes, indexes_)
+
     def test_validate_adsorb(self):
         """ Checks the function that determines whether a particle can be
             adsorbed is valid.
@@ -149,6 +270,7 @@ class TestRSADimers(unittest.TestCase):
                 continue
 
             self.assertTrue(simulation.validate_adsorb(i))
+
 
 # Executes the tests.
 if __name__ == '__main__':
