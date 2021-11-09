@@ -40,7 +40,7 @@ class RSA1DParameters:
     repetitions: int = 1000
 
     # Defines the tolerance, i.e., how close two numbers must be, to be equal.
-    tolerance = 1.0*10**(-5)
+    tolerance: float = 1.0*10**(-5)
 
 
 @dataclass
@@ -69,4 +69,4 @@ class RSA2DParameters:
     repetitions: int = 1000
 
     # Defines the tolerance, i.e., how close two numbers must be, to be equal.
-    tolerance = 1.0*10**(-5)
+    tolerance: float = 1.0*10**(-5)

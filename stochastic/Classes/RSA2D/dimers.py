@@ -84,12 +84,18 @@ class Dimers(RSA2D):
             in the lattice onto which to adsorb.
         """
 
-        generator = self.random_generator
-        site_0 = (generator.integers(0, self.dimensions[0]), generator.integers(0, self.dimensions[1]))
+        generator = self.random_generator.integers
+        site_0 = [0, 0]
+        if self.dimensions[0] > 1:
+            site_0[0] = generator(0, self.dimensions[0]) if self.periodic[0] else generator(0, self.dimensions[0] - 1)
+        if self.dimensions[1] > 1:
+            site_0[1] = generator(0, self.dimensions[1]) if self.periodic[1] else generator(0, self.dimensions[1] - 1)
+        site_0 = tuple(site_0)
 
-        site_1 = generator.choice(numpy.array([[1, 0], [-1, 0], [0, 1], [0, -1]], dtype=int))
-        site_1 = map(int, site_0 + site_1)
-        site_1 = self.normalize_site(tuple(site_1))
+        generator = self.random_generator
+        site_1 = generator.choice(numpy.array([[1, 0], [0, 1]], dtype=int))
+        site_1 = tuple(map(int, site_0 + site_1))
+        site_1 = self.normalize_site(site_1)
 
         self.attempts += 1
         if self.validate_adsorb(site_0, site_1):

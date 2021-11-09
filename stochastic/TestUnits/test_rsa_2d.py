@@ -7,6 +7,7 @@
 # Imports: General.
 import copy
 import itertools
+import numpy
 import random
 import unittest
 
@@ -231,46 +232,48 @@ class TestRSADimers(unittest.TestCase):
         # //////////////////////////////////////////////////////////////////////
 
         # With an empty lattice, it must be possible to adsorb anywhere.
-        for i in range(simulation.length):
-            self.assertTrue(simulation.validate_adsorb(i))
+        simulation.periodic = (True, True)
+        for site_0 in itertools.product(*[range(i) for i in simulation.dimensions]):
+            for indexes in numpy.array([[1, 0], [-1, 0], [0, 1], [0, -1]], dtype=int):
+                site_1 = tuple(map(int, indexes + site_0))
+                site_1 = simulation.normalize_site(site_1)
+                self.assertTrue(simulation.validate_adsorb(site_0, site_1))
 
-        # Set a particle in a site.
-        site = 34
-        simulation.lattice[site] = NNExclusion.OCCUPIED
-        for i in range(simulation.length):
-            if i == site - 1 or i == site or i == site + 1:
-                self.assertFalse(simulation.validate_adsorb(i))
-                continue
+        # With an empty lattice, it must be possible to adsorb anywhere.
+        simulation.periodic = (False, True)
+        for site_0 in itertools.product(*[range(i) for i in simulation.dimensions]):
+            for indexes in numpy.array([[1, 0], [-1, 0], [0, 1], [0, -1]], dtype=int):
+                site_1 = tuple(map(int, indexes + site_0))
+                site_1 = simulation.normalize_site(site_1)
+                if simulation.validate_in_lattice(site_1):
+                    self.assertTrue(simulation.validate_adsorb(site_0, site_1))
+                    continue
 
-            self.assertTrue(simulation.validate_adsorb(i))
+                self.assertFalse(simulation.validate_adsorb(site_0, site_1))
 
-        simulation.lattice[site] = NNExclusion.EMPTY
+        # With an empty lattice, it must be possible to adsorb anywhere.
+        simulation.periodic = (True, False)
+        for site_0 in itertools.product(*[range(i) for i in simulation.dimensions]):
+            for indexes in numpy.array([[1, 0], [-1, 0], [0, 1], [0, -1]], dtype=int):
+                site_1 = tuple(map(int, indexes + site_0))
+                site_1 = simulation.normalize_site(site_1)
+                if simulation.validate_in_lattice(site_1):
+                    self.assertTrue(simulation.validate_adsorb(site_0, site_1))
+                    continue
 
-        # Set a particle at the origin a site.
-        site = 0
-        simulation.lattice[site] = NNExclusion.OCCUPIED
-        for i in range(simulation.length):
-            valid = i == simulation.normalize_site(site - 1) or i == simulation.normalize_site(site)
-            valid = valid or i == simulation.normalize_site(site + 1)
-            if valid:
-                self.assertFalse(simulation.validate_adsorb(i))
-                continue
+                self.assertFalse(simulation.validate_adsorb(site_0, site_1))
 
-            self.assertTrue(simulation.validate_adsorb(i))
+        # With an empty lattice, it must be possible to adsorb anywhere.
+        simulation.periodic = (False, False)
+        for site_0 in itertools.product(*[range(i) for i in simulation.dimensions]):
+            for indexes in numpy.array([[1, 0], [-1, 0], [0, 1], [0, -1]], dtype=int):
+                site_1 = tuple(map(int, indexes + site_0))
+                site_1 = simulation.normalize_site(site_1)
+                if simulation.validate_in_lattice(site_1):
+                    self.assertTrue(simulation.validate_adsorb(site_0, site_1))
+                    continue
 
-        simulation.lattice[site] = NNExclusion.EMPTY
-
-        # Set a particle at the last site.
-        site = -1
-        simulation.lattice[site] = NNExclusion.OCCUPIED
-        for i in range(simulation.length):
-            valid = i == simulation.normalize_site(site - 1) or i == simulation.normalize_site(site)
-            valid = valid or i == simulation.normalize_site(site + 1)
-            if valid:
-                self.assertFalse(simulation.validate_adsorb(i))
-                continue
-
-            self.assertTrue(simulation.validate_adsorb(i))
+                self.assertFalse(simulation.validate_adsorb(site_0, site_1))
 
 
 # Executes the tests.

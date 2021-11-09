@@ -19,8 +19,8 @@ if __name__ == "__main__":
     simulation.run_simulation()
 
     # Plot the graphs.
-    RSA1DResultsAnalysis.plot_results("Dimers_results.txt")
-    RSA1DResultsAnalysis.plot_lattices("Dimers_lattice.txt")
+    RSA1DResultsAnalysis.plot_results(parameters.results_file)
+    RSA1DResultsAnalysis.plot_lattices(parameters.lattice_file)
 
     # Set the parameters.
     parameters = RSA1DParameters()
@@ -37,5 +37,5 @@ if __name__ == "__main__":
     simulation.run_simulation()
 
     # Plot the graphs.
-    RSA1DResultsAnalysis.plot_results("NNExclusion_results.txt")
-    RSA1DResultsAnalysis.plot_lattices("NNExclusion_lattice.txt")
+    RSA1DResultsAnalysis.plot_results(parameters.results_file)
+    RSA1DResultsAnalysis.plot_lattices(parameters.lattice_file)
