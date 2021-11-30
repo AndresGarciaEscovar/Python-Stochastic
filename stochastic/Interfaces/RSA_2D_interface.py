@@ -22,8 +22,16 @@ from stochastic.Utilities.RSA_parameters import RSA2DParameters
 
 
 class RSA2D(metaclass=ABCMeta):
-    """ Class to simulate random sequential adsorption with nearest neighbor
-        exclusion for a one-dimensional lattice.
+    """ Class that is the interface to build random sequential adsorption
+        simulations in 2 dimensions.
+
+        Constants:
+
+        - EMPTY: Represents the empty state of a cell in the system.
+
+        - OCCUPIED: Represents the occupied state of a cell in the system.
+
+        Parameters:
 
         - self.attemps: An integer that represents the number of attempts at
           adsorbing a particle.
