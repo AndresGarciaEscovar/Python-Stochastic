@@ -1,4 +1,4 @@
-""" Contains examples for the 1D systems."""
+""" Contains the examples for the 1D systems."""
 
 # ------------------------------------------------------------------------------
 # Imports.
