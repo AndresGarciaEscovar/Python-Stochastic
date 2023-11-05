@@ -1,0 +1,26 @@
+# The yaml file with the specific configuration for the adsorption and desorption grid.
+#
+# Mandatory parameters:
+#
+#  - dimensionality: The dimensionality of the grid. Must be either "1D" or "2D"
+#  - label: The label to be included in the plot title.
+#  - nticks: The number of ticks in the grid.
+#  - particles: A dictionary with the following keys
+#    - adsorbing: A list with the indexes of the adsorbing particles. The numbers must not be repeated and must be
+#      in the interval [0, nticks). They must not conflict with the fixed particles.
+#    - desorbing: A list with the indexes of the desorbing particles. The numbers must not be repeated and must be
+#      in the interval [0, nticks). They must be a subset of the fixed particles.
+#    - fixed: The indexes of the fixed particles. The numbers must not be repeated and must be in the interval
+#      [0, nticks).
+#
+# Optional parameters:
+#
+#  - font_size: The size of the font; must be a valid LaTeX font size.
+#
+dimensionality: "1D"
+label: "Adsorption - Desorption"
+nticks: 11
+particles:
+  adsorbing: [ 3 ]
+  desorbing: [ 1, 5, 8]
+  fixed: [ 1, 5, 6, 7, 8, 9 ]
