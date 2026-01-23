@@ -12,7 +12,7 @@ import random
 import unittest
 
 # Imports: User-defined classes.
-from stochastic.Classes.Spin1D.neighbors import Neighbors
+from stochastic.classes.Spin1D.neighbors import Neighbors
 
 # ------------------------------------------------------------------------------
 # Classes.

@@ -9,10 +9,10 @@ import random
 import unittest
 
 # Imports: User-defined classes.
-from stochastic.Classes.RSA1D.dimers import Dimers
-from stochastic.Classes.RSA1D.nn_exclusion import NNExclusion
+from stochastic.classes.RSA1D.dimers import Dimers
+from stochastic.classes.RSA1D.nn_exclusion import NNExclusion
 
-from stochastic.Utilities.RSA_parameters import RSA1DParameters
+from stochastic.utilities.RSA_parameters import RSA1DParameters
 
 # ------------------------------------------------------------------------------
 # Classes.
