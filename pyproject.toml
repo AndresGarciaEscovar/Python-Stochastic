@@ -33,19 +33,17 @@ dependencies = [
 version = "0.0.1"
 
 
-# ---------------------------------------- Optional Fields --------------------------------------- #
-
-
-[project.optional-dependencies]
-debugging = ["icecream==2.1.3"]
-
-
 # --------------------------------------- Package Commands --------------------------------------- #
 
 
 [project.scripts]
 ccheckers = "ccheckers.__main__:main"
 
+# --------------------------------------- Package URLS --------------------------------------- #
+
+
+[project.urls]
+repository = "https://github.com/AndresGarciaEscovar/Stochastic"
 
 # -------------------------------------- Packages to Include ------------------------------------- #
 
