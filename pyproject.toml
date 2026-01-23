@@ -34,6 +34,16 @@ version = "0.0.1"
 # --------------------------------------- Package Commands --------------------------------------- #
 
 
+[project.optional-dependencies]
+linting = [
+    "flake8=7.3.0",
+    "pylint=4.04"
+]
+
+
+# --------------------------------------- Package Commands --------------------------------------- #
+
+
 [project.scripts]
 ccheckers = "ccheckers.__main__:main"
 
