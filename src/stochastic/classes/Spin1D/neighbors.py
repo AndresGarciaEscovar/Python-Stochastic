@@ -6,7 +6,7 @@
 # Imports.
 # ------------------------------------------------------------------------------
 
-from stochastic.Interfaces.Spin1D_interface import Spin1D
+from stochastic.interfaces.Spin1D_interface import Spin1D
 
 # ------------------------------------------------------------------------------
 # Classes.

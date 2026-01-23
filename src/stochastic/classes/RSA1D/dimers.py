@@ -1,5 +1,4 @@
-""" File that contains the random sequential adsorption with nearest neighbors
-    exclusion.
+""" File that contains the random sequential adsorption of dimers.
 """
 
 # ------------------------------------------------------------------------------
@@ -7,17 +6,16 @@
 # ------------------------------------------------------------------------------
 
 # Imports: User-defined.
-from stochastic.Interfaces.RSA_1D_interface import RSA1D
-from stochastic.Utilities.RSA_parameters import RSA1DParameters
+from stochastic.interfaces.RSA_1D_interface import RSA1D
+from stochastic.utilities.RSA_parameters import RSA1DParameters
 
 # ------------------------------------------------------------------------------
 # Classes.
 # ------------------------------------------------------------------------------
 
 
-class NNExclusion(RSA1D):
-    """ Class to simulate random sequential adsorption with nearest neighbor
-        exclusion for a one-dimensional lattice.
+class Dimers(RSA1D):
+    """ Class to simulate random sequential adsorption of dimers.
 
         Inherited parameters:
 
@@ -58,7 +56,7 @@ class NNExclusion(RSA1D):
     # --------------------------------------------------------------------------
     # Get Methods.
     # --------------------------------------------------------------------------
-    
+
     def get_preheader(self) -> str:
         """ Returns the pre-header, i.e., the string that contains the
             simulation information.
@@ -67,7 +65,7 @@ class NNExclusion(RSA1D):
         """
 
         preheader = ",".join([
-            f"RSA Nearest Neighbor Exclusion", f"seed={self.seed}", f"repetitions(n)={self.repetitions}",
+            f"RSA Dimer", f"seed={self.seed}", f"repetitions(n)={self.repetitions}",
             f"maximum time={self.maximum_time}", f"length={self.length}", f"periodic={self.periodic}"
         ])
 
@@ -81,11 +79,13 @@ class NNExclusion(RSA1D):
         """ Tries to perform an adsorption operation; i.e., select a random site
             in the lattice onto which to adsorb.
         """
-
-        site = self.random_generator.integers(0, self.length)
+        generator = self.random_generator
+        site = generator.integers(0, self.length) if self.periodic else generator.integers(0, self.length - 1)
         self.attempts += 1
         if self.validate_adsorb(site):
+            site_ = self.normalize_site(site + 1)
             self.lattice[site] = RSA1D.OCCUPIED
+            self.lattice[site_] = RSA1D.OCCUPIED
             self.attempts_successful += 1
 
     # --------------------------------------------------------------------------
@@ -105,12 +105,6 @@ class NNExclusion(RSA1D):
             return False
 
         examined = {site_}
-        if ((site - 1) < 0 and self.periodic) or site > 0:
-            site_ = self.normalize_site(site - 1)
-            if (site_ not in examined) and not self.lattice[site_] == RSA1D.EMPTY:
-                return False
-
-        examined.add(site_)
         if ((site + 1) >= self.length and self.periodic) or (site + 1) < self.length:
             site_ = self.normalize_site(site + 1)
             if (site_ not in examined) and not self.lattice[site_] == RSA1D.EMPTY:
@@ -132,4 +126,4 @@ class NNExclusion(RSA1D):
             :param parameters: A dataclass that contains the adjustable
              parameters of the simulation.
         """
-        super(NNExclusion, self).__init__(parameters)
+        super(Dimers, self).__init__(parameters)

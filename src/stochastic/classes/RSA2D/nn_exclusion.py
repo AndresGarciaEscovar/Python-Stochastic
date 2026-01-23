@@ -10,8 +10,8 @@
 import copy as cp
 
 # Imports: User-defined.
-from stochastic.Interfaces.RSA_2D_interface import RSA2D
-from stochastic.Utilities.RSA_parameters import RSA2DParameters
+from stochastic.interfaces.RSA_2D_interface import RSA2D
+from stochastic.utilities.RSA_parameters import RSA2DParameters
 
 # ------------------------------------------------------------------------------
 # Classes.
@@ -61,7 +61,7 @@ class NNExclusion(RSA2D):
     # --------------------------------------------------------------------------
     # Get Methods.
     # --------------------------------------------------------------------------
-    
+
     def get_preheader(self) -> str:
         """ Returns the pre-header, i.e., the string that contains the
             simulation information.

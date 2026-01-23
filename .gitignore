@@ -4,6 +4,7 @@
 
 # Hidden.
 .idea
+.venv
 .vscode
 
 # Configuration.

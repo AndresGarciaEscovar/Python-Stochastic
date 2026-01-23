@@ -13,7 +13,7 @@ from abc import ABCMeta, abstractmethod
 from typing import Any
 
 # Imports: User-defined.
-from stochastic.Utilities.RSA_parameters import RSA1DParameters
+from stochastic.utilities.RSA_parameters import RSA1DParameters
 
 # ------------------------------------------------------------------------------
 # Classes.

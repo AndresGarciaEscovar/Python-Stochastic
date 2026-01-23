@@ -5,17 +5,21 @@
 # Imports.
 # ------------------------------------------------------------------------------
 
+# Imports: General.
+import numpy
+
 # Imports: User-defined.
-from stochastic.Interfaces.RSA_1D_interface import RSA1D
-from stochastic.Utilities.RSA_parameters import RSA1DParameters
+from stochastic.interfaces.RSA_2D_interface import RSA2D
+from stochastic.utilities.RSA_parameters import RSA2DParameters
 
 # ------------------------------------------------------------------------------
 # Classes.
 # ------------------------------------------------------------------------------
 
 
-class Dimers(RSA1D):
-    """ Class to simulate random sequential adsorption of dimers.
+class Dimers(RSA2D):
+    """ Class to simulate random sequential adsorption of dimers for a
+        two-dimensional lattice.
 
         Inherited parameters:
 
@@ -56,7 +60,7 @@ class Dimers(RSA1D):
     # --------------------------------------------------------------------------
     # Get Methods.
     # --------------------------------------------------------------------------
-    
+
     def get_preheader(self) -> str:
         """ Returns the pre-header, i.e., the string that contains the
             simulation information.
@@ -65,8 +69,8 @@ class Dimers(RSA1D):
         """
 
         preheader = ",".join([
-            f"RSA Dimer", f"seed={self.seed}", f"repetitions(n)={self.repetitions}",
-            f"maximum time={self.maximum_time}", f"length={self.length}", f"periodic={self.periodic}"
+            f"RSA-2D Dimer", f"seed={self.seed}", f"repetitions(n)={self.repetitions}",
+            f"maximum time={self.maximum_time}", f"dimensions={self.dimensions}", f"periodic={self.periodic}"
         ])
 
         return preheader
@@ -79,38 +83,54 @@ class Dimers(RSA1D):
         """ Tries to perform an adsorption operation; i.e., select a random site
             in the lattice onto which to adsorb.
         """
-        generator = self.random_generator
-        site = generator.integers(0, self.length) if self.periodic else generator.integers(0, self.length - 1)
+
+        generator = self.random_generator.choice
+        site_0 = [0, 0]
+        site_1 = generator(numpy.array([[1, 0], [0, 1]], dtype=int))
+
+        generator = self.random_generator.integers
+        if numpy.array_equal(site_1, numpy.array([1, 0], dtype=int)):
+            site_0[0] = generator(0, self.dimensions[0]) if self.periodic[0] else generator(0, self.dimensions[0] - 1)
+            site_0[1] = generator(0, self.dimensions[1])
+        else:
+            site_0[0] = generator(0, self.dimensions[0])
+            site_0[1] = generator(0, self.dimensions[1]) if self.periodic[1] else generator(0, self.dimensions[1] - 1)
+
+        site_1 = tuple(map(int, site_0 + site_1))
+        site_1 = self.normalize_site(site_1)
+
         self.attempts += 1
-        if self.validate_adsorb(site):
-            site_ = self.normalize_site(site + 1)
-            self.lattice[site] = RSA1D.OCCUPIED
-            self.lattice[site_] = RSA1D.OCCUPIED
+        site_0 = tuple(site_0)
+        if self.validate_adsorb(site_0, site_1):
+            self.lattice[site_0[0]][site_0[1]] = RSA2D.OCCUPIED
+            self.lattice[site_1[0]][site_1[1]] = RSA2D.OCCUPIED
             self.attempts_successful += 1
 
     # --------------------------------------------------------------------------
     # Validate Methods.
     # --------------------------------------------------------------------------
 
-    def validate_adsorb(self, site: int) -> bool:
+    def validate_adsorb(self, site_0: tuple, site_1: tuple) -> bool:
         """ Determines if the given site can adsorb a particle.
 
-            :param site: The site to be examined. Must be an integer number.
+            :param site_0: Number of the zeroth site where the dimer is going to
+             be adsorbed.
+
+             :param site_1: Number of the first site where the dimer is going to
+             be adsorbed.
 
             :return: If the site is empty and its inmediate neighbors are empty.
         """
 
-        site_ = self.normalize_site(site)
-        if not self.lattice[site_] == RSA1D.EMPTY:
+        if not self.lattice[site_0[0]][site_0[1]] == RSA2D.EMPTY:
             return False
 
-        examined = {site_}
-        if ((site + 1) >= self.length and self.periodic) or (site + 1) < self.length:
-            site_ = self.normalize_site(site + 1)
-            if (site_ not in examined) and not self.lattice[site_] == RSA1D.EMPTY:
-                return False
+        examined = {site_0}
+        if self.validate_in_lattice(site_1) and site_1 not in examined:
+            if self.lattice[site_1[0]][site_1[1]] == RSA2D.EMPTY:
+                return True
 
-        return True
+        return False
 
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     # Constructor and Dunder Methods.
@@ -120,7 +140,7 @@ class Dimers(RSA1D):
     # Constructor.
     # --------------------------------------------------------------------------
 
-    def __init__(self, parameters: RSA1DParameters):
+    def __init__(self, parameters: RSA2DParameters):
         """ Initializes the simulation parameters.
 
             :param parameters: A dataclass that contains the adjustable

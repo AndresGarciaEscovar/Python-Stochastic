@@ -7,52 +7,48 @@
 # ------------------------------------------------------------------------------
 
 # Imports: General.
-import itertools
 import numpy
 
 from abc import ABCMeta, abstractmethod
 from typing import Any
 
 # Imports: User-defined.
-from stochastic.Utilities.RSA_parameters import RSA2DParameters
+from stochastic.utilities.RSA_parameters import RSA1DParameters
 
 # ------------------------------------------------------------------------------
 # Classes.
 # ------------------------------------------------------------------------------
 
 
-class RSA2D(metaclass=ABCMeta):
+class Spin1D(metaclass=ABCMeta):
     """ Class that is the interface to build random sequential adsorption
-        simulations in 2 dimensions.
+        simulations in 1 dimension.
 
         Constants:
 
-        - EMPTY: Represents the empty state of a cell in the system.
+        - UP: Represents an "up" spin state in the cell of the system.
 
-        - OCCUPIED: Represents the occupied state of a cell in the system.
+        - DOWN: Represents a "down" spin state in the cell of the system.
 
         Parameters:
 
         - self.attemps: An integer that represents the number of attempts at
           adsorbing a particle.
 
-        - self.attempts_successful: An integer that represents the number of
-          successful attempts at adsorbing a particle.
-
-        - self.dimensions: A 2-tuple that indicates the dimensions of the
-          lattice.
-
         - self.lattice: A list that represents the lattice where the particles
-          live.
+          with the "up" or "down" spin live.
 
         - self.lattice_file: The name of the file where the lattice must be
           printed.
 
+        - self.length: A positive integer that represents the length of the
+          lattice.
+
         - self.maximum_time: The maximum time for which the simulation must be
           run.
 
-        - self.periodic: A 2-tuple with boolean flags that indicate the
-          periodicity of each dimension.
+        - self.periodic: A boolean flag that indicates if the lattice is
+          periodic.
 
         - self.random_generator: The random number generator.
 
@@ -76,8 +72,8 @@ class RSA2D(metaclass=ABCMeta):
     # Constants
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-    EMPTY = 0  # type: int
-    OCCUPIED = 1  # type: int
+    UP = 1  # type: int
+    DOWN = -1  # type: int
 
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     # Getters/Setters/Deleters
@@ -107,56 +103,6 @@ class RSA2D(metaclass=ABCMeta):
     # --------------------------------------------------------------------------
 
     @property
-    def attempts_successful(self) -> int:
-        """ Returns the number of successful attempts to place a particle in the
-            lattice.
-
-            :return: The number of successful attempts to place a particle in
-             the lattice.
-        """
-        return self.__attempts_successful
-
-    @attempts_successful.setter
-    def attempts_successful(self, attempts_successful: int) -> None:
-        """ Sets the number of successful attempts.
-
-            :param attempts_successful: The number of successful attempts to
-             make a move.
-        """
-        self.__attempts_successful = attempts_successful
-
-    @attempts_successful.deleter
-    def attempts_successful(self) -> None:
-        """ Deletes the parameter."""
-        raise PermissionError("The attempts_successful variable must not be deleted.")
-
-    # --------------------------------------------------------------------------
-
-    @property
-    def dimensions(self) -> tuple:
-        """ Returns the dimensions of the lattice.
-
-            :return: The dimensions of the lattice.
-        """
-        return self.__dimensions
-
-    @dimensions.setter
-    def dimensions(self, dimensions: tuple) -> None:
-        """ Sets the length of the lattice.
-
-            :param dimensions: A tuple of positive integers tha represent the
-             dimensions of the lattice.
-        """
-        self.__dimensions = (int(abs(dimensions[0])), int(abs(dimensions[1])))
-
-    @dimensions.deleter
-    def dimensions(self) -> None:
-        """ Deletes the parameter."""
-        raise PermissionError("The length variable must not be deleted.")
-
-    # --------------------------------------------------------------------------
-
-    @property
     def lattice(self) -> list:
         """ Returns the list that represents the lattice.
 
@@ -167,7 +113,7 @@ class RSA2D(metaclass=ABCMeta):
     @lattice.setter
     def lattice(self, _) -> None:
         """ Creates the lattice."""
-        self.__lattice = [[RSA2D.EMPTY for _ in range(self.dimensions[1])] for _ in range(self.dimensions[0])]
+        self.__lattice = [Spin1D.DOWN for _ in range(self.length)]
 
     @lattice.deleter
     def lattice(self) -> None:
@@ -204,6 +150,29 @@ class RSA2D(metaclass=ABCMeta):
     # --------------------------------------------------------------------------
 
     @property
+    def length(self) -> int:
+        """ Returns the length of the lattice.
+
+            :return: The length of the lattice.
+        """
+        return self.__length
+
+    @length.setter
+    def length(self, length: int) -> None:
+        """ Sets the length of the lattice.
+
+            :param length: The length of the lattice. A positive integer number.
+        """
+        self.__length = int(abs(length))
+
+    @length.deleter
+    def length(self) -> None:
+        """ Deletes the parameter."""
+        raise PermissionError("The length variable must not be deleted.")
+
+    # --------------------------------------------------------------------------
+
+    @property
     def maximum_time(self) -> float:
         """ Returns the maximum simulation time.
 
@@ -229,7 +198,7 @@ class RSA2D(metaclass=ABCMeta):
     # --------------------------------------------------------------------------
 
     @property
-    def periodic(self) -> tuple[bool, ...]:
+    def periodic(self) -> bool:
         """ Indicates if the lattice is periodic.
 
             :return: True, if the lattice is periodic. False, otherwise.
@@ -237,13 +206,12 @@ class RSA2D(metaclass=ABCMeta):
         return self.__periodic
 
     @periodic.setter
-    def periodic(self, periodic: tuple[bool, ...]) -> None:
-        """ Sets the flag to indicate if the lattice is periodic. One flag for
-            each dimension.
+    def periodic(self, periodic: bool) -> None:
+        """ Sets the flag to indicate if the lattice is periodic.
 
             :param periodic: The flag to indicate if the lattice is periodic.
         """
-        self.__periodic = (periodic[0], periodic[1])
+        self.__periodic = periodic
 
     @periodic.deleter
     def periodic(self) -> None:
@@ -399,18 +367,50 @@ class RSA2D(metaclass=ABCMeta):
     # Get Methods.
     # --------------------------------------------------------------------------
 
-    def get_coverage(self):
-        """ Gets the number non-empty sites in the lattice.
+    def get_empty_nts(self, order: int):
+        """ Gets the number n of consecutive empty sites, with respect to all
+            the sites in the lattice.
 
-            :return: the number non-empty sites in the lattice.
-        """
-        iterator = itertools.product(*[range(i) for i in self.dimensions])
-        return sum([1 for i, j in iterator if not self.lattice[i][j] == RSA2D.EMPTY])
+            :param order: The number of consecutive sites that must be empty.
 
-    def get_number_of_cells(self):
-        """ Returns the number of cells in the lattice.
+            :return: The number of sites that are empty and whose n consecutive
+             neighbors to the right are empty.
         """
-        return int(numpy.prod(self.dimensions))
+
+        # //////////////////////////////////////////////////////////////////////
+        # Auxiliary functions.
+        # //////////////////////////////////////////////////////////////////////
+
+        def validate_continue(site0: int, order0: int) -> bool:
+            """ Validates if the counting must continue.
+
+                :param site0: The site that is currently being evaluated.
+
+                :param order0: The number of consecutive sites that must be
+                 empty.
+
+                :return: True, if the counting must continue. False, otherwise.
+            """
+            return site0 == self.length - (order0 - 1) and not self.periodic
+
+        # //////////////////////////////////////////////////////////////////////
+        # Implementation.
+        # //////////////////////////////////////////////////////////////////////
+
+        counter = 0
+        for site in range(self.length):
+            empty = self.lattice[site] == RSA1D.EMPTY
+
+            if validate_continue(site, order):
+                break
+
+            for site_ in range(1, order):
+                site_ = self.normalize_site(site_ + site)
+                empty = empty and self.lattice[site_] == RSA1D.EMPTY
+
+            counter += 1 if empty else 0
+
+        return counter
 
     @abstractmethod
     def get_preheader(self) -> str:
@@ -425,7 +425,7 @@ class RSA2D(metaclass=ABCMeta):
     # Normalize Methods.
     # --------------------------------------------------------------------------
 
-    def normalize_site(self, site: tuple) -> tuple:
+    def normalize_site(self, site: int) -> int:
         """ Given an scalar integer site, returns the site in the lattice, as it
             would correspond to the periodicity.
 
@@ -434,35 +434,10 @@ class RSA2D(metaclass=ABCMeta):
             :return: The normalized site.
         """
 
-        # //////////////////////////////////////////////////////////////////////
-        # Auxiliary functions.
-        # //////////////////////////////////////////////////////////////////////
+        while site < 0:
+            site += self.length
 
-        def get_periodic(index0: int, periodicity0: int) -> int:
-            """ Given a scalar integer index, and its periodicity, returns the
-                proper index in the range 0 <= index0 < periodicity.
-
-                :param index0: The index to be normalized.
-
-                :param periodicity0: The periodicty of the dimension.
-
-                :return: The normalized site.
-            """
-
-            while index0 < 0:
-                index0 += periodicity0
-
-            return index0 % periodicity0
-
-        # //////////////////////////////////////////////////////////////////////
-        # Implementation.
-        # //////////////////////////////////////////////////////////////////////
-
-        site_ = tuple(
-            get_periodic(site[i], self.dimensions[i]) if self.periodic[i] else site[i] for i in range(2)
-        )
-
-        return site_
+        return site % self.length
 
     # --------------------------------------------------------------------------
     # Print Results.
@@ -507,7 +482,7 @@ class RSA2D(metaclass=ABCMeta):
 
         h_string = []
         preheader = self.get_preheader()
-        header = ["attemps/n", "successes/n", "coverage"]
+        header = ["attemps/n", "successes/n", "singlets/n", "doublets/n", "triplets/n"]
         colum_widths = get_colum_widths(header, self.statistics_table)
 
         with open(self.results_file, "w") as fl:
@@ -543,12 +518,11 @@ class RSA2D(metaclass=ABCMeta):
         """
 
         # Reset the lattice.
-        for i, j in itertools.product(*[range(dimension) for dimension in self.dimensions]):
-            self.lattice[i][j] = RSA2D.EMPTY
+        for i in range(self.length):
+            self.lattice[i] = Spin1D.DOWN
 
         # Reset the counters.
         self.attempts = 0
-        self.attempts_successful = 0
 
     # --------------------------------------------------------------------------
     # Run Methods.
@@ -583,10 +557,10 @@ class RSA2D(metaclass=ABCMeta):
         while elapsed_time < self.maximum_time:
             self.statistics_record()
             self.process_adsorb()
-            if number == 0 and (10 * self.attempts) % self.get_number_of_cells() == 0:
+            if number == 0 and (10 * self.attempts) % self.length == 0:
                 self.save_lattice(initial=False, last=False)
 
-            elapsed_time = self.attempts / self.get_number_of_cells()
+            elapsed_time = self.attempts / self.length
 
         self.statistics_record()
         if number == 0:
@@ -610,11 +584,8 @@ class RSA2D(metaclass=ABCMeta):
         preheader = self.get_preheader()
 
         # Set the table header.
-        header = ["time\\index"]
-        product = itertools.product
-        header.extend([
-            f"({indexes[0]}x{indexes[1]})" for indexes in product(*[range(dimension) for dimension in self.dimensions])
-        ])
+        header = ["time\\site"]
+        header.extend([str(i) for i in range(1, self.length + 1)])
         header = ",".join(header)
 
         # Always open in append mode.
@@ -622,14 +593,13 @@ class RSA2D(metaclass=ABCMeta):
             if initial:
                 fl.write("\n".join([preheader, header, ""]))
 
-            tmp_stats = [self.attempts / self.get_number_of_cells()]
-            for i, j in itertools.product(*[range(dimension) for dimension in self.dimensions]):
-                tmp_stats.append(self.lattice[i][j])
+            tmp_stats = [self.attempts / self.length]
+            tmp_stats.extend(self.lattice)
             tmp_stats = ",".join([f"{stat:0.3f}" if i == 0 else f"{stat:1}" for i, stat in enumerate(tmp_stats)])
             fl.write("".join([tmp_stats, "\n"]))
 
             if last:
-                fl.write("".join(["-" * self.get_number_of_cells(), "\n"]))
+                fl.write("".join(["-" * self.length, "\n"]))
 
     # --------------------------------------------------------------------------
     # Statistics Methods.
@@ -656,6 +626,8 @@ class RSA2D(metaclass=ABCMeta):
             for i0, _ in enumerate(self.statistics_table):
                 self.statistics_table[i0][1] /= number_simulations0
                 self.statistics_table[i0][2] /= number_simulations0
+                self.statistics_table[i0][3] /= number_simulations0
+                self.statistics_table[i0][4] /= number_simulations0
 
         # //////////////////////////////////////////////////////////////////////
         # Implementation.
@@ -665,22 +637,25 @@ class RSA2D(metaclass=ABCMeta):
             normalize_results(number_simulations)
             return
 
-        if not (10 * self.attempts) % self.get_number_of_cells() == 0:
+        if not (10 * self.attempts) % self.length == 0:
             return
 
         # Get statistics.
-        elapsed_time = self.attempts / self.get_number_of_cells()
-        successful = self.attempts_successful / self.get_number_of_cells()
-        coverage = self.get_coverage() / self.get_number_of_cells()
+        elapsed_time = self.attempts / self.length
+        singlets = self.get_empty_nts(1) / self.length
+        doublets = self.get_empty_nts(2) / self.length
+        triplets = self.get_empty_nts(3) / self.length
 
         # Go through all the entries.
         for i, statistic in enumerate(self.statistics_table):
             if self.validate_almost_equal(elapsed_time, statistic[0]):
                 self.statistics_table[i][1] += successful
-                self.statistics_table[i][2] += coverage
+                self.statistics_table[i][2] += singlets
+                self.statistics_table[i][3] += doublets
+                self.statistics_table[i][4] += triplets
                 return
 
-        self.statistics_table.append([elapsed_time, successful, coverage])
+        self.statistics_table.append([elapsed_time, successful, singlets, doublets, triplets])
 
     # --------------------------------------------------------------------------
     # Validate Methods.
@@ -703,18 +678,14 @@ class RSA2D(metaclass=ABCMeta):
         return abs((number0 - number1) / number0) <= self.tolerance
 
     @abstractmethod
-    def validate_adsorb(self, *args) -> bool:
+    def validate_adsorb(self, site: int) -> bool:
         """ Determines if the given site can adsorb a particle.
 
-            :param args: The needed arguments to validate the adsorption.
+            :param site: The site to be examined. Must be an integer number.
 
             :return: If the site is empty and its inmediate neighbors are empty.
         """
         ...
-
-    def validate_in_lattice(self, indexes: tuple) -> bool:
-        """ Validates if the given indexes are in the lattice."""
-        return all(map(lambda x, y: 0 <= x < y, indexes, self.dimensions))
 
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     # Constructor and Dunder Methods.
@@ -724,7 +695,7 @@ class RSA2D(metaclass=ABCMeta):
     # Constructor.
     # --------------------------------------------------------------------------
 
-    def __init__(self, parameters: RSA2DParameters):
+    def __init__(self, parameters: Spin1DParameters):
         """ Initializes the simulation parameters.
 
             :param parameters: A dataclass that contains the adjustable
@@ -733,12 +704,12 @@ class RSA2D(metaclass=ABCMeta):
 
         # Counters.
         self.attempts = 0
-        self.attempts_successful = 0
+        self.spinsDown = -int(parameters.length)
         self.maximum_time = parameters.maximum_time
         self.repetitions = parameters.repetitions
 
         # Lattice parameters.
-        self.dimensions = parameters.dimensions
+        self.length = parameters.length
         self.lattice = None
         self.periodic = parameters.periodic
         self.lattice_file = parameters.lattice_file
