@@ -1,22 +1,29 @@
-""" File that contains the RSAParameters class."""
+"""
+    File that contains the RSAParameters class.
+"""
 
-# ------------------------------------------------------------------------------
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Imports.
-# ------------------------------------------------------------------------------
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-# Imports: General.
+
+# Standard library.
 import time
 
 from dataclasses import dataclass
 
-# ------------------------------------------------------------------------------
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Classes.
-# ------------------------------------------------------------------------------
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
 @dataclass
 class RSA1DParameters:
-    """ A data class where the parameters of the system are defined."""
+    """
+        A data class where the parameters of the system are defined.
+    """
 
     # Lattice save file path.
     lattice_file: str = "lattice.txt"
@@ -25,9 +32,9 @@ class RSA1DParameters:
     length: int = 1
 
     # File name to save the lattice.
-    results_file: str = "results.txt"   
+    results_file: str = "results.txt"
 
-    # Define the seed with which the generator must be seeded (i.e., the system time by default).
+    # The seed with which the generator is seeded (i.e., the system time).
     seed: int = int(time.time())
 
     # Define the maximum simulation time.
@@ -45,7 +52,9 @@ class RSA1DParameters:
 
 @dataclass
 class RSA2DParameters:
-    """ A data class where the parameters of the system are defined."""
+    """
+        A data class where the parameters of the system are defined.
+    """
 
     # Defines the dimensions of the lattice.
     dimensions: int = (1, 1)
@@ -54,9 +63,9 @@ class RSA2DParameters:
     lattice_file: str = "lattice.txt"
 
     # File name to save the lattice.
-    results_file: str = "results.txt"   
+    results_file: str = "results.txt"
 
-    # Define the seed with which the generator must be seeded (i.e., the system time by default).
+    # The seed with which the generator is seeded (i.e., the system time).
     seed: int = int(time.time())
 
     # Define the maximum simulation time.

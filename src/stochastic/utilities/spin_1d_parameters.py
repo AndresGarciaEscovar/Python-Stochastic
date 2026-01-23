@@ -1,23 +1,28 @@
-""" File that contains the RSAParameters class."""
+"""
+    File that contains the RSAParameters class.
+"""
 
-# ------------------------------------------------------------------------------
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Imports.
-# ------------------------------------------------------------------------------
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-# Imports: General.
+
+# Standard library.
 import time
 
 from dataclasses import dataclass
 
-# ------------------------------------------------------------------------------
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Classes.
-# ------------------------------------------------------------------------------
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
 @dataclass
 class Spin1DParameters:
-    """ A data class where the parameters of the system are defined."""
-
+    """
+        A data class where the parameters of the system are defined.
+    """
     # Lattice save file path.
     lattice_file: str = "spin_lattice.txt"
 
@@ -25,9 +30,9 @@ class Spin1DParameters:
     length: int = 1
 
     # File name to save the lattice.
-    results_file: str = "results.txt"   
+    results_file: str = "results.txt"
 
-    # Define the seed with which the generator must be seeded (i.e., the system time by default).
+    # The seed with which the generator is seeded (i.e., the system time).
     seed: int = int(time.time())
 
     # Define the maximum number of attempts.
