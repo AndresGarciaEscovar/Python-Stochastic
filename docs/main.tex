@@ -35,16 +35,16 @@
 
 % Margins and general layout - Vertical variables.
 \topmargin=0mm
-\headheight=6mm 
-\headsep=1.2cm 
-\textheight=22.cm 
+\headheight=6mm
+\headsep=1.2cm
+\textheight=22.cm
 \footskip=1cm
-\linespread{1.0} 
+\linespread{1.0}
 \addtolength{\voffset}{-0.5in}
 
 % Margins and general layout - Horizontal variables.
-\oddsidemargin=2.1cm 
-\evensidemargin=1.7 cm 
+\oddsidemargin=2.1cm
+\evensidemargin=1.7 cm
 \textwidth=17.0cm
 \addtolength{\hoffset}{-1.0in}
 \setlength{\parindent}{0cm}
@@ -64,7 +64,7 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{System Diagrams - 1D}
 
-    \begin{tikzpicture}[remember picture, overlay] 
+    \begin{tikzpicture}[remember picture, overlay]
         % 1D Ads Des
         % Boxes
         \draw (0,0) rectangle (+4.8333cm,-4.8333cm);
@@ -102,20 +102,20 @@
         % Other elements
         \draw (+1.2083cm,-3.8667cm) -- (+1.6477cm,-3.8667cm);
         \draw (+1.4280cm,-3.8667cm) -- (+1.4280cm,-3.4273cm);
-        
+
         % Adsorbing particles
         \draw [->] (+1.4280cm,-2.9395cm) -- (+1.4280cm,-3.3789cm);
         \fill [black] (+1.4280cm,-2.7462cm) circle (0.1450);
-        
+
         \draw (+3.6250cm,-3.8667cm) -- (+3.1856cm,-3.8667cm);
         \draw (+3.4053cm,-3.8667cm) -- (+3.4053cm,-3.4273cm);
         \fill [black] (+3.4053cm,-3.2339cm) circle (0.1450);
-        
+
         % Adsorbing particles
         \draw [->] (+3.4053cm,-3.0406cm) -- (+3.4053cm,-2.6012cm);
         \node at (+2.4167cm,-3.4536cm) {\footnotesize{or}};
     \end{tikzpicture}
-       
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % System Diagrams - 2D
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -123,7 +123,7 @@
     \section{System Diagrams - 2D}
 
     \begin{tikzpicture}[remember picture, overlay]
-        
+
     \end{tikzpicture}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -133,7 +133,7 @@
     \section{Flow Charts for Kinetic Monte Carlo Algorithms}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Flow Charts for Kinetic Monte Carlo Algorithms - RSA with Nearest 
+    % Flow Charts for Kinetic Monte Carlo Algorithms - RSA with Nearest
     % Neighbor Exclusion
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -170,7 +170,7 @@
         \item RSA simulations are efficient except for long times where few
         adsorption sites remain $\rightarrow$ most adsorption attempts fail;
         alternative, track adsorption sites.
-    \end{itemize} 
+    \end{itemize}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Flow Charts for Kinetic Monte Carlo Algorithms - Glauber Spin Flip
@@ -192,7 +192,7 @@
         \omega_0 = \alpha,\,\,
         \omega_{\pm} = \alpha\left(
         1 \pm \tanh\left(2\beta J\right)
-        \right)\,\,\text{and}\,\, \omega_{\text{max}} = 
+        \right)\,\,\text{and}\,\, \omega_{\text{max}} =
         \max\left(\omega_{+},\omega_{-}\right)\\
         %
         \omega_{\text{max}}\equiv\text{Maximum rate per site},\quad
@@ -216,7 +216,7 @@
     \end{itemize}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Flow Charts for Kinetic Monte Carlo Algorithms - Irreversible Island 
+    % Flow Charts for Kinetic Monte Carlo Algorithms - Irreversible Island
     % Formation During Deposition
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -225,7 +225,7 @@
     Consider a system in which particles are deposited at a rate $F$ per site.
     Adsorbed atoms with no neighbors hop left and right at a rate $h$. If
     an atom happens to be a neighbor of another atom, it can't hop or desorb.
-    
+
     % Algorithm
     \subsubsection{Algorithm}
     Define:
@@ -248,7 +248,7 @@
         $q_\text{dep}=2h/\left(F+2h\right)$; provided the chosen site
         contains a particle and does not have any neighbors.
         \begin{enumerate}
-            \item If there are no neighbors, hop with probability 
+            \item If there are no neighbors, hop with probability
             $h$ to either site.
         \end{enumerate}
     \end{itemize}
@@ -266,7 +266,7 @@
 
     % Bortz Algorithm
     \subsubsection{Algorithm}
-    
+
     Tracks only the active isolated particles. Define:
     \begin{gather*}
         N_{h}\equiv\text{Numer of isolated particles},\\
