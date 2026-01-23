@@ -1,27 +1,33 @@
-""" File that contains the random sequential adsorption (RSA) base classes, for
+"""
+    File that contains the random sequential adsorption (RSA) base classes, for
     RSA in one dimension.
 """
 
-# ------------------------------------------------------------------------------
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Imports.
-# ------------------------------------------------------------------------------
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-# Imports: General.
-import numpy
 
+# Standard library.
 from abc import ABCMeta, abstractmethod
 from typing import Any
+
+# Third-party.
+import numpy
 
 # Imports: User-defined.
 from stochastic.utilities.rsa_parameters import RSA1DParameters
 
-# ------------------------------------------------------------------------------
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Classes.
-# ------------------------------------------------------------------------------
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
 class RSA1D(metaclass=ABCMeta):
-    """ Class that is the interface to build random sequential adsorption
+    """
+        Class that is the interface to build random sequential adsorption
         simulations in 1 dimension.
 
         Constants:
@@ -70,17 +76,16 @@ class RSA1D(metaclass=ABCMeta):
 
         - self.tolerance: The tolerance to compare the floating point numbers.
     """
-
-    # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+    # /////////////////////////////////////////////////////////////////////////
     # Constants
-    # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+    # /////////////////////////////////////////////////////////////////////////
 
     EMPTY = 0  # type: int
     OCCUPIED = 1  # type: int
 
-    # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+    # /////////////////////////////////////////////////////////////////////////
     # Getters/Setters/Deleters
-    # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+    # /////////////////////////////////////////////////////////////////////////
 
     @property
     def attempts(self) -> int:
@@ -103,7 +108,7 @@ class RSA1D(metaclass=ABCMeta):
         """ Deletes the parameter."""
         raise PermissionError("The attempts variable must not be deleted.")
 
-    # --------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     @property
     def attempts_successful(self) -> int:
@@ -129,7 +134,7 @@ class RSA1D(metaclass=ABCMeta):
         """ Deletes the parameter."""
         raise PermissionError("The attempts_successful variable must not be deleted.")
 
-    # --------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     @property
     def lattice(self) -> list:
@@ -149,7 +154,7 @@ class RSA1D(metaclass=ABCMeta):
         """ Deletes the parameter."""
         raise PermissionError("The lattice variable must not be deleted.")
 
-    # --------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     @property
     def lattice_file(self) -> str:
@@ -176,7 +181,7 @@ class RSA1D(metaclass=ABCMeta):
         """ Deletes the parameter."""
         raise PermissionError("The lattice_file variable must not be deleted.")
 
-    # --------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     @property
     def length(self) -> int:
@@ -199,7 +204,7 @@ class RSA1D(metaclass=ABCMeta):
         """ Deletes the parameter."""
         raise PermissionError("The length variable must not be deleted.")
 
-    # --------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     @property
     def maximum_time(self) -> float:
@@ -224,7 +229,7 @@ class RSA1D(metaclass=ABCMeta):
         """ Deletes the parameter."""
         raise PermissionError("The maximum_time variable must not be deleted.")
 
-    # --------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     @property
     def periodic(self) -> bool:
@@ -247,7 +252,7 @@ class RSA1D(metaclass=ABCMeta):
         """ Deletes the parameter."""
         raise PermissionError("The periodic variable must not be deleted.")
 
-    # --------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     @property
     def random_generator(self) -> Any:
@@ -267,7 +272,7 @@ class RSA1D(metaclass=ABCMeta):
         """ Deletes the parameter."""
         raise PermissionError("The random_generator variable must not be deleted.")
 
-    # --------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     @property
     def repetitions(self) -> int:
@@ -295,7 +300,7 @@ class RSA1D(metaclass=ABCMeta):
         """ Deletes the parameter."""
         raise PermissionError("The repetitions variable must not be deleted.")
 
-    # --------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     @property
     def results_file(self) -> str:
@@ -322,7 +327,7 @@ class RSA1D(metaclass=ABCMeta):
         """ Deletes the parameter."""
         raise PermissionError("The results_file variable must not be deleted.")
 
-    # --------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     @property
     def seed(self) -> int:
@@ -345,7 +350,7 @@ class RSA1D(metaclass=ABCMeta):
         """ Deletes the parameter."""
         raise PermissionError("The seed variable must not be deleted.")
 
-    # --------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     @property
     def statistics_table(self) -> list:
@@ -367,7 +372,7 @@ class RSA1D(metaclass=ABCMeta):
         """ Deletes the parameter."""
         raise PermissionError("The statistics_table variable must not be deleted.")
 
-    # --------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     @property
     def tolerance(self) -> float:
@@ -388,13 +393,9 @@ class RSA1D(metaclass=ABCMeta):
         """ Deletes the parameter."""
         raise PermissionError("The tolerance variable must not be deleted.")
 
-    # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+    # /////////////////////////////////////////////////////////////////////////
     # Methods.
-    # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-    # --------------------------------------------------------------------------
-    # Get Methods.
-    # --------------------------------------------------------------------------
+    # /////////////////////////////////////////////////////////////////////////
 
     def get_empty_nts(self, order: int):
         """ Gets the number n of consecutive empty sites, with respect to all
@@ -450,10 +451,6 @@ class RSA1D(metaclass=ABCMeta):
         """
         ...
 
-    # --------------------------------------------------------------------------
-    # Normalize Methods.
-    # --------------------------------------------------------------------------
-
     def normalize_site(self, site: int) -> int:
         """ Given an scalar integer site, returns the site in the lattice, as it
             would correspond to the periodicity.
@@ -467,10 +464,6 @@ class RSA1D(metaclass=ABCMeta):
             site += self.length
 
         return site % self.length
-
-    # --------------------------------------------------------------------------
-    # Print Results.
-    # --------------------------------------------------------------------------
 
     def print_results(self) -> None:
         """ Saves the results, with the information, to the given file."""
@@ -527,20 +520,12 @@ class RSA1D(metaclass=ABCMeta):
 
                 fl.write(",".join(h_string) + "\n")
 
-    # --------------------------------------------------------------------------
-    # Process Methods.
-    # --------------------------------------------------------------------------
-
     @abstractmethod
     def process_adsorb(self) -> None:
         """ Tries to perform an adsorption operation; i.e., select a random site
             in the lattice onto which to adsorb.
         """
         ...
-
-    # --------------------------------------------------------------------------
-    # Reset Methods.
-    # --------------------------------------------------------------------------
 
     def reset_simulation_variables(self) -> None:
         """ Resets the variables for a single simulation to their initial state.
@@ -553,10 +538,6 @@ class RSA1D(metaclass=ABCMeta):
         # Reset the counters.
         self.attempts = 0
         self.attempts_successful = 0
-
-    # --------------------------------------------------------------------------
-    # Run Methods.
-    # --------------------------------------------------------------------------
 
     def run_simulation(self) -> None:
         """ Runs the simulation the number of specified times by the repetition
@@ -576,7 +557,11 @@ class RSA1D(metaclass=ABCMeta):
         self.print_results()
 
     def run_simulation_single(self, number: int) -> None:
+        """
+            Runs a single simulation.
 
+            :param number: The number of simulation to be run.
+        """
         self.reset_simulation_variables()
         elapsed_time = 0
 
@@ -595,10 +580,6 @@ class RSA1D(metaclass=ABCMeta):
         self.statistics_record()
         if number == 0:
             self.save_lattice(initial=False, last=True)
-
-    # --------------------------------------------------------------------------
-    # Save Methods.
-    # --------------------------------------------------------------------------
 
     def save_lattice(self, initial=True, last=False) -> None:
         """ Prints the lattice to the given file.
@@ -630,10 +611,6 @@ class RSA1D(metaclass=ABCMeta):
 
             if last:
                 fl.write("".join(["-" * self.length, "\n"]))
-
-    # --------------------------------------------------------------------------
-    # Statistics Methods.
-    # --------------------------------------------------------------------------
 
     def statistics_record(self, number_simulations: int = None) -> None:
         """ Records the statistics.
@@ -688,10 +665,6 @@ class RSA1D(metaclass=ABCMeta):
 
         self.statistics_table.append([elapsed_time, successful, singlets, doublets, triplets])
 
-    # --------------------------------------------------------------------------
-    # Validate Methods.
-    # --------------------------------------------------------------------------
-
     def validate_almost_equal(self, number0: float, number1: float) -> bool:
         """ Determines if two numbers are equal within the tolerance limit.
 
@@ -718,13 +691,9 @@ class RSA1D(metaclass=ABCMeta):
         """
         ...
 
-    # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-    # Constructor and Dunder Methods.
-    # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-    # --------------------------------------------------------------------------
+    # /////////////////////////////////////////////////////////////////////////
     # Constructor.
-    # --------------------------------------------------------------------------
+    # /////////////////////////////////////////////////////////////////////////
 
     def __init__(self, parameters: RSA1DParameters):
         """ Initializes the simulation parameters.
