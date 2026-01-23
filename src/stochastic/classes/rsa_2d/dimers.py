@@ -9,8 +9,8 @@
 import numpy
 
 # Imports: User-defined.
-from stochastic.interfaces.RSA_2D_interface import RSA2D
-from stochastic.utilities.RSA_parameters import RSA2DParameters
+from stochastic.interfaces.rsa_2d_interface import RSA2D
+from stochastic.utilities.rsa_parameters import RSA2DParameters
 
 # ------------------------------------------------------------------------------
 # Classes.

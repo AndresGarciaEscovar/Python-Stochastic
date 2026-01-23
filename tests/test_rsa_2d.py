@@ -12,9 +12,9 @@ import random
 import unittest
 
 # Imports: User-defined classes.
-from stochastic.classes.RSA2D.dimers import Dimers
+from stochastic.classes.rsa_2d.dimers import Dimers
 
-from stochastic.utilities.RSA_parameters import RSA2DParameters
+from stochastic.utilities.rsa_parameters import RSA2DParameters
 
 # ------------------------------------------------------------------------------
 # Classes.

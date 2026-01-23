@@ -13,30 +13,33 @@ from abc import ABCMeta, abstractmethod
 from typing import Any
 
 # Imports: User-defined.
-from stochastic.utilities.RSA_parameters import RSA1DParameters
+from stochastic.utilities.rsa_parameters import RSA1DParameters
 
 # ------------------------------------------------------------------------------
 # Classes.
 # ------------------------------------------------------------------------------
 
 
-class Spin1D(metaclass=ABCMeta):
+class RSA1D(metaclass=ABCMeta):
     """ Class that is the interface to build random sequential adsorption
         simulations in 1 dimension.
 
         Constants:
 
-        - UP: Represents an "up" spin state in the cell of the system.
+        - EMPTY: Represents the empty state of a cell in the system.
 
-        - DOWN: Represents a "down" spin state in the cell of the system.
+        - OCCUPIED: Represents the occupied state of a cell in the system.
 
         Parameters:
 
         - self.attemps: An integer that represents the number of attempts at
           adsorbing a particle.
 
+        - self.attempts_successful: An integer that represents the number of
+          successful attempts at adsorbing a particle.
+
         - self.lattice: A list that represents the lattice where the particles
-          with the "up" or "down" spin live.
+          live.
 
         - self.lattice_file: The name of the file where the lattice must be
           printed.
@@ -72,8 +75,8 @@ class Spin1D(metaclass=ABCMeta):
     # Constants
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-    UP = 1  # type: int
-    DOWN = -1  # type: int
+    EMPTY = 0  # type: int
+    OCCUPIED = 1  # type: int
 
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     # Getters/Setters/Deleters
@@ -103,6 +106,32 @@ class Spin1D(metaclass=ABCMeta):
     # --------------------------------------------------------------------------
 
     @property
+    def attempts_successful(self) -> int:
+        """ Returns the number of successful attempts to place a particle in the
+            lattice.
+
+            :return: The number of successful attempts to place a particle in
+             the lattice.
+        """
+        return self.__attempts_successful
+
+    @attempts_successful.setter
+    def attempts_successful(self, attempts_successful: int) -> None:
+        """ Sets the number of successful attempts.
+
+            :param attempts_successful: The number of successful attempts to
+             make a move.
+        """
+        self.__attempts_successful = attempts_successful
+
+    @attempts_successful.deleter
+    def attempts_successful(self) -> None:
+        """ Deletes the parameter."""
+        raise PermissionError("The attempts_successful variable must not be deleted.")
+
+    # --------------------------------------------------------------------------
+
+    @property
     def lattice(self) -> list:
         """ Returns the list that represents the lattice.
 
@@ -113,7 +142,7 @@ class Spin1D(metaclass=ABCMeta):
     @lattice.setter
     def lattice(self, _) -> None:
         """ Creates the lattice."""
-        self.__lattice = [Spin1D.DOWN for _ in range(self.length)]
+        self.__lattice = [RSA1D.EMPTY for _ in range(self.length)]
 
     @lattice.deleter
     def lattice(self) -> None:
@@ -519,10 +548,11 @@ class Spin1D(metaclass=ABCMeta):
 
         # Reset the lattice.
         for i in range(self.length):
-            self.lattice[i] = Spin1D.DOWN
+            self.lattice[i] = RSA1D.EMPTY
 
         # Reset the counters.
         self.attempts = 0
+        self.attempts_successful = 0
 
     # --------------------------------------------------------------------------
     # Run Methods.
@@ -642,6 +672,7 @@ class Spin1D(metaclass=ABCMeta):
 
         # Get statistics.
         elapsed_time = self.attempts / self.length
+        successful = self.attempts_successful / self.length
         singlets = self.get_empty_nts(1) / self.length
         doublets = self.get_empty_nts(2) / self.length
         triplets = self.get_empty_nts(3) / self.length
@@ -695,7 +726,7 @@ class Spin1D(metaclass=ABCMeta):
     # Constructor.
     # --------------------------------------------------------------------------
 
-    def __init__(self, parameters: Spin1DParameters):
+    def __init__(self, parameters: RSA1DParameters):
         """ Initializes the simulation parameters.
 
             :param parameters: A dataclass that contains the adjustable
@@ -704,7 +735,7 @@ class Spin1D(metaclass=ABCMeta):
 
         # Counters.
         self.attempts = 0
-        self.spinsDown = -int(parameters.length)
+        self.attempts_successful = 0
         self.maximum_time = parameters.maximum_time
         self.repetitions = parameters.repetitions
 

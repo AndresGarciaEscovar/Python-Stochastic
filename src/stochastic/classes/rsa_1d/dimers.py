@@ -1,26 +1,21 @@
-""" File that contains the random sequential adsorption of monomers with nearest
-    neighbor exclusion.
+""" File that contains the random sequential adsorption of dimers.
 """
 
 # ------------------------------------------------------------------------------
 # Imports.
 # ------------------------------------------------------------------------------
 
-# Imports: General.
-import copy as cp
-
 # Imports: User-defined.
-from stochastic.interfaces.RSA_2D_interface import RSA2D
-from stochastic.utilities.RSA_parameters import RSA2DParameters
+from stochastic.interfaces.rsa_1d_interface import RSA1D
+from stochastic.utilities.rsa_parameters import RSA1DParameters
 
 # ------------------------------------------------------------------------------
 # Classes.
 # ------------------------------------------------------------------------------
 
 
-class NNExclusion(RSA2D):
-    """ Class to simulate random sequential adsorption with nearest neighbor
-        exclusion for a two-dimensional lattice.
+class Dimers(RSA1D):
+    """ Class to simulate random sequential adsorption of dimers.
 
         Inherited parameters:
 
@@ -70,8 +65,8 @@ class NNExclusion(RSA2D):
         """
 
         preheader = ",".join([
-            f"RSA-2D NN Exclusion", f"seed={self.seed}", f"repetitions(n)={self.repetitions}",
-            f"maximum time={self.maximum_time}", f"dimensions={self.dimensions}", f"periodic={self.periodic}"
+            f"RSA Dimer", f"seed={self.seed}", f"repetitions(n)={self.repetitions}",
+            f"maximum time={self.maximum_time}", f"length={self.length}", f"periodic={self.periodic}"
         ])
 
         return preheader
@@ -84,45 +79,38 @@ class NNExclusion(RSA2D):
         """ Tries to perform an adsorption operation; i.e., select a random site
             in the lattice onto which to adsorb.
         """
-
-        generator = self.random_generator.integers
-        site = [generator(0, self.dimensions[i]) for i in range(2)]
-
+        generator = self.random_generator
+        site = generator.integers(0, self.length) if self.periodic else generator.integers(0, self.length - 1)
         self.attempts += 1
-        site = tuple(site)
         if self.validate_adsorb(site):
-            self.lattice[site[0]][site[1]] = RSA2D.OCCUPIED
+            site_ = self.normalize_site(site + 1)
+            self.lattice[site] = RSA1D.OCCUPIED
+            self.lattice[site_] = RSA1D.OCCUPIED
             self.attempts_successful += 1
 
     # --------------------------------------------------------------------------
     # Validate Methods.
     # --------------------------------------------------------------------------
 
-    def validate_adsorb(self, site: tuple) -> bool:
+    def validate_adsorb(self, site: int) -> bool:
         """ Determines if the given site can adsorb a particle.
 
-            :param site: The tuple that represents the site where the particle
-             is to be adsorbed.
+            :param site: The site to be examined. Must be an integer number.
 
             :return: If the site is empty and its inmediate neighbors are empty.
         """
 
-        if not self.lattice[site[0]][site[1]] == RSA2D.EMPTY:
+        site_ = self.normalize_site(site)
+        if not self.lattice[site_] == RSA1D.EMPTY:
             return False
 
-        examined = set()
-        indexes = ((1, 0), (-1, 0), (0, 1), (0, -1))
-        for indexes_ in indexes:
-            indexes_ = tuple(index + site[i] for i, index in enumerate(indexes_))
-            indexes_ = self.normalize_site(indexes_)
-            if self.validate_in_lattice(indexes_):
-                examined.add(cp.deepcopy(indexes_))
+        examined = {site_}
+        if ((site + 1) >= self.length and self.periodic) or (site + 1) < self.length:
+            site_ = self.normalize_site(site + 1)
+            if (site_ not in examined) and not self.lattice[site_] == RSA1D.EMPTY:
+                return False
 
-        valid = True
-        for indexes_ in examined:
-            valid = valid and self.lattice[indexes_[0]][indexes_[1]] == RSA2D.EMPTY
-
-        return valid
+        return True
 
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     # Constructor and Dunder Methods.
@@ -132,10 +120,10 @@ class NNExclusion(RSA2D):
     # Constructor.
     # --------------------------------------------------------------------------
 
-    def __init__(self, parameters: RSA2DParameters):
+    def __init__(self, parameters: RSA1DParameters):
         """ Initializes the simulation parameters.
 
             :param parameters: A dataclass that contains the adjustable
              parameters of the simulation.
         """
-        super(NNExclusion, self).__init__(parameters)
+        super(Dimers, self).__init__(parameters)

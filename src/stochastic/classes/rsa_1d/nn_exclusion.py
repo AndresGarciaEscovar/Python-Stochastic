@@ -7,8 +7,8 @@
 # ------------------------------------------------------------------------------
 
 # Imports: User-defined.
-from stochastic.interfaces.RSA_1D_interface import RSA1D
-from stochastic.utilities.RSA_parameters import RSA1DParameters
+from stochastic.interfaces.rsa_1d_interface import RSA1D
+from stochastic.utilities.rsa_parameters import RSA1DParameters
 
 # ------------------------------------------------------------------------------
 # Classes.
