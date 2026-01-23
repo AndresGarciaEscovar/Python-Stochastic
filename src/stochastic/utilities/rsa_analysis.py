@@ -1,4 +1,5 @@
-""" Contains the class for results analysis of the different simulation types.
+"""
+    Contains the class for results analysis of the different simulation types.
 """
 
 
