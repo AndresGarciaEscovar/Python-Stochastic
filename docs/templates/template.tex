@@ -35,16 +35,16 @@
 
 % Margins and general layout - Vertical variables.
 \topmargin=0mm
-\headheight=6mm 
-\headsep=1.2cm 
-\textheight=22.cm 
+\headheight=6mm
+\headsep=1.2cm
+\textheight=22.cm
 \footskip=1cm
-\linespread{1.0} 
+\linespread{1.0}
 \addtolength{\voffset}{-0.5in}
 
 % Margins and general layout - Horizontal variables.
-\oddsidemargin=2.1cm 
-\evensidemargin=1.7 cm 
+\oddsidemargin=2.1cm
+\evensidemargin=1.7 cm
 \textwidth=17.0cm
 \addtolength{\hoffset}{-1.0in}
 \setlength{\parindent}{0cm}
@@ -64,10 +64,10 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{System Diagrams - 1D}
 
-    \begin{tikzpicture}[remember picture, overlay] 
+    \begin{tikzpicture}[remember picture, overlay]
 <images-1d>
     \end{tikzpicture}
-       
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % System Diagrams - 2D
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -85,7 +85,7 @@
     \section{Flow Charts for Kinetic Monte Carlo Algorithms}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Flow Charts for Kinetic Monte Carlo Algorithms - RSA with Nearest 
+    % Flow Charts for Kinetic Monte Carlo Algorithms - RSA with Nearest
     % Neighbor Exclusion
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -122,7 +122,7 @@
         \item RSA simulations are efficient except for long times where few
         adsorption sites remain $\rightarrow$ most adsorption attempts fail;
         alternative, track adsorption sites.
-    \end{itemize} 
+    \end{itemize}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Flow Charts for Kinetic Monte Carlo Algorithms - Glauber Spin Flip
@@ -144,7 +144,7 @@
         \omega_0 = \alpha,\,\,
         \omega_{\pm} = \alpha\left(
         1 \pm \tanh\left(2\beta J\right)
-        \right)\,\,\text{and}\,\, \omega_{\text{max}} = 
+        \right)\,\,\text{and}\,\, \omega_{\text{max}} =
         \max\left(\omega_{+},\omega_{-}\right)\\
         %
         \omega_{\text{max}}\equiv\text{Maximum rate per site},\quad
@@ -168,7 +168,7 @@
     \end{itemize}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Flow Charts for Kinetic Monte Carlo Algorithms - Irreversible Island 
+    % Flow Charts for Kinetic Monte Carlo Algorithms - Irreversible Island
     % Formation During Deposition
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -177,7 +177,7 @@
     Consider a system in which particles are deposited at a rate $F$ per site.
     Adsorbed atoms with no neighbors hop left and right at a rate $h$. If
     an atom happens to be a neighbor of another atom, it can't hop or desorb.
-    
+
     % Algorithm
     \subsubsection{Algorithm}
     Define:
@@ -200,7 +200,7 @@
         $q_\text{dep}=2h/\left(F+2h\right)$; provided the chosen site
         contains a particle and does not have any neighbors.
         \begin{enumerate}
-            \item If there are no neighbors, hop with probability 
+            \item If there are no neighbors, hop with probability
             $h$ to either site.
         \end{enumerate}
     \end{itemize}
@@ -218,7 +218,7 @@
 
     % Bortz Algorithm
     \subsubsection{Algorithm}
-    
+
     Tracks only the active isolated particles. Define:
     \begin{gather*}
         N_{h}\equiv\text{Numer of isolated particles},\\

@@ -6,9 +6,9 @@ Suggestion, use Visual Studio Code for better markdown support.
 
 The "1D Glauber Spin Model" refers to the stochastic process that leads to the
 equilibration of a 1-dimensional periodic chain of "atoms" whose spin values can
-only take two values "up" (&#8593; = 1) or "down" (&#8595; = -1) and can only 
+only take two values "up" (&#8593; = 1) or "down" (&#8595; = -1) and can only
 interact with their nearest neighbors. The equilibrium magnetization will depend
-on the value of the magnitude and sing of the coupling, i.e., the interaction 
+on the value of the magnitude and sing of the coupling, i.e., the interaction
 "constant".
 
 # Initial Conditions
@@ -81,7 +81,7 @@ c     FIND SITE AND NN NEIGHBOR SPIN VALUES => CHOOSE TRANSITION RATE
 c     COUNT THE NUMBER OF SPINS DOWN
       ndown=0
       do i=1,n
-         if(z(i).lt.0) ndown =ndown+1 
+         if(z(i).lt.0) ndown =ndown+1
       end do
 c     WRITE DOWN THE RESULT AND CHECK IF THE SIMULATION CAN STOP
       write(6,100) (1.0d0*nattempts)/n, (1.0d0*ndown)/n
@@ -90,7 +90,7 @@ c     WRITE DOWN THE RESULT AND CHECK IF THE SIMULATION CAN STOP
       stop
       end
 ```
-Notice that the conditions `z(iminus)+z(i)+z(iplus)=3` or 
-`z(iminus)+z(i)+z(iplus)=-3` implies that the spin configuration is either 
-&#8593;&#8593;&#8593; or &#8595;&#8595;&#8595;; where the middle spins is the 
+Notice that the conditions `z(iminus)+z(i)+z(iplus)=3` or
+`z(iminus)+z(i)+z(iplus)=-3` implies that the spin configuration is either
+&#8593;&#8593;&#8593; or &#8595;&#8595;&#8595;; where the middle spins is the
 spin that is attempting to flip.
