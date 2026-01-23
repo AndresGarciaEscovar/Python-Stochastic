@@ -30,7 +30,7 @@ class RSA1DResultsAnalysis:
 
         # Get the data.
         data = []
-        with open(file_path, "r") as fl:
+        with open(file_path, encoding="utf-8", mode="r") as fl:
             lines = fl.readlines()
             for line in lines:
                 data.append(line.split(","))
@@ -40,7 +40,7 @@ class RSA1DResultsAnalysis:
         axis_names = list(map(lambda x: x.strip(), data[1]))
         data = np.array(data[2:], dtype=float)
         xmax = max(data[:, 0])
-        
+
         # New figure.
         fig, axes = plt.subplots(2, 2)
         plt.suptitle(plot_title, fontsize=6)
