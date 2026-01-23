@@ -249,7 +249,7 @@ class Spin1D(metaclass=ABCMeta):
         """
         raise PermissionError("The periodic variable must not be deleted.")
 
-    # --------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
 
     @property
     def random_generator(self) -> Any:
