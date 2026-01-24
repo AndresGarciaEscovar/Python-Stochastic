@@ -132,3 +132,5 @@ class Dimers(RSA1D):
              parameters of the simulation.
         """
         super().__init__(parameters)
+
+        self.lattice = []

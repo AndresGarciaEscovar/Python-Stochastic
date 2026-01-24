@@ -50,7 +50,7 @@ class RSA1DResultsAnalysis:
         xmax = max(data[:, 0])
 
         # New figure.
-        fig, axes = plt.subplots(2, 2)
+        _, axes = plt.subplots(2, 2)
         plt.suptitle(plot_title, fontsize=6)
 
         # Format the graph of the data for the success/n vs attemps/n.
@@ -123,7 +123,7 @@ class RSA1DResultsAnalysis:
             tmp_list0 = []
 
             # Scan the data frame.
-            for i0, line0 in enumerate(data0):
+            for line0 in data0:
                 if line0[0][0] == "-":
                     data_frames0.append(cp.deepcopy(tmp_list0))
                     tmp_list0 = []
@@ -139,7 +139,7 @@ class RSA1DResultsAnalysis:
 
         # Import the data.
         data = []
-        with open(file_path, "r") as fl:
+        with open(file_path, encoding="utf-8", mode="r") as fl:
             lines = fl.readlines()
             for line in lines:
                 data.append(line.split(","))
@@ -227,7 +227,7 @@ class RSA2DResultsAnalysis:
         xmax = max(data[:, 0])
 
         # New figure.
-        fig, axes = plt.subplots(ncols=1, nrows=2)
+        _, axes = plt.subplots(ncols=1, nrows=2)
         plt.suptitle(plot_title, fontsize=6)
 
         # Format the graph of the data for the success/n vs attemps/n.
@@ -277,7 +277,7 @@ class RSA2DResultsAnalysis:
 
             data_frames0 = []
             tmp_list0 = []
-            for i0, line0 in enumerate(data0):
+            for line0 in data0:
                 if line0[0][0] == "-":
                     data_frames0.append(cp.deepcopy(tmp_list0))
                     tmp_list0 = []
@@ -304,7 +304,7 @@ class RSA2DResultsAnalysis:
 
         for i, frame in enumerate(data):
             times = [time[0] for time in frame[2:]]
-            indexes_list = [indexes for indexes in frame[1][1:]]
+            indexes_list = list(frame[1][1:])
 
             for j, indexes in enumerate(indexes_list):
                 indexes = indexes.split("x")

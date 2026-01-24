@@ -56,7 +56,6 @@ class Dimers(RSA2D):
 
         - self.tolerance: The tolerance to compare the floating point numbers.
     """
-
     # /////////////////////////////////////////////////////////////////////////
     # Methods.
     # /////////////////////////////////////////////////////////////////////////
@@ -147,4 +146,6 @@ class Dimers(RSA2D):
             :param parameters: A dataclass that contains the adjustable
              parameters of the simulation.
         """
-        super(Dimers, self).__init__(parameters)
+        super().__init__(parameters)
+
+        self.lattice = []
