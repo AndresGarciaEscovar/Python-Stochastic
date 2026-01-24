@@ -1,21 +1,23 @@
-""" File that contains the random sequential adsorption of monomers with nearest
-    neighbor exclusion.
+""" File that contains the random sequential adsorption of monomers with
+    nearest neighbor exclusion.
 """
 
-# ------------------------------------------------------------------------------
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Imports.
-# ------------------------------------------------------------------------------
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-# Imports: General.
+
+# Standard library.
 import copy as cp
 
-# Imports: User-defined.
+# User.
 from stochastic.interfaces.rsa_2d_interface import RSA2D
 from stochastic.utilities.rsa_parameters import RSA2DParameters
 
-# ------------------------------------------------------------------------------
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Classes.
-# ------------------------------------------------------------------------------
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
 class NNExclusion(RSA2D):
@@ -54,37 +56,34 @@ class NNExclusion(RSA2D):
         - self.tolerance: The tolerance to compare the floating point numbers.
     """
 
-    # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+    # /////////////////////////////////////////////////////////////////////////
     # Methods.
-    # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-    # --------------------------------------------------------------------------
-    # Get Methods.
-    # --------------------------------------------------------------------------
+    # /////////////////////////////////////////////////////////////////////////
 
     def get_preheader(self) -> str:
-        """ Returns the pre-header, i.e., the string that contains the
+        """
+            Returns the pre-header, i.e., the string that contains the
             simulation information.
 
             :return: The string that represents the pre-header.
         """
 
         preheader = ",".join([
-            f"RSA-2D NN Exclusion", f"seed={self.seed}", f"repetitions(n)={self.repetitions}",
-            f"maximum time={self.maximum_time}", f"dimensions={self.dimensions}", f"periodic={self.periodic}"
+            "RSA-2D NN Exclusion",
+            f"seed={self.seed}",
+            f"repetitions(n)={self.repetitions}",
+            f"maximum time={self.maximum_time}",
+            f"dimensions={self.dimensions}",
+            f"periodic={self.periodic}"
         ])
 
         return preheader
 
-    # --------------------------------------------------------------------------
-    # Process Methods.
-    # --------------------------------------------------------------------------
-
     def process_adsorb(self) -> None:
-        """ Tries to perform an adsorption operation; i.e., select a random site
-            in the lattice onto which to adsorb.
         """
-
+            Tries to perform an adsorption operation; i.e., select a random
+            site in the lattice onto which to adsorb.
+        """
         generator = self.random_generator.integers
         site = [generator(0, self.dimensions[i]) for i in range(2)]
 
@@ -94,48 +93,47 @@ class NNExclusion(RSA2D):
             self.lattice[site[0]][site[1]] = RSA2D.OCCUPIED
             self.attempts_successful += 1
 
-    # --------------------------------------------------------------------------
-    # Validate Methods.
-    # --------------------------------------------------------------------------
-
     def validate_adsorb(self, site: tuple) -> bool:
-        """ Determines if the given site can adsorb a particle.
+        """
+            Determines if the given site can adsorb a particle.
 
             :param site: The tuple that represents the site where the particle
              is to be adsorbed.
 
-            :return: If the site is empty and its inmediate neighbors are empty.
+            :return: If the site is empty and its inmediate neighbors are
+             empty.
         """
-
         if not self.lattice[site[0]][site[1]] == RSA2D.EMPTY:
             return False
 
         examined = set()
         indexes = ((1, 0), (-1, 0), (0, 1), (0, -1))
         for indexes_ in indexes:
-            indexes_ = tuple(index + site[i] for i, index in enumerate(indexes_))
+            indexes_ = tuple(
+                index + site[i] for i, index in enumerate(indexes_)
+            )
             indexes_ = self.normalize_site(indexes_)
             if self.validate_in_lattice(indexes_):
                 examined.add(cp.deepcopy(indexes_))
 
         valid = True
         for indexes_ in examined:
-            valid = valid and self.lattice[indexes_[0]][indexes_[1]] == RSA2D.EMPTY
+            index0, index1 = indexes[:2]
+            valid = valid and self.lattice[index0][index1] == RSA2D.EMPTY
 
         return valid
 
-    # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-    # Constructor and Dunder Methods.
-    # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-    # --------------------------------------------------------------------------
+    # /////////////////////////////////////////////////////////////////////////
     # Constructor.
-    # --------------------------------------------------------------------------
+    # /////////////////////////////////////////////////////////////////////////
 
     def __init__(self, parameters: RSA2DParameters):
-        """ Initializes the simulation parameters.
+        """
+            Initializes the simulation parameters.
 
             :param parameters: A dataclass that contains the adjustable
              parameters of the simulation.
         """
-        super(NNExclusion, self).__init__(parameters)
+        super().__init__(parameters)
+
+        self.lattice = []
