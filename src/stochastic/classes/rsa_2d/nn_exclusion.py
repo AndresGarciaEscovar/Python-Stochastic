@@ -1,6 +1,8 @@
-""" File that contains the random sequential adsorption of monomers with
+"""
+    File that contains the random sequential adsorption of monomers with
     nearest neighbor exclusion.
 """
+
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Imports.
@@ -21,7 +23,8 @@ from stochastic.utilities.rsa_parameters import RSA2DParameters
 
 
 class NNExclusion(RSA2D):
-    """ Class to simulate random sequential adsorption with nearest neighbor
+    """
+        Class to simulate random sequential adsorption with nearest neighbor
         exclusion for a two-dimensional lattice.
 
         Inherited parameters:
