@@ -14,7 +14,7 @@
 
 
 # User.
-from stochastic.rsa_1d_dimers.validation.parameters import validate
+from stochastic.programs.rsa_1d_dimers.validation.parameters import validate
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

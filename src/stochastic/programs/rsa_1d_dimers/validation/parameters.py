@@ -11,6 +11,7 @@
 # Standard library.
 import time
 
+from importlib.resources import files as ifiles
 from pathlib import Path
 
 # User.
@@ -39,7 +40,8 @@ def validate(parameters: dict) -> dict:
         :return: A dictionary with the complete simulation parameters.
     """
 
-    return final
+
+    return {}
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # TO DELETE
