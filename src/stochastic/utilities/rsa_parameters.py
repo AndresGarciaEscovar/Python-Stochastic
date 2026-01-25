@@ -24,7 +24,6 @@ class RSA1DParameters:
     """
         A data class where the parameters of the system are defined.
     """
-
     # Lattice save file path.
     lattice_file: str = "lattice.txt"
 
