@@ -1,8 +1,9 @@
 {
     "simulation": {
+        "attempts": 1000,
         "length": 100,
-        "number": 10,
         "periodic": false,
+        "repetitions": 10,
         "seed": -1,
         "time_maximum": 100.0,
         "tolerance": 0.00005
