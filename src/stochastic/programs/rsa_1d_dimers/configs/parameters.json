@@ -1,6 +1,7 @@
 {
     "simulation": {
         "length": 100,
+        "number": 10,
         "periodic": false,
         "seed": -1,
         "time_maximum": 100.0,
