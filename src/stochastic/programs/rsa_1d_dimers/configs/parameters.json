@@ -2,7 +2,7 @@
     "simulation": {
         "length": 100,
         "periodic": false,
-        "seed": 0,
+        "seed": -1,
         "time_maximum": 100.0,
         "tolerance": 0.00005
     },
