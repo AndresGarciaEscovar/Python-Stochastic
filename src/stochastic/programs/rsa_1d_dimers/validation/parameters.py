@@ -13,6 +13,7 @@ import json
 import time
 
 from importlib.resources import files as ifiles
+from pathlib import Path
 
 # User.
 from stochastic.programs.rsa_1d_dimers import configs
@@ -73,6 +74,36 @@ def validate_parameters_history(parameters: dict) -> None:
 
         :return: A dictionary with the history parameters.
     """
+    # No need to check the parameters.
+    if not parameters["save"]:
+        return parameters
+
+    # Check the output file path.
+    file: Path = Path(parameters["file"])
+
+    if len(file.parts) != 1:
+        raise ValueError(
+            f"The name of the history file must not have any addtional path, "
+            f"i.e., it must only be the name of the file; current path: "
+            f"{file}."
+        )
+
+    if f"{file.with_suffix('')}".strip() == "":
+        raise ValueError("The name of the history file cannot be empty.")
+
+    if file.suffix != ".txt":
+        raise ValueError(
+            f"The name of the history file must have a \".txt\" extension; "
+            f"current extension: \"{file.suffix}\"."
+        )
+
+    # Validate the interval is a positive number.
+    if parameters["interval"] < 0.0:
+        raise ValueError(
+            f"The saving interval must be greater than or equal to zero; "
+            f"current interval setting: {parameters['interval']}."
+        )
+
     return parameters
 
 
@@ -84,7 +115,41 @@ def validate_parameters_output(parameters: dict) -> None:
          "output" entry.
 
         :return: A dictionary with the output parameters.
+
+        :raise ValueError: If the working directory does not exist. If the
+         output file name has subdirectories. If the output file name is
+         empty. If the output file name has a different extension than ".txt".
     """
+    # Set the proper working directory.
+    if parameters["working"].strip() == "":
+        parameters["working"] = f"{Path.cwd()}"
+
+    # Check the working directory.
+    if not Path(parameters["working"]).is_dir():
+        raise ValueError(
+            f"The given path \"{parameters['working']}\" for the working "
+            f"directory is not a directory; create the directory before "
+            f"setting it."
+        )
+
+    # Check the output file path.
+    file: Path = Path(parameters["output"])
+
+    if len(file.parts) != 1:
+        raise ValueError(
+            f"The name of the file must not have any addtional path, i.e., it "
+            f"must only be the name of the file; current path: {file}."
+        )
+
+    if f"{file.with_suffix('')}".strip() == "":
+        raise ValueError("The name of the output file cannot be empty.")
+
+    if file.suffix != ".txt":
+        raise ValueError(
+            f"The name of the output file must have a \".txt\" extension; "
+            f"current extension: \"{file.suffix}\"."
+        )
+
     return parameters
 
 
@@ -97,6 +162,31 @@ def validate_parameters_simulation(parameters: dict) -> None:
 
         :return: A dictionary with the simulation parameters.
     """
+    # Set the seed.
+    if parameters["seed"] < 0:
+        parameters["seed"] = int(time.time())
+
+    # Check the other values.
+    message: str = ""
+    skip: tuple = ("periodic",)
+
+    for key, value in parameters.items():
+        # No neeed to check these parameters.
+        if key in skip:
+            continue
+
+        # Values must be positive, greater than zero.
+        if value <= 0.0:
+            message += (
+                f"The value (for the \"simulation\".\"{key}\" parameter) is "
+                f"negative, it must be a positive value, i.e., greater than "
+                f"or equal to zero. "
+            )
+
+    # Check if an error must be thrown.
+    if message != "":
+        raise ValueError(message)
+
     return parameters
 
 
