@@ -50,10 +50,10 @@ def validate_parameters(parameters: dict) -> None:
         :param parameters: A dictionary with the complete simulation
          parameters.
     """
-    # Auxiliary variables.
+    # Auxiliary variables (LEAVE IN THIS ORDER).
     functions: dict = {
-        "history": validate_parameters_history,
         "output": validate_parameters_output,
+        "history": validate_parameters_history,
         "simulation": validate_parameters_simulation,
     }
 
