@@ -206,7 +206,7 @@ def validate(parameters: dict) -> dict:
     # Auxiliary variables.
     default: dict = load_base()
 
-    # Validate the dictionary.
+    # Validate the dictionary structure.
     if parameters != {}:
         # Validate the dictionary format and extract the parameters.
         validate_dictionary_sub(default, parameters, error=True)
