@@ -1,6 +1,5 @@
 {
     "simulation": {
-        "attempts": 1000,
         "length": 100,
         "periodic": false,
         "repetitions": 10,
