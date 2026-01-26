@@ -40,7 +40,7 @@ def print_parameters() -> None:
 
     # Open the file.
     with ifiles(configs).joinpath(file).open(**parameters) as stream:
-        print(f"\n{stream.read()}", end="\n\n")
+        print(f"\n{stream.read()}", end="\n")
 
 
 def run(parameters: dict) -> dict:
@@ -51,5 +51,5 @@ def run(parameters: dict) -> dict:
 
         :return: A dictionary with the results to be plotted.
     """
-    # Validate the parameters before starting.
-    validate(parameters)
+    # Get the simulation parameters.
+    final: dict = validate(parameters)
