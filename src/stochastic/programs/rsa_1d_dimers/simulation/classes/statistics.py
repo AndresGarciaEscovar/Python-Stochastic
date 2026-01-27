@@ -78,7 +78,7 @@ def _get_coverage(lattice: list) -> int:
 
         :return: An integer number that represents the lattice coverage.
     """
-    return sum(lattice)
+    return sum(1 for x in lattice if x != 0)
 
 
 def _get_lengths(table: list) -> list:
