@@ -1,0 +1,183 @@
+"""
+    File that contains the class where to store the statistics.
+"""
+
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# Imports
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# Global Variables.
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+# Headers.
+HEADER_ATTEMPTS: tuple = ("Attempts", "Successful")
+HEADER_COVERAGE: tuple = ("Attempts", "Occupied")
+
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# Functions
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+def _get_continuous_empty(lattice: list, number: int, periodic: bool) -> int:
+    """
+        Gets the number of sites that have N (represented by the "number"
+        variable) empty sites. It will consider if the variable is periodic.
+        The lattice must only be made of zeros and ones, where zero (0) is
+        empty and one (1) is busy.
+
+        :param lattice: The lattice with the particles.
+
+        :param number: The number of consecutive empty sites to check.
+
+        :param periodic: A boolean flag indicating whether the lattice is
+         periodic, i.e., site n = n + N, where N is the length of the lattice.
+         True, if the lattice is periodic; False otherwise.
+    """
+    # Cannot take these statistics.
+    if number >= len(lattice):
+        raise ValueError(
+            "The number of contiguous empty sites cannot be greater than that "
+            "of the lattice length."
+        )
+
+    for i in range()
+
+
+def _get_coverage(lattice: list) -> int:
+    """
+        Gets the number of sites that are not empty. The lattice must only
+        be made of zeros and ones, where zero (0) is empty and one (1) is busy.
+
+        :param lattice: The lattice with the particles.
+
+        :return: An integer number that represents the lattice coverage.
+    """
+    return sum(lattice)
+
+
+def _get_lengths(table: list) -> list:
+    """
+        Gets the maximum width for each column of the given table.
+
+        :param array: The table for which the column widths must be obtained.
+
+        :return: A list of the widths of each table column entry.
+    """
+    # Auxiliary variables.
+    length: int = len(table[0])
+
+    return tuple(max(len(f"{x[i]}") for x in table) for i in range(length))
+
+
+def _get_string_table(table: list) -> str:
+    """
+        Gets the string for the given table.
+
+        :param array: The table for which the string must be obtained.
+
+        :return: A list of the widths of each table column entry.
+    """
+    # Auxiliary variables.
+    lengths: list = _get_lengths(table)
+    string: str = ""
+    temp: callable = "{:>{length}}".format
+
+    # Get each row.
+    for i, entries in enumerate(table):
+        # For each entry.
+        string += " | ".join(
+            temp(x, length=lengths[i]) for i, x in enumerate(entries)
+        ) + "\n"
+
+        # Header separator.
+        if i == 0:
+            string = f"{string}{' | '.join('-' * x for x in lengths)}\n"
+
+    return f"{string}\n\n"
+
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# Classes
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+class RSA1DDimersStatistics:
+    """
+        Contains the variables to take the statistics of the simulation.
+
+        PARAMETERS:
+        ___________
+
+        - self.attempts: The array with the statistics of the number of
+          attempts and successful attempts.
+
+        - self.coverage: The array with the total number of particles and the
+          inverse elapsed time, i.e., the number of attempts.
+
+        - self.length: The length of the 1D lattice, a number  greater than
+          zero.
+
+        - self.periodic: A boolean flag indicating whether the lattice is
+          periodic. True, if the lattice is periodic; False, otherwise.
+    """
+    # /////////////////////////////////////////////////////////////////////////
+    # Methods
+    # /////////////////////////////////////////////////////////////////////////
+
+    def update_coverage(self, lattice: list) -> None:
+        """
+            From the given lattice, updates the coverage. Increases the number
+            of attempts by one.
+
+            :param lattice: The lattice with the particles.
+        """
+        attempts: int = self.coverage[-1][0] + 1
+
+        self.coverage.append((attempts, _get_coverage(lattice)))
+
+    # /////////////////////////////////////////////////////////////////////////
+    # Methods - Dunder
+    # /////////////////////////////////////////////////////////////////////////
+
+    def __str__(self) -> str:
+        """
+            The string representation of the class at the time it is invoked.
+
+            :return: The string with the class representation.
+        """
+        # Parameters.
+        string: str = "\n    ".join([
+            "Parameters:",
+            f"length: {self.length}",
+            f"periodic: {self.periodic}"
+        ]) + "\n\n"
+
+        # Append the strings.
+        string += _get_string_table(self.attempts)
+        string += _get_string_table(self.coverage)
+
+        return string.strip()
+
+    # /////////////////////////////////////////////////////////////////////////
+    # Constructor
+    # /////////////////////////////////////////////////////////////////////////
+
+    def __init__(self, parameters: dict) -> None:
+        """
+            Builds a new statistics object.
+
+            :param parameters: The simulation parameters that contains all the
+             information to record the statistics.
+        """
+        # Initialize the parameters.
+        self.attempts: list = [HEADER_ATTEMPTS, (0, 0)]
+        self.coverage: list = [HEADER_COVERAGE, (0, 0)]
+
+        # Useful parameters.
+        self.length: int = parameters["simulation"]["length"]
+        self.periodic: bool = parameters["simulation"]["periodic"]

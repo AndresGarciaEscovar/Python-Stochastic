@@ -1,15 +1,14 @@
 {
     "simulation": {
+        "attempts": 100,
         "length": 100,
         "periodic": false,
         "repetitions": 10,
-        "seed": -1,
-        "time_maximum": 100.0,
-        "tolerance": 0.00005
+        "seed": -1
     },
     "history": {
         "file": "history.txt",
-        "interval": 1.0,
+        "interval": 0,
         "save": false
     },
     "output": {
