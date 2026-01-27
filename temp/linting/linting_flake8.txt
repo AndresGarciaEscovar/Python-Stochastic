@@ -1,0 +1,2 @@
+/home/andres/Projects/Python/Stochastic/temp/linting/../../src/stochastic/programs/rsa_1d_dimers/main.py:52:5: F841 local variable 'results' is assigned to but never used
+/home/andres/Projects/Python/Stochastic/temp/linting/../../src/stochastic/programs/rsa_1d_dimers/simulation/main.py:36:5: E303 too many blank lines (2)
