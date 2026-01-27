@@ -38,14 +38,32 @@ def _get_continuous_empty(lattice: list, number: int, periodic: bool) -> int:
          periodic, i.e., site n = n + N, where N is the length of the lattice.
          True, if the lattice is periodic; False otherwise.
     """
+    # Auxiliary variables.
+    count: int = 0
+    length: int = len(lattice)
+
     # Cannot take these statistics.
-    if number >= len(lattice):
+    if number >= length:
         raise ValueError(
             "The number of contiguous empty sites cannot be greater than that "
             "of the lattice length."
         )
 
-    for i in range()
+    # Scan the lattice.
+    for site in range(length):
+        # Sites to be examined.
+        sites: list = [
+            (site + i) % length if periodic else (site + i)
+            for i in range(number)
+        ]
+
+        # Reached the end of the lattice.
+        if any(x >= length for x in sites):
+            break
+
+        # Check ALL consecutive sites are empty.
+        if any(lattice[x] != 0 for x in sites):
+            count += 1
 
 
 def _get_coverage(lattice: list) -> int:

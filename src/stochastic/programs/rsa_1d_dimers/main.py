@@ -50,4 +50,3 @@ def run(parameters: dict) -> dict:
     # Run the simulation.
     final: dict = validate(parameters)
     results: Any = srun(final)
-
