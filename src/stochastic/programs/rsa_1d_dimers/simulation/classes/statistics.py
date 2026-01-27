@@ -16,6 +16,7 @@
 # Headers.
 HEADER_ATTEMPTS: tuple = ("Attempts", "Successful")
 HEADER_COVERAGE: tuple = ("Attempts", "Occupied")
+HEADER_EMPTYSTS: tuple = ("Attempts", "Free")
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -64,6 +65,8 @@ def _get_continuous_empty(lattice: list, number: int, periodic: bool) -> int:
         # Check ALL consecutive sites are empty.
         if any(lattice[x] != 0 for x in sites):
             count += 1
+
+    return count
 
 
 def _get_coverage(lattice: list) -> int:
@@ -154,9 +157,16 @@ class RSA1DDimersStatistics:
 
             :param lattice: The lattice with the particles.
         """
+        # Update the coverage.
         attempts: int = self.coverage[-1][0] + 1
-
         self.coverage.append((attempts, _get_coverage(lattice)))
+
+        # Alias for function.
+        emp: callable = lambda x, y: _get_continuous_empty(x, y, self.periodic)
+
+        self.empty_single.append((attempts, emp(lattice, 1)))
+        self.empty_double.append((attempts, emp(lattice, 2)))
+        self.empty_triple.append((attempts, emp(lattice, 3)))
 
     # /////////////////////////////////////////////////////////////////////////
     # Methods - Dunder
@@ -176,8 +186,20 @@ class RSA1DDimersStatistics:
         ]) + "\n\n"
 
         # Append the strings.
+        string += "Attempts:\n\n"
         string += _get_string_table(self.attempts)
+
+        string += "Coverage:\n\n"
         string += _get_string_table(self.coverage)
+
+        string += "Empties - Single:\n\n"
+        string += _get_string_table(self.empty_single)
+
+        string += "Empties - Double:\n\n"
+        string += _get_string_table(self.empty_double)
+
+        string += "Empties - Triple:\n\n"
+        string += _get_string_table(self.empty_triple)
 
         return string.strip()
 
@@ -195,6 +217,10 @@ class RSA1DDimersStatistics:
         # Initialize the parameters.
         self.attempts: list = [HEADER_ATTEMPTS, (0, 0)]
         self.coverage: list = [HEADER_COVERAGE, (0, 0)]
+
+        self.empty_single: list = [HEADER_EMPTYSTS, (0, 0)]
+        self.empty_double: list = [HEADER_EMPTYSTS, (0, 0)]
+        self.empty_triple: list = [HEADER_EMPTYSTS, (0, 0)]
 
         # Useful parameters.
         self.length: int = parameters["simulation"]["length"]
