@@ -164,6 +164,7 @@ class RSA1DDimersStatistics:
         # Alias for function.
         emp: callable = lambda x, y: _get_continuous_empty(x, y, self.periodic)
 
+        # Update the other quantities.
         self.empty_single.append((attempts, emp(lattice, 1)))
         self.empty_double.append((attempts, emp(lattice, 2)))
         self.empty_triple.append((attempts, emp(lattice, 3)))
