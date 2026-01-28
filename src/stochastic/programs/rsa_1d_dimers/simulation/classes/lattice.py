@@ -49,33 +49,24 @@ class RSA1DDimersLattice:
         """
         # Auxiliary variables.
         string: str = ""
-        parts: list = [f"{part}".strip() for part in self.lattice]
-        sites: list = [f"{site}".strip() for site in range(self.length)]
+        ents: tuple = tuple(f"{part}" for part in self.lattice)
+        sites: tuple = tuple(f"{site}" for site in range(self.length))
+        widths: tuple = tuple(max(len(x), len(y)) for x, y in zip(ents, sites))
 
-        # Lengths.
+        # Determine if partial full lattice needs to be returned.
         if not partial:
-            lengths: tuple = tuple(map(
-                lambda x, y: max(len(f"{x}"), len(y)),
-                parts,
-                sites
-            ))
-
-        else:
-            lengths: tuple = tuple(map(lambda x: len(f"{x}"), self.lattice))
-
-        # Print the lattice.
-        if not partial:
-            for i, (site, length) in enumerate(zip(sites, lengths)):
+            for i, (site, length) in enumerate(zip(sites, widths)):
                 char: str = " | " if i > 0 else ""
                 string += f"{char}{site:>{length}}"
 
             string += "\n"
 
-        for i, (part, length) in enumerate(zip(parts, lengths)):
+        # Get the particles in the site.
+        for i, (ent, length) in enumerate(zip(ents, widths)):
             char: str = " | " if i > 0 else ""
-            string += f"{char}{part:>{length}}"
+            string += f"{char}{ent:>{length}}"
 
-        return string
+        return string + "\n"
 
     def particle_adsorb(self, sites: list) -> bool:
         """
