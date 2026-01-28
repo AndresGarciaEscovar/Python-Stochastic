@@ -4,6 +4,15 @@
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# Imports
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+# Standard library.
+import copy as cp
+
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Classes
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
@@ -21,6 +30,95 @@ class RSA1DDimersLattice:
     OCCUPIED: int = 1
 
     # /////////////////////////////////////////////////////////////////////////
+    # Methods
+    # /////////////////////////////////////////////////////////////////////////
+
+    def get_lattice_string(self, partial: bool = False) -> str:
+        """
+            The string representation of the lattice at the given time. The
+            partial representation of the lattice is the state of the lattice
+            without the site numbering.
+
+            :param partial: A boolean flag indicating whether the lattice
+             string to be returned is the full representation of the lattice,
+             or the partial representation of the lattice. True, if the partial
+             representation of the lattice is requested; False, if the full
+             representation of the lattice is requested. False, by default.
+
+            :return: The string representation of the lattice.
+        """
+        # Auxiliary variables.
+        string: str = ""
+        parts: list = [f"{part}".strip() for part in self.lattice]
+        sites: list = [f"{site}".strip() for site in range(self.length)]
+
+        # Lengths.
+        if not partial:
+            lengths: tuple = tuple(map(
+                lambda x, y: max(len(f"{x}"), len(y)),
+                parts,
+                sites
+            ))
+
+        else:
+            lengths: tuple = tuple(map(lambda x: len(f"{x}"), self.lattice))
+
+        # Print the lattice.
+        if not partial:
+            for i, (site, length) in enumerate(zip(sites, lengths)):
+                char: str = " | " if i > 0 else ""
+                string += f"{char}{site:>{length}}"
+
+            string += "\n"
+
+        for i, (part, length) in enumerate(zip(parts, lengths)):
+            char: str = " | " if i > 0 else ""
+            string += f"{char}{part:>{length}}"
+
+        return string
+
+    def particle_adsorb(self, sites: list) -> bool:
+        """
+            Attempts to adsorb the particles at the given sites.
+
+            :param sites: A list of sites where to adsorb the particles.
+
+            :return: A boolean flag that indicates whether ALL the particles
+             were adsorbed, i.e., the requested sites are within the lattice
+             and empty.
+        """
+        # Auxliary variables.
+        occupied: int = RSA1DDimersLattice.OCCUPIED
+
+        # Check the sites.
+        fsites: list = cp.deepcopy(sites)
+        fsites = [x % self.length for x in fsites] if self.periodic else fsites
+
+        # All sites must be valid.
+        flag: bool = all(
+            x < self.length and self.lattice[x] != occupied for x in fsites
+        )
+
+        # Change the sites.
+        if flag:
+            for site in sites:
+                self.lattice[site] = occupied
+
+        return flag
+
+    # /////////////////////////////////////////////////////////////////////////
+    # Methods - Dunder
+    # /////////////////////////////////////////////////////////////////////////
+
+    def __str__(self) -> str:
+        """
+            The string representation of the lattice class with the current
+            state at the time it is invoked.
+
+            :return: The string with the class representation.
+        """
+
+    # /////////////////////////////////////////////////////////////////////////
     # Constructor
     # /////////////////////////////////////////////////////////////////////////
 
@@ -32,4 +130,12 @@ class RSA1DDimersLattice:
              information to create the lattice, and perform the lattice
              operations.
         """
-        raise NotImplementedError("Continue here!")
+        # Auxiliary variables.
+        empty: int = RSA1DDimersLattice.EMPTY
+
+        # Initialize the parameters.
+        self.length: int = parameters["simulation"]["length"]
+        self.periodic: bool = parameters["simulation"]["periodic"]
+
+        # Update the lattice.
+        self.lattice: list = [empty for _ in range(self.length)]
