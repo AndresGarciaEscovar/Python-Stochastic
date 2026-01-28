@@ -140,6 +140,14 @@ class RSA1DDimersStatistics:
         - self.coverage: The array with the total number of particles and the
           inverse elapsed time, i.e., the number of attempts.
 
+        - self.empty_double: The number of sites that have an empty neighbor
+          to the left.
+
+        - self.empty_single: The number of sites that are empty.
+
+        - self.empty_triple: The number of sites that have two empty neighbors
+          to the left.
+
         - self.length: The length of the 1D lattice, a number  greater than
           zero.
 
