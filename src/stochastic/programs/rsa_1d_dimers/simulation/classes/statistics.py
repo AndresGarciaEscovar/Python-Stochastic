@@ -164,10 +164,10 @@ class RSA1DDimersStatistics:
     # Methods
     # /////////////////////////////////////////////////////////////////////////
 
-    def update_coverage(self, lattice: list, successful: bool) -> None:
+    def update_statistics(self, lattice: list, successful: bool) -> None:
         """
-            From the given lattice, updates the coverage. Increases the number
-            of attempts by one.
+            From the given lattice, updates the statistics, i.e., increases the
+            number of attempts by one and the corresponding quantities.
 
             :param lattice: The lattice with the particles.
 
