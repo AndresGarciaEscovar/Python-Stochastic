@@ -104,7 +104,8 @@ class RSA1DDimersLattice:
         if self.periodic:
             fsites = [x % self.length for x in fsites]
 
-        flag: bool = all(x < self.length and self.lattice[x] != occupied
+        flag: bool = all(
+            x < self.length and self.lattice[x] != occupied
             for x in fsites
         )
 
