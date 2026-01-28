@@ -8,6 +8,12 @@
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
+# User.
+from stochastic.programs.rsa_1d_dimers.simulation.classes.lattice import (
+    RSA1DDimersLattice
+)
+
+
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Global Variables.
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -63,7 +69,7 @@ def _get_continuous_empty(lattice: list, number: int, periodic: bool) -> int:
             break
 
         # Check ALL consecutive sites are empty.
-        if any(lattice[x] != 0 for x in sites):
+        if any(lattice[x] != RSA1DDimersLattice.EMPTY for x in sites):
             count += 1
 
     return count
