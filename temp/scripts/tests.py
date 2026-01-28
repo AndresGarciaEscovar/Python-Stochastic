@@ -8,6 +8,10 @@
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
+# Standard library.
+from pathlib import Path
+from shutil import rmtree
+
 # User.
 from stochastic.programs.rsa_1d_dimers.main import run
 
@@ -39,7 +43,28 @@ PARAMETERS: dict = {
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-# Functions
+# Functions - Auxiliary
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+def remove_cache() -> None:
+    """
+        Removes the cache.
+    """
+    # Auxiliary variables.
+    path: Path = Path(__file__).parent.parent.parent
+    dires: list = [
+        x for x in path.rglob("*") if x.is_dir() and x.name == "__pycache__"
+    ]
+
+    # Remove each directory.
+    for dire in dires:
+        if dire.exists():
+            rmtree(f"{dire}")
+
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# Main Functions
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
@@ -49,6 +74,9 @@ def run_main() -> None:
     """
     # Run the simulation.
     results = run(PARAMETERS)
+
+    # Remove the cache.
+    remove_cache()
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
