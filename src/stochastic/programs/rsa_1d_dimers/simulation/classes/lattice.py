@@ -127,6 +127,14 @@ class RSA1DDimersLattice:
 
             :return: The string with the class representation.
         """
+        # Parameters.
+        string: str = "\n    ".join([
+            "Parameters:",
+            f"length: {self.length}",
+            f"periodic: {self.periodic}"
+        ]) + "\n\n"
+
+        return f"{string}Lattice:\n\n{self.get_lattice_string(partial=False)}"
 
     # /////////////////////////////////////////////////////////////////////////
     # Constructor
