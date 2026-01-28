@@ -25,7 +25,7 @@ from stochastic.programs.rsa_1d_dimers.main import run
 PARAMETERS: dict = {
     "simulation": {
         "attempts": 100,
-        "length": 100,
+        "length": 20,
         "periodic": False,
         "repetitions": 10,
         "seed": -1
