@@ -47,6 +47,7 @@ def _get_continuous_empty(lattice: list, number: int, periodic: bool) -> int:
     """
     # Auxiliary variables.
     count: int = 0
+    empty: int = RSA1DDimersLattice.EMPTY
     length: int = len(lattice)
 
     # Cannot take these statistics.
@@ -69,7 +70,7 @@ def _get_continuous_empty(lattice: list, number: int, periodic: bool) -> int:
             break
 
         # Check ALL consecutive sites are empty.
-        if all(lattice[x] == RSA1DDimersLattice.EMPTY for x in sites):
+        if all(lattice[x] == empty for x in sites):
             count += 1
 
     return count
