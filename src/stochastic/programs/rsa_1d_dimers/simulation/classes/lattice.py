@@ -88,6 +88,13 @@ class RSA1DDimersLattice:
              were adsorbed, i.e., the requested sites are within the lattice
              and empty.
         """
+        # All sites must be valid.
+        if any(x < 0 for x in sites):
+            raise ValueError(
+                "One the sites for a particle to adsorb is a negative number;"
+                "the site must be inside the lattice."
+            )
+
         # Auxliary variables.
         occupied: int = RSA1DDimersLattice.OCCUPIED
 
@@ -97,12 +104,11 @@ class RSA1DDimersLattice:
         if self.periodic:
             fsites = [x % self.length for x in fsites]
 
-        # All sites must be valid.
-        flag: bool = all(
-            x < self.length and self.lattice[x] != occupied for x in fsites
+        flag: bool = all(x < self.length and self.lattice[x] != occupied
+            for x in fsites
         )
 
-        # Change the sites.
+        # Update the particles in the sites.
         if flag:
             for site in sites:
                 self.lattice[site] = occupied
