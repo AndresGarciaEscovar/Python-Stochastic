@@ -9,6 +9,9 @@
 
 
 # User.
+from stochastic.programs.rsa_1d_dimers.simulation.classes.lattice import (
+    RSA1DDimersLattice
+)
 from stochastic.programs.rsa_1d_dimers.simulation.classes.statistics import (
     RSA1DDimersStatistics
 )
@@ -27,10 +30,8 @@ def run(parameters: dict) -> RSA1DDimersStatistics:
 
         :return: The results of the simulation.
     """
-
-    print(parameters["simulation"])
-
+    # Import the objects.
     statistics: RSA1DDimersStatistics = RSA1DDimersStatistics(parameters)
-    # lattice:
+    lattice: RSA1DDimersLattice = RSA1DDimersLattice(parameters)
 
     return statistics

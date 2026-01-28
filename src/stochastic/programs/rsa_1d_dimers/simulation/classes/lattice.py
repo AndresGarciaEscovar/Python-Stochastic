@@ -32,3 +32,4 @@ class RSA1DDimersLattice:
              information to create the lattice, and perform the lattice
              operations.
         """
+        raise NotImplementedError("Continue here!")
