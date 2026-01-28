@@ -20,6 +20,16 @@ import copy as cp
 class RSA1DDimersLattice:
     """
         Contains the variables to store the lattice of the simulation.
+
+        PARAMETERS:
+        ___________
+
+        - self.lattice: The array that contains the particles.
+
+        - self.length: The length of the lattice.
+
+        - self.periodic: A boolean flag indicating whether the lattice is
+          periodic. True, if the lattice is periodic; False, otherwise.
     """
     # /////////////////////////////////////////////////////////////////////////
     # Class Variables
