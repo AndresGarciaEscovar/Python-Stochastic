@@ -93,7 +93,9 @@ class RSA1DDimersLattice:
 
         # Check the sites.
         fsites: list = cp.deepcopy(sites)
-        fsites = [x % self.length for x in fsites] if self.periodic else fsites
+
+        if self.periodic:
+            fsites = [x % self.length for x in fsites]
 
         # All sites must be valid.
         flag: bool = all(
