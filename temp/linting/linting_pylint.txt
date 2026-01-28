@@ -1,6 +1,0 @@
-************* Module stochastic.programs.rsa_1d_dimers.main
-src/stochastic/programs/rsa_1d_dimers/main.py:52:4: W0612: Unused variable 'results' (unused-variable)
-
-------------------------------------------------------------------
-Your code has been rated at 9.95/10 (previous run: 9.95/10, +0.00)
-
