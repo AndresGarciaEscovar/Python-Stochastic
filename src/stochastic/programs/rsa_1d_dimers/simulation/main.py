@@ -31,6 +31,6 @@ def run(parameters: dict) -> RSA1DDimersStatistics:
     print(parameters["simulation"])
 
     statistics: RSA1DDimersStatistics = RSA1DDimersStatistics(parameters)
-
+    # lattice:
 
     return statistics

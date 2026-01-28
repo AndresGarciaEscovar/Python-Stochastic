@@ -150,16 +150,24 @@ class RSA1DDimersStatistics:
     # Methods
     # /////////////////////////////////////////////////////////////////////////
 
-    def update_coverage(self, lattice: list) -> None:
+    def update_coverage(self, lattice: list, successful: bool) -> None:
         """
             From the given lattice, updates the coverage. Increases the number
             of attempts by one.
 
             :param lattice: The lattice with the particles.
+
+            :param successful: A boolean flag indicating whether the adsorption
+             attempt was successful. True, if the attempt was successful in
+             adsorbing a particle; False, otherwise.
         """
         # Update the coverage.
         attempts: int = self.coverage[-1][0] + 1
         self.coverage.append((attempts, _get_coverage(lattice)))
+
+        # Update the number of successful attempts.
+        nsuccessful: int = self.attempts[-1][1] + (1 if successful else 0)
+        self.attempts.append((attempts, nsuccessful))
 
         # Alias for function.
         emp: callable = lambda x, y: _get_continuous_empty(x, y, self.periodic)
