@@ -171,3 +171,8 @@ class RSA1DDimersResults:
 
         # Simulation information.
         self.information: dict = parameters
+
+        raise NotImplementedError(
+            "The string form for this class must be written, this is how the "
+            "results will be printed to a file."
+        )
