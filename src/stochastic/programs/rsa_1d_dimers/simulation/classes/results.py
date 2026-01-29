@@ -173,6 +173,6 @@ class RSA1DDimersResults:
         self.information: dict = parameters
 
         raise NotImplementedError(
-            "The string form for this class must be written, this is how the "
-            "results will be printed to a file."
+            "The string form for the objects created using this class must be "
+            "written, this is how the results will be printed to a file."
         )
