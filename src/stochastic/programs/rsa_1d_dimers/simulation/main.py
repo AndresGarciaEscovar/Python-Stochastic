@@ -12,6 +12,9 @@
 from stochastic.programs.rsa_1d_dimers.simulation.classes.lattice import (
     RSA1DDimersLattice
 )
+from stochastic.programs.rsa_1d_dimers.simulation.classes.results import (
+    RSA1DDimersResults
+)
 from stochastic.programs.rsa_1d_dimers.simulation.classes.statistics import (
     RSA1DDimersStatistics
 )
@@ -22,7 +25,7 @@ from stochastic.programs.rsa_1d_dimers.simulation.classes.statistics import (
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
-def run(parameters: dict) -> RSA1DDimersStatistics:
+def run(parameters: dict) -> RSA1DDimersResults:
     """
         Runs the main simulation.
 
@@ -33,5 +36,6 @@ def run(parameters: dict) -> RSA1DDimersStatistics:
     # Import the objects.
     statistics: RSA1DDimersStatistics = RSA1DDimersStatistics(parameters)
     lattice: RSA1DDimersLattice = RSA1DDimersLattice(parameters)
+    results: RSA1DDimersResults = RSA1DDimersResults(parameters)
 
-    return statistics
+    return results
