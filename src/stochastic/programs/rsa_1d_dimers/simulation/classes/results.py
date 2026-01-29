@@ -8,6 +8,9 @@
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
+# Standard library.
+from datetime import datetime
+
 # User.
 from stochastic.programs.rsa_1d_dimers.simulation.classes.statistics import (
     RSA1DDimersStatistics
@@ -15,8 +18,84 @@ from stochastic.programs.rsa_1d_dimers.simulation.classes.statistics import (
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# Global Variables
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+# Date format
+DFORMAT: str = "%Y-%m-%d %H:%M%S"
+
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Functions - Auxiliary
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+def _get_lengths(table: list) -> tuple:
+    """
+        Gets the maximum width for each column of the given table.
+
+        :param array: The table for which the column widths must be obtained.
+
+        :return: A list of the widths of each table column entry.
+    """
+    # Auxiliary variables.
+    if len(table) == 0:
+        return tuple()
+
+    # Get the length.
+    length: int = len(table[0])
+
+    return tuple(max(len(f"{x[i]}") for x in table) for i in range(length))
+
+
+def _get_string_dictionary(parameters: dict) -> str:
+    """
+        From the parameters dictionary gets the string representing the
+        simulation parameters.
+
+        :param parameters: The dictionary with the simulation parameters.
+
+        :return: A string with the simulation parameters.
+    """
+    # Auxiliary variables.
+    date: str = f"{datetime.now().strftime(DFORMAT)}"
+
+    string: str = "Parameters:\n"
+    string += f"    date (YYYY-MM-DD hh:mm:ss): {date}\n"
+
+    # Extract the key and variables.
+    for key, value in parameters.items():
+        string += f"    {key}: {value}\n"
+
+    return f"{string}\n"
+
+
+def _get_string_table(table: list) -> str:
+    """
+        Gets the string for the given table.
+
+        :param array: The table for which the string must be obtained.
+
+        :return: A list of the widths of each table column entry.
+    """
+    # Auxiliary variables.
+    lengths: list = _get_lengths(table)
+    string: str = ""
+    temp: callable = "{:>{length}}".format
+
+    # Get each row.
+    for i, entries in enumerate(table):
+        # For each entry.
+        string += " | ".join(
+            temp(x, length=lengths[i]) for i, x in enumerate(entries)
+        ) + "\n"
+
+        # Header separator.
+        if i == 0:
+            string = f"{string}{' | '.join('-' * x for x in lengths)}\n"
+
+    return f"{string}\n\n"
 
 
 def _update_results(target: list, current: list) -> None:
@@ -150,6 +229,37 @@ class RSA1DDimersResults:
             self.empty_triple[i][0] /= length_pore
 
     # /////////////////////////////////////////////////////////////////////////
+    # Methods - Dunder
+    # /////////////////////////////////////////////////////////////////////////
+
+    def __str__(self) -> str:
+        """
+            The string representation of the class at the time it is invoked.
+
+            :return: The string with the class representation.
+        """
+        # Parameters.
+        string: str = _get_string_dictionary(self.information["simulation"])
+
+        # Append the strings.
+        string += "Attempts:\n\n"
+        string += _get_string_table(self.attempts)
+
+        string += "Coverage:\n\n"
+        string += _get_string_table(self.coverage)
+
+        string += "Empties - Single:\n\n"
+        string += _get_string_table(self.empty_single)
+
+        string += "Empties - Double:\n\n"
+        string += _get_string_table(self.empty_double)
+
+        string += "Empties - Triple:\n\n"
+        string += _get_string_table(self.empty_triple)
+
+        return string.strip()
+
+    # /////////////////////////////////////////////////////////////////////////
     # Constructor
     # /////////////////////////////////////////////////////////////////////////
 
@@ -172,7 +282,7 @@ class RSA1DDimersResults:
         # Simulation information.
         self.information: dict = parameters
 
-        raise NotImplementedError(
-            "The string form for the objects created using this class must be "
-            "written, this is how the results will be printed to a file."
-        )
+        # raise NotImplementedError(
+        #     "The string form for the objects created using this class must be "
+        #     "written, this is how the results will be printed to a file."
+        # )
