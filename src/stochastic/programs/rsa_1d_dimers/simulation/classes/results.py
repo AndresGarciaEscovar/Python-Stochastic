@@ -23,7 +23,7 @@ from stochastic.programs.rsa_1d_dimers.simulation.classes.statistics import (
 
 
 # Date format
-DFORMAT: str = "%Y-%m-%d %H:%M%S"
+DFORMAT: str = "%Y-%m-%d %H:%M:%S"
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -210,6 +210,10 @@ class RSA1DDimersResults:
 
         # For each quantity.
         for i in range(length_stat):
+            # The first entry is a string.
+            if i == 0:
+                continue
+
             # Average the simulations.
             number: int = self.attempts[i][0] * self.simulations
 
@@ -281,8 +285,3 @@ class RSA1DDimersResults:
 
         # Simulation information.
         self.information: dict = parameters
-
-        # raise NotImplementedError(
-        #     "The string form for the objects created using this class must be "
-        #     "written, this is how the results will be printed to a file."
-        # )
