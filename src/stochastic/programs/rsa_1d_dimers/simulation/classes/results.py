@@ -214,8 +214,15 @@ class RSA1DDimersResults:
 
         # For each quantity.
         for i in range(length_stat):
-            # The first entry is a string.
+            # Fix the elapsed time.
             if i == 0:
+                self.attempts[i][0] = "Time Elapsed"
+                self.coverage[i][0] = "Time Elapsed"
+
+                self.empty_single[i][0] = "Time Elapsed"
+                self.empty_double[i][0] = "Time Elapsed"
+                self.empty_triple[i][0] = "Time Elapsed"
+
                 continue
 
             # Average the simulations.
