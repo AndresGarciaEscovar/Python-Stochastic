@@ -31,15 +31,32 @@ def _run_simulation(parameters: dict) -> RSA1DDimersResults:
 
         :param parameters: The parameters to run the simulations.
 
-        :return: The processed results of the simulation.
+        :return: The averaged results of the simulation.
     """
-    attempts: int = parameters["simulation"]["attempts"]
-
-    statistics: RSA1DDimersStatistics = RSA1DDimersStatistics(parameters)
-    lattice: RSA1DDimersLattice = RSA1DDimersLattice(parameters)
+    # Auxiliary variables.
+    repetitions: int = parameters["simulation"]["repetitions"]
     results: RSA1DDimersResults = RSA1DDimersResults(parameters)
 
-    print(f"{results}")
+    # Run the simulation the given number of times.
+    for _ in range(repetitions):
+        # Get the statistics and process them.
+        statistics: RSA1DDimersStatistics = run_simulation_single(parameters)
+        results.statistics_add(statistics)
+
+    # Process the statistics.
+    results.statistics_process()
+
+def run_simulation_single(parameters: dict) -> RSA1DDimersStatistics:
+    """
+        Runs a single simulation, that is, makes N attempts to adsorb a
+        particle into a lattice and takes the statistics associated with it.
+
+        :param parameters: The parameters of the simulation.
+    """
+    statistics: RSA1DDimersStatistics = RSA1DDimersStatistics(parameters)
+    lattice: RSA1DDimersLattice = RSA1DDimersLattice(parameters)
+
+    return statistics
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Main Function
