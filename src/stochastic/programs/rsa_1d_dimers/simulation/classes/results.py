@@ -119,6 +119,10 @@ def _update_results(target: list, current: list) -> None:
 
     # Attempt to merge the statistics.
     for i, (x, y) in enumerate(zip(target, current)):
+        # No need to update the header.
+        if i == 0:
+            continue
+
         # Time stamps must be the same.
         if x[0] != y[0]:
             raise ValueError(
