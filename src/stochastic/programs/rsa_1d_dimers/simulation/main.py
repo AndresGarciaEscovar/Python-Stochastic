@@ -46,6 +46,10 @@ def _run_simulation(parameters: dict) -> RSA1DDimersResults:
     # Process the statistics.
     results.statistics_process()
 
+    print(results)
+
+    return results
+
 def run_simulation_single(parameters: dict) -> RSA1DDimersStatistics:
     """
         Runs a single simulation, that is, makes N attempts to adsorb a
@@ -73,7 +77,5 @@ def run(parameters: dict) -> RSA1DDimersResults:
     """
     # Import the objects.
     results: RSA1DDimersResults = _run_simulation(parameters)
-
-    print("HERE")
 
     return results
