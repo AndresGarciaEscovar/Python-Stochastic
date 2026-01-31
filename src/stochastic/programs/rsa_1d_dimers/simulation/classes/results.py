@@ -208,6 +208,7 @@ class RSA1DDimersResults:
             Processes the statistics to give the final results.
         """
         # Auxiliary variables.
+        header_0: str = "Time Elapsed"
         length_pore: int = self.information["simulation"]["length"]
         length_stat: int = len(self.attempts)
         denominator: int = self.simulations * length_pore
@@ -216,12 +217,12 @@ class RSA1DDimersResults:
         for i in range(length_stat):
             # Fix the elapsed time.
             if i == 0:
-                self.attempts[i][0] = "Time Elapsed"
-                self.coverage[i][0] = "Time Elapsed"
+                self.attempts[i][0] = header_0
+                self.coverage[i][0] = header_0
 
-                self.empty_single[i][0] = "Time Elapsed"
-                self.empty_double[i][0] = "Time Elapsed"
-                self.empty_triple[i][0] = "Time Elapsed"
+                self.empty_single[i][0] = header_0
+                self.empty_double[i][0] = header_0
+                self.empty_triple[i][0] = header_0
 
                 continue
 
