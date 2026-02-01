@@ -12,7 +12,7 @@
 from datetime import datetime
 
 # User.
-from stochastic.programs.rsa_1d_dimers.simulation.classes.statistics import (
+from stochastic.programs.rsa_1d_dimers.classes.statistics import (
     RSA1DDimersStatistics
 )
 

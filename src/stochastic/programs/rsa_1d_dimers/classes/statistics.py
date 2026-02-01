@@ -9,7 +9,7 @@
 
 
 # User.
-from stochastic.programs.rsa_1d_dimers.simulation.classes.lattice import (
+from stochastic.programs.rsa_1d_dimers.classes.lattice import (
     RSA1DDimersLattice
 )
 

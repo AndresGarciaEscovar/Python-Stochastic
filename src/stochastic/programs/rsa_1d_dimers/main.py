@@ -10,12 +10,10 @@
 
 # Standard library.
 from importlib.resources import files as ifiles
-from typing import Any
 
 # User.
 from stochastic.programs.rsa_1d_dimers import configs
-from stochastic.programs.rsa_1d_dimers.simulation.main import run as srun
-from stochastic.programs.rsa_1d_dimers.validation.parameters import validate
+from stochastic.programs.rsa_1d_dimers.simulation import RSA1DDimersSimulation
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -47,6 +45,5 @@ def run(parameters: dict) -> dict:
 
         :return: A dictionary with the results to be plotted.
     """
-    # Run the simulation.
-    final: dict = validate(parameters)
-    results: Any = srun(final)
+    # Create and run the simulation.
+    simulation: RSA1DDimersSimulation = RSA1DDimersSimulation(parameters)
