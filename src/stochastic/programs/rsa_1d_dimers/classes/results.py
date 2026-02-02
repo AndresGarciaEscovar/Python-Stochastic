@@ -12,9 +12,7 @@
 from datetime import datetime
 
 # User.
-from stochastic.programs.rsa_1d_dimers.classes.statistics import (
-    RSA1DDimersStatistics
-)
+from stochastic.programs.rsa_1d_dimers.classes.statistics import Statistics
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -172,7 +170,7 @@ class Results:
     # Methods
     # /////////////////////////////////////////////////////////////////////////
 
-    def statistics_add(self, statistics: RSA1DDimersStatistics) -> None:
+    def statistics_add(self, statistics: Statistics) -> None:
         """
             Adds more statistics to the results before they are processed. For
             this method to process, the statistics arrays must contain the same

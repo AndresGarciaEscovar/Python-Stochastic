@@ -12,10 +12,10 @@
 import random
 
 # User.
-from stochastic.programs.rsa_1d_dimers.validation.parameters import validate
 from stochastic.programs.rsa_1d_dimers.classes.lattice import Lattice
 from stochastic.programs.rsa_1d_dimers.classes.results import Results
 from stochastic.programs.rsa_1d_dimers.classes.statistics import Statistics
+from stochastic.programs.rsa_1d_dimers.validation.parameters import validate
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
