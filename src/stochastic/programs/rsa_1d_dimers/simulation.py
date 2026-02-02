@@ -15,6 +15,7 @@ from datetime import datetime
 from pathlib import Path
 
 # User.
+from stochastic.programs.rsa_1d_dimers.classes.history import History
 from stochastic.programs.rsa_1d_dimers.classes.lattice import Lattice
 from stochastic.programs.rsa_1d_dimers.classes.parameters import Parameters
 from stochastic.programs.rsa_1d_dimers.classes.results import Results
@@ -66,13 +67,27 @@ class Simulation:
         length: int = self.parameters.simulation["length"] - 1
 
         # Get a new lattice and statistics.
-        self.lattice = Lattice(self.parameters.simulation)
-        self.statistics = Statistics(self.parameters.simulation)
+        self.lattice.reset()
+        self.statistics.reset()
 
         for _ in range(attempts):
             site: int = self.generator.randint(0, length)
             successful: bool = self.lattice.particle_adsorb([site, site + 1])
             self.statistics.update_statistics(self.lattice.lattice, successful)
+
+    def _set_working_directory(self) -> None:
+        """
+            Sets the working directory to the place where the results will
+            be stored.
+        """
+        # Auxiliary variables.
+        date: str = datetime.now().strftime("%Y%m%d%H%M%S")
+        directory: str = f"{PROGRAM.replace(' ', '-')}_{date}"
+        path: Path = Path(self.parameters.output["working"]) / directory
+
+        # Set and create the working directory.
+        path.mkdir(exist_ok=True, parents=False)
+        self.parameters.output["working"] = f"{path}"
 
     # /////////////////////////////////////////////////////////////////////////
     # Methods
@@ -100,13 +115,8 @@ class Simulation:
             Saves the final simulation results to the working directory.
         """
         # Auxiliary variables.
-        date: str = datetime.now().strftime("%Y%m%d%H%M%S")
-        directory: str = f"{PROGRAM.replace(' ', '-')}_{date}"
-        path: Path = Path(self.parameters.output["working"]) / directory
+        path: Path = Path(self.parameters.output["working"])
         file: Path = path / self.parameters.output["file"]
-
-        # Create the directory if needed.
-        path.mkdir(exist_ok=True, parents=False)
 
         # Name of the file.
         with open(f"{file}", encoding="utf-8", mode="w") as stream:
@@ -134,3 +144,14 @@ class Simulation:
         self.lattice: Lattice = Lattice(self.parameters.simulation)
         self.results: Results = Results(self.parameters.simulation)
         self.statistics: Statistics = Statistics(self.parameters.simulation)
+
+        # Finish setting other quantities.
+        self._set_working_directory()
+
+        # Initialize the history.
+        self.history: History = History(
+            self.parameters,
+            self.lattice,
+            self.results,
+            self.statistics
+        )

@@ -163,6 +163,18 @@ class Statistics:
     # Methods
     # /////////////////////////////////////////////////////////////////////////
 
+    def reset(self) -> None:
+        """
+            Resets ALL the statistics to their original value.
+        """
+        # Reset the parameters.
+        self.attempts = [HEADER_ATTEMPTS, (0, 0)]
+        self.coverage = [HEADER_COVERAGE, (0, 0)]
+
+        self.empty_single = [HEADER_EMPTYSTS, (0, 0)]
+        self.empty_double = [HEADER_EMPTYSTS, (0, 0)]
+        self.empty_triple = [HEADER_EMPTYSTS, (0, 0)]
+
     def update_statistics(self, lattice: list, successful: bool) -> None:
         """
             From the given lattice, updates the statistics, i.e., increases the

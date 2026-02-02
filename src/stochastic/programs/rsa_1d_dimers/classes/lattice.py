@@ -116,6 +116,13 @@ class Lattice:
 
         return flag
 
+    def reset(self) -> None:
+        """
+            Resets the lattice to an empty lattice.
+        """
+        # Reset to an empty lattice.
+        self.lattice = [Lattice.EMPTY for _ in range(self.length)]
+
     # /////////////////////////////////////////////////////////////////////////
     # Methods - Dunder
     # /////////////////////////////////////////////////////////////////////////
