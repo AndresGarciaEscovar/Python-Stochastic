@@ -121,7 +121,7 @@ class Simulation:
             Constructor for the object.
 
             :param parameters: The simulation parameters that contains all the
-             information to record the statistics.
+             information needed for the simulation.
         """
         # Extract the parameters.
         self.parameters: Parameters = Parameters(parameters)

@@ -289,7 +289,7 @@ class Results:
             Constructor for the object.
 
             :param parameters: The simulation parameters that contains all the
-             information to record the statistics.
+             information to record the results of a simulation.
         """
         # Simulation information.
         self.parameters: dict = parameters

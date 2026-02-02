@@ -82,7 +82,10 @@ class Parameters:
 
     def __init__(self, parameters: dict) -> None:
         """
-            Initializes the parameters object.
+            Constructor for the object.
+
+            :param parameters: The simulation parameters that contains all the
+             information needed for the simulation.
         """
         # Validate the parameters.
         final: dict = validate(parameters)

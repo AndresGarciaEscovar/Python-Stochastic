@@ -231,7 +231,7 @@ class Statistics:
 
     def __init__(self, parameters: dict) -> None:
         """
-            Builds a new statistics object.
+            Constructor for the object.
 
             :param parameters: The simulation parameters that contains all the
              information to record the statistics.
