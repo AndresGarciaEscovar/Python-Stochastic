@@ -15,7 +15,6 @@ from datetime import datetime
 from pathlib import Path
 
 # User.
-from stochastic.programs.rsa_1d_dimers.classes.history import History
 from stochastic.programs.rsa_1d_dimers.classes.lattice import Lattice
 from stochastic.programs.rsa_1d_dimers.classes.parameters import Parameters
 from stochastic.programs.rsa_1d_dimers.classes.results import Results
@@ -195,11 +194,3 @@ class Simulation:
 
         # Finish setting other quantities.
         self._set_working_directory()
-
-        # Initialize the history.
-        self.history: History = History(
-            self.parameters,
-            self.lattice,
-            self.results,
-            self.statistics
-        )
