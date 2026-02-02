@@ -11,11 +11,23 @@
 # Standard library.
 import random
 
+from datetime import datetime
+from pathlib import Path
+
 # User.
 from stochastic.programs.rsa_1d_dimers.classes.lattice import Lattice
 from stochastic.programs.rsa_1d_dimers.classes.parameters import Parameters
 from stochastic.programs.rsa_1d_dimers.classes.results import Results
 from stochastic.programs.rsa_1d_dimers.classes.statistics import Statistics
+
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# Global Variables
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+# Name of the program.
+PROGRAM: str = "RSA 1D Dimers"
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -80,6 +92,22 @@ class Simulation:
         # Process the statistics.
         self.results.statistics_process()
 
+        # Save the results.
+        self.save_results()
+
+    def save_results(self) -> None:
+        """
+            Saves the final simulation results to the working directory.
+        """
+        # Auxiliary variables.
+        date: str = datetime.now().strftime("%Y%m%d%H%M%S")
+        file: str = f"{PROGRAM.replace(' ', '-')}_{date}.txt"
+        path: str = Path(self.parameters.output["working"]) / file
+
+        # Name of the file.
+        with open(f"{path}", encoding="utf-8", mode="w") as stream:
+            stream.write(f"{self.results}")
+
     # /////////////////////////////////////////////////////////////////////////
     # Constructor
     # /////////////////////////////////////////////////////////////////////////
@@ -96,12 +124,9 @@ class Simulation:
         seed: int = self.parameters.simulation["seed"]
 
         # Parameters.
-
         self.generator: random.Random = random.Random(seed)
 
         # Other parameters.
         self.lattice: Lattice = Lattice(self.parameters.simulation)
         self.results: Results = Results(self.parameters.simulation)
         self.statistics: Statistics = Statistics(self.parameters.simulation)
-
-        self.run_simulations()
