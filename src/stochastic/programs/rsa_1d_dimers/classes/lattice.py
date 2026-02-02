@@ -17,7 +17,7 @@ import copy as cp
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
-class RSA1DDimersLattice:
+class Lattice:
     """
         Contains the variables to store the lattice of the simulation.
 
@@ -96,7 +96,7 @@ class RSA1DDimersLattice:
             )
 
         # Auxliary variables.
-        occupied: int = RSA1DDimersLattice.OCCUPIED
+        occupied: int = Lattice.OCCUPIED
 
         # Check the sites.
         fsites: list = cp.deepcopy(sites)
@@ -148,12 +148,9 @@ class RSA1DDimersLattice:
              information to create the lattice, and perform the lattice
              operations.
         """
-        # Auxiliary variables.
-        empty: int = RSA1DDimersLattice.EMPTY
-
         # Initialize the parameters.
         self.length: int = parameters["simulation"]["length"]
         self.periodic: bool = parameters["simulation"]["periodic"]
 
         # Update the lattice.
-        self.lattice: list = [empty for _ in range(self.length)]
+        self.lattice: list = [Lattice.EMPTY for _ in range(self.length)]

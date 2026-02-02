@@ -24,8 +24,8 @@ from stochastic.programs.rsa_1d_dimers.main import run
 # Simulation parameters.
 PARAMETERS: dict = {
     "simulation": {
-        "attempts": 100,
-        "length": 20,
+        "attempts": 10000,
+        "length": 100,
         "periodic": False,
         "repetitions": 10,
         "seed": -1
@@ -73,7 +73,7 @@ def run_main() -> None:
         Runs the main function.
     """
     # Run the simulation.
-    results = run(PARAMETERS)
+    run(PARAMETERS)
 
     # Remove the cache.
     remove_cache()

@@ -9,9 +9,7 @@
 
 
 # User.
-from stochastic.programs.rsa_1d_dimers.classes.lattice import (
-    RSA1DDimersLattice
-)
+from stochastic.programs.rsa_1d_dimers.classes.lattice import Lattice
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -47,7 +45,7 @@ def _get_continuous_empty(lattice: list, number: int, periodic: bool) -> int:
     """
     # Auxiliary variables.
     count: int = 0
-    empty: int = RSA1DDimersLattice.EMPTY
+    empty: int = Lattice.EMPTY
     length: int = len(lattice)
 
     # Cannot take these statistics.
@@ -134,7 +132,7 @@ def _get_string_table(table: list) -> str:
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
-class RSA1DDimersStatistics:
+class Statistics:
     """
         Contains the variables to take the statistics of the simulation.
 

@@ -8,17 +8,14 @@
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
+# Standard library.
+import random
+
 # User.
 from stochastic.programs.rsa_1d_dimers.validation.parameters import validate
-from stochastic.programs.rsa_1d_dimers.classes.lattice import (
-    RSA1DDimersLattice
-)
-from stochastic.programs.rsa_1d_dimers.classes.results import (
-    RSA1DDimersResults
-)
-from stochastic.programs.rsa_1d_dimers.classes.statistics import (
-    RSA1DDimersStatistics
-)
+from stochastic.programs.rsa_1d_dimers.classes.lattice import Lattice
+from stochastic.programs.rsa_1d_dimers.classes.results import Results
+from stochastic.programs.rsa_1d_dimers.classes.statistics import Statistics
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -26,7 +23,7 @@ from stochastic.programs.rsa_1d_dimers.classes.statistics import (
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
-class RSA1DDimersSimulation:
+class Simulation:
     """
         Contains the methods and variables to run a complete simulation and
         get the proper statistics.
@@ -42,7 +39,47 @@ class RSA1DDimersSimulation:
 
         - self.statistics: The object where the statistics of a single
           simulation will be stored.
+
     """
+    # /////////////////////////////////////////////////////////////////////////
+    # Methods - Private
+    # /////////////////////////////////////////////////////////////////////////
+
+    def _run_simulation(self) -> None:
+        """
+            Runs the simulations.
+        """
+        # Auxiliary variables.
+        attempts: int = self.parameters["simulation"]["attempts"]
+        length: int = self.parameters["simulation"]["length"] - 1
+
+        # Get a new lattice and statistics.
+        self.lattice = Lattice(self.parameters)
+        self.statistics = Statistics(self.parameters)
+
+        for _ in range(attempts):
+            site: int = self.generator.randint(0, length)
+            successful: bool = self.lattice.particle_adsorb([site, site + 1])
+            self.statistics.update_statistics(self.lattice.lattice, successful)
+
+    # /////////////////////////////////////////////////////////////////////////
+    # Methods
+    # /////////////////////////////////////////////////////////////////////////
+
+    def run_simulations(self) -> None:
+        """
+            Runs the simulations.
+        """
+        # Auxiliary variables.
+        repetitions: int = self.parameters["simulation"]["repetitions"]
+
+        for _ in range(repetitions):
+            self._run_simulation()
+            self.results.statistics_add(self.statistics)
+
+        # Process the statistics.
+        self.results.statistics_process()
+
     # /////////////////////////////////////////////////////////////////////////
     # Constructor
     # /////////////////////////////////////////////////////////////////////////
@@ -56,8 +93,15 @@ class RSA1DDimersSimulation:
         """
         # Validate the parameters.
         final: dict = validate(parameters)
+        seed: int = final["simulation"]["seed"]
+
+        # Parameters.
+        self.parameters: dict = final
+        self.generator: random.Random = random.Random(seed)
 
         # Other parameters.
-        self.lattice: RSA1DDimersLattice = RSA1DDimersLattice(final)
-        self.results: RSA1DDimersResults = RSA1DDimersResults(final)
-        self.statistics: RSA1DDimersStatistics = RSA1DDimersStatistics(final)
+        self.lattice: Lattice = Lattice(final)
+        self.results: Results = Results(final)
+        self.statistics: Statistics = Statistics(final)
+
+        self.run_simulations()

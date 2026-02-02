@@ -13,7 +13,7 @@ from importlib.resources import files as ifiles
 
 # User.
 from stochastic.programs.rsa_1d_dimers import configs
-from stochastic.programs.rsa_1d_dimers.simulation import RSA1DDimersSimulation
+from stochastic.programs.rsa_1d_dimers.simulation import Simulation
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -46,4 +46,4 @@ def run(parameters: dict) -> dict:
         :return: A dictionary with the results to be plotted.
     """
     # Create and run the simulation.
-    simulation: RSA1DDimersSimulation = RSA1DDimersSimulation(parameters)
+    simulation: Simulation = Simulation(parameters)

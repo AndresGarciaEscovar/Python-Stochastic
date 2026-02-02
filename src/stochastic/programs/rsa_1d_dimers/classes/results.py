@@ -139,7 +139,7 @@ def _update_results(target: list, current: list) -> None:
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
-class RSA1DDimersResults:
+class Results:
     """
         Contains the methods and variables to process the results.
 
