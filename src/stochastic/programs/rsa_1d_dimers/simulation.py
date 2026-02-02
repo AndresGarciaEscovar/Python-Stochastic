@@ -101,11 +101,15 @@ class Simulation:
         """
         # Auxiliary variables.
         date: str = datetime.now().strftime("%Y%m%d%H%M%S")
-        file: str = f"{PROGRAM.replace(' ', '-')}_{date}.txt"
-        path: str = Path(self.parameters.output["working"]) / file
+        directory: str = f"{PROGRAM.replace(' ', '-')}_{date}"
+        path: Path = Path(self.parameters.output["working"]) / directory
+        file: Path = path / self.parameters.output["file"]
+
+        # Create the directory if needed.
+        path.mkdir(exist_ok=True, parents=False)
 
         # Name of the file.
-        with open(f"{path}", encoding="utf-8", mode="w") as stream:
+        with open(f"{file}", encoding="utf-8", mode="w") as stream:
             stream.write(f"{self.results}")
 
     # /////////////////////////////////////////////////////////////////////////

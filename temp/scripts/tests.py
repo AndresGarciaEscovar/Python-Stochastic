@@ -36,7 +36,7 @@ PARAMETERS: dict = {
         "save": False
     },
     "output": {
-        "output": "output.txt",
+        "file": "output.txt",
         "working": ""
     }
 }

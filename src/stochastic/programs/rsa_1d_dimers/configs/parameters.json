@@ -5,7 +5,7 @@
         "save": false
     },
     "output": {
-        "output": "output.txt",
+        "file": "output.txt",
         "working": ""
     },
     "simulation": {

@@ -60,11 +60,11 @@ def _get_string_dictionary(parameters: dict) -> str:
     date: str = f"{datetime.now().strftime(DFORMAT)}"
 
     string: str = "Parameters:\n"
-    string += f"    date (YYYY-MM-DD hh:mm:ss): {date}\n"
+    string += f"    Date (YYYY-MM-DD hh:mm:ss): {date}\n"
 
     # Extract the key and variables.
     for key, value in parameters.items():
-        string += f"    {key}: {value}\n"
+        string += f"    {key.title()}: {value}\n"
 
     return f"{string}\n"
 

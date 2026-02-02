@@ -133,7 +133,7 @@ def validate_parameters_output(parameters: dict) -> None:
         )
 
     # Check the output file path.
-    file: Path = Path(parameters["output"])
+    file: Path = Path(parameters["file"])
 
     if len(file.parts) != 1:
         raise ValueError(
