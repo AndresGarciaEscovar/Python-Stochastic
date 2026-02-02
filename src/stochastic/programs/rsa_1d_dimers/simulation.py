@@ -30,6 +30,24 @@ from stochastic.programs.rsa_1d_dimers.classes.statistics import Statistics
 # Name of the program.
 PROGRAM: str = "RSA 1D Dimers"
 
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# Functions - Auxiliary
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+def _get_header(text: str) -> str:
+    """
+        Gets the header for the given section.
+
+        :param text: The name of the header, must be a relatively short string.
+
+        :return: The string that represents the header of the section.
+    """
+    # Auxiliary variables.
+    header: str = f"# {'-' * 78}"
+
+    return f"{header}\n# {text}\n{header}\n"
+
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Classes
@@ -58,7 +76,7 @@ class Simulation:
     # Methods - Private
     # /////////////////////////////////////////////////////////////////////////
 
-    def _run_simulation(self, reset: bool = True) -> None:
+    def _run_simulation(self) -> None:
         """
             Runs the simulations.
 
@@ -71,9 +89,8 @@ class Simulation:
         length: int = self.parameters.simulation["length"] - 1
 
         # Get a new lattice and statistics.
-        if reset:
-            self.lattice.reset()
-            self.statistics.reset()
+        self.lattice.reset()
+        self.statistics.reset()
 
         for _ in range(attempts):
             site: int = self.generator.randint(0, length)
@@ -98,18 +115,15 @@ class Simulation:
     # Methods
     # /////////////////////////////////////////////////////////////////////////
 
-    def run_simulations(self, reset: bool = True) -> None:
+    def run_simulations(self) -> None:
         """
             Runs the simulations.
         """
         # Auxiliary variables.
-        reset_: bool = reset
         repetitions: int = self.parameters.simulation["repetitions"]
 
         for _ in range(repetitions):
-            self._run_simulation(reset_)
             self.results.statistics_add(self.statistics)
-            reset_ = True
 
         # Process the statistics.
         self.results.statistics_process()
@@ -128,6 +142,33 @@ class Simulation:
         # Name of the file.
         with open(f"{file}", encoding="utf-8", mode="w") as stream:
             stream.write(f"{self.results}")
+
+    def save_history(self) -> None:
+        """
+            Saves the state of the lattice to the given file, if requested.
+        """
+        # Auxiliary variables.
+        flag: bool = self.parameters.history["save"]
+        flag = flag and self.parameters.history["frequency"] > 0
+
+        # Only save if requested.
+        if flag:
+            # Get the file where the lattice will be saved.
+            working: Path = Path(self.parameters.output["working"])
+            file: str = f"{working / self.parameters.history['file']}"
+
+            with open(file, encoding="utf-8", mode="w") as stream:
+                stream.write(_get_header("Parameters\n"))
+                stream.write(f"{self.parameters}")
+
+                stream.write(_get_header("Lattice\n"))
+                stream.write(f"{self.lattice}")
+
+                stream.write(_get_header("Statistics\n"))
+                stream.write(f"{self.statistics}")
+
+                stream.write(_get_header("Results\n"))
+                stream.write(f"{self.results}")
 
     # /////////////////////////////////////////////////////////////////////////
     # Constructor
