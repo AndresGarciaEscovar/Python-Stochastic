@@ -31,9 +31,7 @@ temporary
 *.pdf
 *.out
 *.toc
-
-linting_flake8.txt
-linting_pylint.txt
+*.txt
 
 # ------------------------------------------------------------------------------
 # Exceptions
