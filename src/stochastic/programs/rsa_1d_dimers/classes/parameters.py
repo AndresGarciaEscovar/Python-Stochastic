@@ -54,6 +54,7 @@ class Parameters:
         """
             Prints the current dictionary parameters in a friendly format.
         """
+        # Auxiliary variables.
         indent: str = " " * 4
         string: str = "{\n"
         entries: tuple = (
@@ -62,6 +63,7 @@ class Parameters:
             ("simulation", self.simulation)
         )
 
+        # Print every dictionary.
         for key, dictionary in entries:
             string = f"{string}{indent}'{key}': " + "{\n"
 
@@ -69,6 +71,7 @@ class Parameters:
                 value: Any = f"'{value}'" if isinstance(value, str) else value
                 string = f"{string}{indent * 2}'{subkey}': {value},\n"
 
+            # More strings.
             string = f"{string}{indent}" + "},\n"
 
         return f"{string}" + "}"
@@ -88,5 +91,3 @@ class Parameters:
         self.history: dict = final["history"]
         self.output: dict = final["output"]
         self.simulation: dict = final["simulation"]
-
-        print(f"{self}")
