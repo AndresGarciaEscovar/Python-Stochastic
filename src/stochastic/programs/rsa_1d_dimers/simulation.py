@@ -13,9 +13,9 @@ import random
 
 # User.
 from stochastic.programs.rsa_1d_dimers.classes.lattice import Lattice
+from stochastic.programs.rsa_1d_dimers.classes.parameters import Parameters
 from stochastic.programs.rsa_1d_dimers.classes.results import Results
 from stochastic.programs.rsa_1d_dimers.classes.statistics import Statistics
-from stochastic.programs.rsa_1d_dimers.validation.parameters import validate
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -50,12 +50,12 @@ class Simulation:
             Runs the simulations.
         """
         # Auxiliary variables.
-        attempts: int = self.parameters["simulation"]["attempts"]
-        length: int = self.parameters["simulation"]["length"] - 1
+        attempts: int = self.parameters.simulation["attempts"]
+        length: int = self.parameters.simulation["length"] - 1
 
         # Get a new lattice and statistics.
-        self.lattice = Lattice(self.parameters)
-        self.statistics = Statistics(self.parameters)
+        self.lattice = Lattice(self.parameters.simulation)
+        self.statistics = Statistics(self.parameters.simulation)
 
         for _ in range(attempts):
             site: int = self.generator.randint(0, length)
@@ -71,7 +71,7 @@ class Simulation:
             Runs the simulations.
         """
         # Auxiliary variables.
-        repetitions: int = self.parameters["simulation"]["repetitions"]
+        repetitions: int = self.parameters.simulation["repetitions"]
 
         for _ in range(repetitions):
             self._run_simulation()
@@ -91,17 +91,17 @@ class Simulation:
             :param parameters: The simulation parameters that contains all the
              information to record the statistics.
         """
-        # Validate the parameters.
-        final: dict = validate(parameters)
-        seed: int = final["simulation"]["seed"]
+        # Extract the parameters.
+        self.parameters: Parameters = Parameters(parameters)
+        seed: int = self.parameters.simulation["seed"]
 
         # Parameters.
-        self.parameters: dict = final
+
         self.generator: random.Random = random.Random(seed)
 
         # Other parameters.
-        self.lattice: Lattice = Lattice(final)
-        self.results: Results = Results(final)
-        self.statistics: Statistics = Statistics(final)
+        self.lattice: Lattice = Lattice(self.parameters.simulation)
+        self.results: Results = Results(self.parameters.simulation)
+        self.statistics: Statistics = Statistics(self.parameters.simulation)
 
         self.run_simulations()

@@ -207,7 +207,7 @@ class Results:
         """
         # Auxiliary variables.
         header_0: str = "Time Elapsed"
-        length_pore: int = self.information["simulation"]["length"]
+        length_pore: int = self.parameters["length"]
         length_stat: int = len(self.attempts)
         denominator: int = self.simulations * length_pore
 
@@ -253,7 +253,7 @@ class Results:
             :return: The string with the class representation.
         """
         # Parameters.
-        string: str = _get_string_dictionary(self.information["simulation"])
+        string: str = _get_string_dictionary(self.parameters)
 
         # Append the strings.
         string += "Attempts:\n\n"
@@ -284,6 +284,9 @@ class Results:
             :param parameters: The simulation parameters that contains all the
              information to record the statistics.
         """
+        # Simulation information.
+        self.parameters: dict = parameters
+
         # Initialize the parameters.
         self.simulations: int = 0
         self.attempts: list = []
@@ -293,5 +296,4 @@ class Results:
         self.empty_double: list = []
         self.empty_triple: list = []
 
-        # Simulation information.
-        self.information: dict = parameters
+

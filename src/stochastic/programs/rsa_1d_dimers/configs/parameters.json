@@ -1,11 +1,4 @@
 {
-    "simulation": {
-        "attempts": 100,
-        "length": 100,
-        "periodic": false,
-        "repetitions": 10,
-        "seed": -1
-    },
     "history": {
         "file": "history.txt",
         "interval": 0,
@@ -14,5 +7,12 @@
     "output": {
         "output": "output.txt",
         "working": ""
+    },
+    "simulation": {
+        "attempts": 100,
+        "length": 100,
+        "periodic": false,
+        "repetitions": 10,
+        "seed": -1
     }
 }

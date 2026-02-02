@@ -245,5 +245,5 @@ class Statistics:
         self.empty_triple: list = [HEADER_EMPTYSTS, (0, 0)]
 
         # Useful parameters.
-        self.length: int = parameters["simulation"]["length"]
-        self.periodic: bool = parameters["simulation"]["periodic"]
+        self.length: int = parameters["length"]
+        self.periodic: bool = parameters["periodic"]

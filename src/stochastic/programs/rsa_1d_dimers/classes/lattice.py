@@ -149,8 +149,8 @@ class Lattice:
              operations.
         """
         # Initialize the parameters.
-        self.length: int = parameters["simulation"]["length"]
-        self.periodic: bool = parameters["simulation"]["periodic"]
+        self.length: int = parameters["length"]
+        self.periodic: bool = parameters["periodic"]
 
         # Update the lattice.
         self.lattice: list = [Lattice.EMPTY for _ in range(self.length)]
