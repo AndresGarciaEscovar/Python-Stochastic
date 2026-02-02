@@ -27,12 +27,12 @@ PARAMETERS: dict = {
         "attempts": 10000,
         "length": 100,
         "periodic": False,
-        "repetitions": 10,
+        "repetitions": 1000,
         "seed": -1
     },
     "history": {
         "file": "history.txt",
-        "interval": 0,
+        "frequency": 0,
         "save": False
     },
     "output": {

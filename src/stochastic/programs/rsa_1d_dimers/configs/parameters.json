@@ -1,7 +1,7 @@
 {
     "history": {
         "file": "history.txt",
-        "interval": 0,
+        "frequency": 0,
         "save": false
     },
     "output": {

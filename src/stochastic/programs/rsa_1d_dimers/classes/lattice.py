@@ -121,7 +121,10 @@ class Lattice:
             Resets the lattice to an empty lattice.
         """
         # Reset to an empty lattice.
-        self.lattice = [Lattice.EMPTY for _ in range(self.length)]
+        length: int = len(self.lattice)
+
+        for i in range(length):
+            self.lattice[i] = Lattice.EMPTY
 
     # /////////////////////////////////////////////////////////////////////////
     # Methods - Dunder

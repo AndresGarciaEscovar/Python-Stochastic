@@ -58,17 +58,22 @@ class Simulation:
     # Methods - Private
     # /////////////////////////////////////////////////////////////////////////
 
-    def _run_simulation(self) -> None:
+    def _run_simulation(self, reset: bool = True) -> None:
         """
             Runs the simulations.
+
+            :param reset: A boolean flag indicating whether the statistics
+             and the lattice must be reset. True, if the statistics and lattice
+             must be reset; False, otherwise. True, by default.
         """
         # Auxiliary variables.
         attempts: int = self.parameters.simulation["attempts"]
         length: int = self.parameters.simulation["length"] - 1
 
         # Get a new lattice and statistics.
-        self.lattice.reset()
-        self.statistics.reset()
+        if reset:
+            self.lattice.reset()
+            self.statistics.reset()
 
         for _ in range(attempts):
             site: int = self.generator.randint(0, length)
@@ -93,16 +98,18 @@ class Simulation:
     # Methods
     # /////////////////////////////////////////////////////////////////////////
 
-    def run_simulations(self) -> None:
+    def run_simulations(self, reset: bool = True) -> None:
         """
             Runs the simulations.
         """
         # Auxiliary variables.
+        reset_: bool = reset
         repetitions: int = self.parameters.simulation["repetitions"]
 
         for _ in range(repetitions):
-            self._run_simulation()
+            self._run_simulation(reset_)
             self.results.statistics_add(self.statistics)
+            reset_ = True
 
         # Process the statistics.
         self.results.statistics_process()
