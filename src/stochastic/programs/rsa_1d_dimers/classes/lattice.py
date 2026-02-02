@@ -91,8 +91,8 @@ class Lattice:
         # All sites must be valid.
         if any(x < 0 for x in sites):
             raise ValueError(
-                "One the sites for a particle to adsorb is a negative number;"
-                "the site must be inside the lattice."
+                f"One of the sites for a particle to adsorb is a negative "
+                f"number; the site must be inside the lattice; {sites = }."
             )
 
         # Auxliary variables.

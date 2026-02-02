@@ -222,6 +222,13 @@ class Results:
                 self.empty_double[i][0] = header_0
                 self.empty_triple[i][0] = header_0
 
+                self.attempts[i][1] += " / Attempts"
+                self.coverage[i][1] += " / Length"
+
+                self.empty_single[i][1] += " / Length"
+                self.empty_double[i][1] += " / Length"
+                self.empty_triple[i][1] += " / Length"
+
                 continue
 
             # Average the simulations.
@@ -295,5 +302,3 @@ class Results:
         self.empty_single: list = []
         self.empty_double: list = []
         self.empty_triple: list = []
-
-
