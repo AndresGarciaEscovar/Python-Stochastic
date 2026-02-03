@@ -47,7 +47,7 @@ def format_dictionary(main: dict, parameters: dict) -> dict:
         """
         # Scan the items.
         for key_, value_ in parameters_.items():
-            # Key should not be present!
+            # Key should be present!
             if key_ not in main_.keys():
                 raise KeyError(f"The key {key_} does not exist in main_.")
 
