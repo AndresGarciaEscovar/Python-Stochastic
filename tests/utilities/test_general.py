@@ -49,7 +49,7 @@ class TestUtilitiesGeneral(unittest.TestCase):
 
     def test_format_dictionary(self) -> None:
         """
-            Dummy example.
+            Tests that replacing the dictionary values works correctly.
         """
         # Auxiliary variables.
         expected: dict = cp.deepcopy(DICTIONARY)
