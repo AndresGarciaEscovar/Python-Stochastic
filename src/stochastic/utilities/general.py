@@ -9,6 +9,8 @@
 
 
 # Standard library.
+import copy as cp
+
 from typing import Any
 
 
@@ -64,6 +66,8 @@ def format_dictionary(main: dict, parameters: dict) -> dict:
     # /////////////////////////////////////////////////////////////////////////
 
     # Fix the main dictionary.
-    recursive_(main, parameters)
+    results: dict = cp.deepcopy(main)
 
-    return main
+    recursive_(results, parameters)
+
+    return results

@@ -75,6 +75,8 @@ class TestUtilitiesGeneral(unittest.TestCase):
         self.assertEqual(expected[4]["five"], final[4]["five"], msg)
         self.assertEqual(current[4]["six"], final[4]["six"], msg )
 
+        self.assertNotEqual(expected[4]["six"], final[4]["six"], msg )
+
         # ---------------------------------------------------------------------
         # Key error must be generated.
         # ---------------------------------------------------------------------
