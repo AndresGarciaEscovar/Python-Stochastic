@@ -65,9 +65,10 @@ def format_dictionary(main: dict, parameters: dict) -> dict:
     # Implementation
     # /////////////////////////////////////////////////////////////////////////
 
-    # Fix the main dictionary.
+    # Dictionary copy.
     results: dict = cp.deepcopy(main)
 
+    # Fix the main dictionary.
     recursive_(results, parameters)
 
     return results
