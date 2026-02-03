@@ -69,7 +69,6 @@ class Simulation:
 
         - self.statistics: The object where the statistics of a single
           simulation will be stored.
-
     """
     # /////////////////////////////////////////////////////////////////////////
     # Methods - Private
