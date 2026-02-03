@@ -142,6 +142,20 @@ class TestUtilitiesValidate(unittest.TestCase):
         )
 
         # ---------------------------------------------------------------------
+        # Dictionaries have the same structure.
+        # ---------------------------------------------------------------------
+
+        current["one"]["two"] = 3
+        current["one"]["three"] = "2"
+        del current[4]
+
+        # The dictionaries should be the same.
+        self.assertTrue(
+            validate_dictionary_sub(expected, current),
+            "The dictionary is not a subdictionary of the expected dictionary."
+        )
+
+        # ---------------------------------------------------------------------
         # Dictionaries have the same structure but different types.
         # ---------------------------------------------------------------------
 
@@ -159,23 +173,23 @@ class TestUtilitiesValidate(unittest.TestCase):
         ):
             validate_dictionary_sub(expected, current, error=True)
 
-        # # ---------------------------------------------------------------------
-        # # Dictionaries don't have the same structure.
-        # # ---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
+        # Dictionaries don't have the same structure.
+        # ---------------------------------------------------------------------
 
-        # del current["one"]
+        current["Four"] = 9
 
-        #  # The dictionaries should NOT be the same.
-        # self.assertFalse(
-        #     validate_dictionary_sub(expected, current),
-        #     "The dictionaries match in structure."
-        # )
+         # The dictionaries should NOT be the same.
+        self.assertFalse(
+            validate_dictionary_sub(expected, current),
+            "The dictionaries match in structure."
+        )
 
-        # with self.assertRaises(
-        #     ValueError,
-        #     msg="False validation must raise an error"
-        # ):
-        #     validate_dictionary_sub(expected, current, error=True)
+        with self.assertRaises(
+            ValueError,
+            msg="False validation must raise an error"
+        ):
+            validate_dictionary_sub(expected, current, error=True)
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
