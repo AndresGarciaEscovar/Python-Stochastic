@@ -97,11 +97,11 @@ def validate_parameters_history(parameters: dict) -> None:
             f"current extension: \"{file.suffix}\"."
         )
 
-    # Validate the interval is a positive number.
-    if parameters["interval"] < 0.0:
+    # Validate the frequency is a positive number.
+    if parameters["frequency"] < 0:
         raise ValueError(
-            f"The saving interval must be greater than or equal to zero; "
-            f"current interval setting: {parameters['interval']}."
+            f"The saving frequency must be greater than or equal to zero; "
+            f"current frequency setting: {parameters['frequency']}."
         )
 
     return parameters
