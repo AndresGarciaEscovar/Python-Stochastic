@@ -37,9 +37,20 @@ def format_dictionary(main: dict, parameters: dict) -> dict:
     def recursive_(main_: Any, parameters_: Any) -> None:
         """
             Recursively sets the keys of the main dictionary.
+
+            :param main_: The dictionary that needs to be updated.
+
+            :param parameters_: The dictionary with which to update the main_
+             dictionary.
+
+            :raise KeyError: If the key does not exist in the main dictionary.
         """
         # Scan the items.
         for key_, value_ in parameters_.items():
+            # Key should not be present!
+            if key_ not in main_.keys():
+                raise KeyError(f"The key {key_} does not exist in main_.")
+
             # End of the dictionary.
             if not isinstance(value_, dict):
                 main_[key_] = value_

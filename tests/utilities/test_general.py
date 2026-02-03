@@ -9,7 +9,29 @@
 
 
 # Standard library.
+import copy as cp
 import unittest
+
+# User.
+from stochastic.utilities.general import format_dictionary
+
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# Global Variables
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+# Dictionary to compare.
+DICTIONARY: dict = {
+    "one": {
+        "two": 2,
+        "three": "3",
+    },
+    4: {
+        "five": 5,
+        "six": 6.0
+    }
+}
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -25,11 +47,42 @@ class TestUtilitiesGeneral(unittest.TestCase):
     # Tests
     # /////////////////////////////////////////////////////////////////////////
 
-    def test_example(self) -> None:
+    def test_format_dictionary(self) -> None:
         """
             Dummy example.
         """
-        self.assertEqual(1, 1)
+        # Auxiliary variables.
+        expected: dict = cp.deepcopy(DICTIONARY)
+        current: dict = cp.deepcopy(DICTIONARY)
+
+        # ---------------------------------------------------------------------
+        # Just change one entry.
+        # ---------------------------------------------------------------------
+
+        msg: str = "The parameters must be equal."
+
+        del current["one"]
+        del current[4]["five"]
+
+        current[4]["six"] = 7.0
+
+        # Setup the parameters.
+        final: dict = format_dictionary(expected, current)
+
+        # Validate the quantities.
+        self.assertEqual(expected["one"]["two"], final["one"]["two"], msg)
+        self.assertEqual(expected["one"]["three"], final["one"]["three"], msg)
+        self.assertEqual(expected[4]["five"], final[4]["five"], msg)
+        self.assertEqual(current[4]["six"], final[4]["six"], msg )
+
+        # ---------------------------------------------------------------------
+        # Key error must be generated.
+        # ---------------------------------------------------------------------
+
+        current["five"] = "Nine"
+
+        with self.assertRaises(KeyError, msg="Key should not exist."):
+            format_dictionary(expected, current)
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
