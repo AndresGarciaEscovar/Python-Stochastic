@@ -73,7 +73,8 @@ class Simulation:
             successful: bool = self.lattice.particle_adsorb([site, site + 1])
             self.statistics.update_statistics(self.lattice.lattice, successful)
 
-        self._simulation_save()
+        # Save the complete simulation.
+        self._simulation_save("complete")
 
     def _set_simulation(self) -> None:
         """
@@ -97,21 +98,38 @@ class Simulation:
         path.mkdir(exist_ok=True, parents=False)
         self.parameters.output["working"] = f"{path}"
 
-    def _simulation_save(self) -> None:
+    def _simulation_save(self, stype: str) -> None:
         """
             Saves the simulation to a json file.
+
+            :param stype: The type of simulation to be saved.
         """
         # Get the working directory.
         directory: Path = Path(self.parameters.output["working"])
         file: str = f"{directory / 'save.json'}"
 
         # State variables.
-        state: dict = {
-            "parameters": self.parameters.get_dictionary(),
-            "lattice": self.lattice.get_dictionary(),
-            "results": self.results.get_dictionary(),
-        }
+        if stype == "partial":
+            state: dict = {
+                "parameters": self.parameters.get_dictionary(),
+                "results": self.results.get_dictionary(),
+            }
 
+        elif stype == "complete":
+            state: dict = {
+                "parameters": self.parameters.get_dictionary(),
+                "lattice": self.lattice.get_dictionary(),
+                "results": self.results.get_dictionary(),
+                "statistics": self.statistics.get_dictionary(),
+            }
+
+        else:
+            raise ValueError(
+                f"The requested save type is not valid; must be either "
+                f"'complete' or 'partial'; current value of {stype = }."
+            )
+
+        # Save the dictionary.
         with open(file, encoding="utf-8", mode="w") as stream:
             json.dump(state, stream, indent=4)
 

@@ -171,6 +171,21 @@ class Statistics:
     # Methods
     # /////////////////////////////////////////////////////////////////////////
 
+    def get_dictionary(self) -> dict:
+        """
+            Returns a dictionary with the COMPLETE parameters of the
+            simulation.
+        """
+        return {
+            "attempts": self.attempts,
+            "coverage": self.coverage,
+            "empty_single": self.empty_single,
+            "empty_double": self.empty_double,
+            "empty_triple": self.empty_triple,
+            "length": self.length,
+            "periodic": self.periodic
+        }
+
     def reset(self) -> None:
         """
             Resets ALL the statistics to their original value.
