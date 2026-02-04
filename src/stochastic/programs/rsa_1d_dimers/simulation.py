@@ -129,6 +129,12 @@ class Simulation:
                 f"'complete' or 'partial'; current value of {stype = }."
             )
 
+        # Add some other data.
+        state["_metadata"] = {
+            "name": PROGRAM,
+            "save_date": datetime.now().strftime("%Y%m%d%H%M%S")
+        }
+
         # Save the dictionary.
         with open(file, encoding="utf-8", mode="w") as stream:
             json.dump(state, stream, indent=4)
