@@ -29,6 +29,11 @@ class Parameters:
 
         - self.history: A dictionary with the history parameters.
 
+        - self.loaded: A boolean flag indicating whether the simulation was
+          loaded or it has not been loaded. True, if the simulation has been
+          loaded from an external file; False, otherwise. Set initially to
+          False.
+
         - self.output: A dictionary with the output parameters.
 
         - self.simulation: A dictionary with the simulation parameters.
@@ -104,6 +109,9 @@ class Parameters:
         """
         # Validate the parameters.
         final: dict = validate(parameters)
+
+        # Other parameters.
+        self.loaded: bool = False
 
         # Extract the dictionaries.
         self.history: dict = final["history"]
