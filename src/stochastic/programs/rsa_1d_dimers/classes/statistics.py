@@ -86,20 +86,6 @@ def _get_coverage(lattice: list) -> int:
     return sum(1 for x in lattice if x != 0)
 
 
-def _get_lengths(table: list) -> list:
-    """
-        Gets the maximum width for each column of the given table.
-
-        :param array: The table for which the column widths must be obtained.
-
-        :return: A list of the widths of each table column entry.
-    """
-    # Auxiliary variables.
-    length: int = len(table[0])
-
-    return tuple(max(len(f"{x[i]}") for x in table) for i in range(length))
-
-
 def _get_string_table(table: list) -> str:
     """
         Gets the string for the given table.
@@ -109,22 +95,44 @@ def _get_string_table(table: list) -> str:
         :return: A list of the widths of each table column entry.
     """
     # Auxiliary variables.
-    lengths: list = _get_lengths(table)
     string: str = ""
-    temp: callable = "{:>{length}}".format
+    tostr: callable = "{:>{width}}".format
 
-    # Get each row.
-    for i, entries in enumerate(table):
-        # For each entry.
-        string += " | ".join(
-            temp(x, length=lengths[i]) for i, x in enumerate(entries)
-        ) + "\n"
+    # Set the string.
+    if len(table) <= 1:
+        # No data to show.
+        string += "No data to show."
 
-        # Header separator.
-        if i == 0:
-            string = f"{string}{' | '.join('-' * x for x in lengths)}\n"
+    else:
+        # Table dimensions
+        table_length: int = len(table)
+        table_width: int = len(table[0])
 
-    return f"{string}\n\n"
+        # List of widths.
+        widths: list = _get_widths(table)
+
+        for i in range(table_width):
+            string += " | ".join(
+                tostr(table[j][i], width=w)
+                for j, w in zip(range(table_length), widths)
+            ) + "\n"
+
+    return f"{string}\n"
+
+
+def _get_widths(table: list) -> tuple:
+    """
+        Gets the maximum width for each column of the given table.
+
+        :param array: The table for which the column widths must be obtained.
+
+        :return: A list of the widths of each table column entry.
+    """
+    # Auxiliary variables.
+    if len(table) == 0:
+        return tuple()
+
+    return tuple(max(len(f"{x}") for x in entry) for entry in table)
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
