@@ -54,13 +54,13 @@ def _get_string_dictionary(parameters: dict) -> str:
     """
     # Auxiliary variables.
     date: str = f"{datetime.now().strftime(DFORMAT)}"
-    string: str = "Parameters:\n"
+    string: str = f"{_get_header('Parameters')}\n"
 
     # Extract the key and variables.
-    string += f"    Date (YYYY-MM-DD hh:mm:ss): {date}\n"
+    string += f"Date (YYYY-MM-DD hh:mm:ss): {date}\n"
 
     for key, value in parameters.items():
-        string += f"    {key.title()}: {value}\n"
+        string += f"{key.title()}: {value}\n"
 
     return f"{string}\n"
 
@@ -281,22 +281,22 @@ class Results:
         string: str = _get_string_dictionary(self.parameters)
 
         # Append the strings.
-        string += "Attempts:\n\n"
+        string += f"{_get_header('Attempts')}\n"
         string += _get_string_table(self.attempts)
 
-        string += "Coverage:\n\n"
+        string += f"{_get_header('Coverage')}\n"
         string += _get_string_table(self.coverage)
 
-        string += "Empties - Single:\n\n"
+        string += f"{_get_header('Empties - Single')}\n"
         string += _get_string_table(self.empty_single)
 
-        string += "Empties - Double:\n\n"
+        string += f"{_get_header('Empties - Double')}\n"
         string += _get_string_table(self.empty_double)
 
-        string += "Empties - Triple:\n\n"
+        string += f"{_get_header('Empties - Triple')}\n"
         string += _get_string_table(self.empty_triple)
 
-        return string.strip()
+        return f"{string.strip()}\n"
 
     # /////////////////////////////////////////////////////////////////////////
     # Constructor
