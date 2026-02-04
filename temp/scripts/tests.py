@@ -24,10 +24,10 @@ from stochastic.programs.rsa_1d_dimers.main import run
 # Simulation parameters.
 PARAMETERS: dict = {
     "simulation": {
-        "attempts": 10000,
+        "attempts": 500,
         "length": 100,
         "periodic": False,
-        "repetitions": 1000,
+        "repetitions": 10,
         "seed": -1
     },
     "history": {
