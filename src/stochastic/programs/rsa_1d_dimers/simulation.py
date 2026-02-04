@@ -29,24 +29,6 @@ from stochastic.programs.rsa_1d_dimers.classes.statistics import Statistics
 # Name of the program.
 PROGRAM: str = "RSA 1D Dimers"
 
-# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-# Functions - Auxiliary
-# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-
-def _get_header(text: str) -> str:
-    """
-        Gets the header for the given section.
-
-        :param text: The name of the header, must be a relatively short string.
-
-        :return: The string that represents the header of the section.
-    """
-    # Auxiliary variables.
-    header: str = f"# {'-' * 78}"
-
-    return f"{header}\n# {text}\n{header}\n"
-
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Classes

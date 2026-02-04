@@ -29,19 +29,18 @@ DFORMAT: str = "%Y-%m-%d %H:%M:%S"
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
-def _get_widths(table: list) -> tuple:
+def _get_header(text: str) -> str:
     """
-        Gets the maximum width for each column of the given table.
+        Gets the header for the given section.
 
-        :param array: The table for which the column widths must be obtained.
+        :param text: The name of the header, must be a relatively short string.
 
-        :return: A list of the widths of each table column entry.
+        :return: The string that represents the header of the section.
     """
     # Auxiliary variables.
-    if len(table) == 0:
-        return tuple()
+    header: str = f"# {'-' * 78}"
 
-    return tuple(max(len(f"{x}") for x in entry) for entry in table)
+    return f"{header}\n# {text}\n{header}\n"
 
 
 def _get_string_dictionary(parameters: dict) -> str:
@@ -98,6 +97,21 @@ def _get_string_table(table: list) -> str:
             ) + "\n"
 
     return f"{string}\n"
+
+
+def _get_widths(table: list) -> tuple:
+    """
+        Gets the maximum width for each column of the given table.
+
+        :param array: The table for which the column widths must be obtained.
+
+        :return: A list of the widths of each table column entry.
+    """
+    # Auxiliary variables.
+    if len(table) == 0:
+        return tuple()
+
+    return tuple(max(len(f"{x}") for x in entry) for entry in table)
 
 
 def _update_results(target: list, current: list) -> None:
