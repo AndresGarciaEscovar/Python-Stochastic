@@ -29,7 +29,7 @@ DFORMAT: str = "%Y-%m-%d %H:%M:%S"
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
-def _get_lengths(table: list) -> tuple:
+def _get_widths(table: list) -> tuple:
     """
         Gets the maximum width for each column of the given table.
 
@@ -78,7 +78,7 @@ def _get_string_table(table: list) -> str:
         :return: A list of the widths of each table column entry.
     """
     # Auxiliary variables.
-    lengths: list = _get_lengths(table)
+    lengths: list = _get_widths(table)
     string: str = ""
     temp: callable = "{:>{length}}".format
 
