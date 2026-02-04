@@ -124,6 +124,7 @@ class Simulation:
         repetitions: int = self.parameters.simulation["repetitions"]
 
         for _ in range(repetitions):
+            self._run_simulation()
             self.results.statistics_add(self.statistics)
 
         # Process the statistics.
