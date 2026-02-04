@@ -9,6 +9,7 @@
 
 
 # Standard library.
+import json
 import random
 
 from datetime import datetime
@@ -72,6 +73,8 @@ class Simulation:
             successful: bool = self.lattice.particle_adsorb([site, site + 1])
             self.statistics.update_statistics(self.lattice.lattice, successful)
 
+        self._simulation_save()
+
     def _set_simulation(self) -> None:
         """
             Sets a simulation before starting to run a single simulation.
@@ -93,6 +96,24 @@ class Simulation:
         # Set and create the working directory.
         path.mkdir(exist_ok=True, parents=False)
         self.parameters.output["working"] = f"{path}"
+
+    def _simulation_save(self) -> None:
+        """
+            Saves the simulation to a json file.
+        """
+        # Get the working directory.
+        directory: Path = Path(self.parameters.output["working"])
+        file: str = f"{directory / 'save.json'}"
+
+        # State variables.
+        state: dict = {
+            "parameters": self.parameters.get_dictionary(),
+            "lattice": self.lattice.get_dictionary(),
+            "results": self.results.get_dictionary(),
+        }
+
+        with open(file, encoding="utf-8", mode="w") as stream:
+            json.dump(state, stream, indent=4)
 
     # /////////////////////////////////////////////////////////////////////////
     # Methods
@@ -131,7 +152,7 @@ class Simulation:
     # Constructor
     # /////////////////////////////////////////////////////////////////////////
 
-    def __init__(self, parameters: dict, file: str = None) -> None:
+    def __init__(self, parameters: dict) -> None:
         """
             Constructor for the object.
 

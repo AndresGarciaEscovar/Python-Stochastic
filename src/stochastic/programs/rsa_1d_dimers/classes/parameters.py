@@ -34,6 +34,21 @@ class Parameters:
         - self.simulation: A dictionary with the simulation parameters.
     """
     # /////////////////////////////////////////////////////////////////////////
+    # Methods
+    # /////////////////////////////////////////////////////////////////////////
+
+    def get_dictionary(self):
+        """
+            Returns a dictionary with the COMPLETE parameters of the
+            simulation.
+        """
+        return {
+            "history": self.history,
+            "output": self.output,
+            "simulation": self.simulation,
+        }
+
+    # /////////////////////////////////////////////////////////////////////////
     # Methods - Dunder
     # /////////////////////////////////////////////////////////////////////////
 

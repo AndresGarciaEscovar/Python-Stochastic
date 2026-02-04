@@ -43,6 +43,17 @@ class Lattice:
     # Methods
     # /////////////////////////////////////////////////////////////////////////
 
+    def get_dictionary(self) -> dict:
+        """
+            Returns a dictionary with the COMPLETE parameters of the
+            simulation.
+        """
+        return {
+            "lattice": self.lattice,
+            "length": self.length,
+            "periodic": self.periodic,
+        }
+
     def get_lattice_string(self, partial: bool = False) -> str:
         """
             The string representation of the lattice at the given time. The

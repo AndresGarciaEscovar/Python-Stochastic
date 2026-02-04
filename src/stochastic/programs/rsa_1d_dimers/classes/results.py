@@ -188,6 +188,20 @@ class Results:
     # Methods
     # /////////////////////////////////////////////////////////////////////////
 
+    def get_dictionary(self) -> dict:
+        """
+            Returns a dictionary with the COMPLETE parameters of the
+            simulation.
+        """
+        return {
+            "simulations": self.simulations,
+            "attempts": self.attempts,
+            "coverage": self.coverage,
+            "empty_single": self.empty_single,
+            "empty_double": self.empty_double,
+            "empty_triple": self.empty_triple,
+        }
+
     def statistics_add(self, statistics: Statistics) -> None:
         """
             Adds more statistics to the results before they are processed. For
