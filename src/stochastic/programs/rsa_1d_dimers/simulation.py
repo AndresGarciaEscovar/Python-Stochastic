@@ -77,23 +77,26 @@ class Simulation:
     def _run_simulation(self) -> None:
         """
             Runs the simulations.
-
-            :param reset: A boolean flag indicating whether the statistics
-             and the lattice must be reset. True, if the statistics and lattice
-             must be reset; False, otherwise. True, by default.
         """
         # Auxiliary variables.
         attempts: int = self.parameters.simulation["attempts"]
         length: int = self.parameters.simulation["length"] - 1
 
         # Get a new lattice and statistics.
-        self.lattice.reset()
-        self.statistics.reset()
+        self._set_simulation()
 
         for _ in range(attempts):
             site: int = self.generator.randint(0, length)
             successful: bool = self.lattice.particle_adsorb([site, site + 1])
             self.statistics.update_statistics(self.lattice.lattice, successful)
+
+    def _set_simulation(self) -> None:
+        """
+            Sets a simulation before starting to run a single simulation.
+        """
+        # For the moment, set the simulation.
+        self.lattice.reset()
+        self.statistics.reset()
 
     def _set_working_directory(self) -> None:
         """
@@ -141,43 +144,20 @@ class Simulation:
         with open(f"{file}", encoding="utf-8", mode="w") as stream:
             stream.write(f"{self.results}")
 
-    def save_history(self) -> None:
-        """
-            Saves the state of the lattice to the given file, if requested.
-        """
-        # Auxiliary variables.
-        flag: bool = self.parameters.history["save"]
-        flag = flag and self.parameters.history["frequency"] > 0
-
-        # Only save if requested.
-        if flag:
-            # Get the file where the lattice will be saved.
-            working: Path = Path(self.parameters.output["working"])
-            file: str = f"{working / self.parameters.history['file']}"
-
-            with open(file, encoding="utf-8", mode="w") as stream:
-                stream.write(_get_header("Parameters\n"))
-                stream.write(f"{self.parameters}")
-
-                stream.write(_get_header("Lattice\n"))
-                stream.write(f"{self.lattice}")
-
-                stream.write(_get_header("Statistics\n"))
-                stream.write(f"{self.statistics}")
-
-                stream.write(_get_header("Results\n"))
-                stream.write(f"{self.results}")
-
     # /////////////////////////////////////////////////////////////////////////
     # Constructor
     # /////////////////////////////////////////////////////////////////////////
 
-    def __init__(self, parameters: dict) -> None:
+    def __init__(self, parameters: dict, file: str = None) -> None:
         """
             Constructor for the object.
 
             :param parameters: The simulation parameters that contains all the
              information needed for the simulation.
+
+            :param file: A string with the path to the file to load a
+             simulation. If the string is "None", the simulation starts from
+             scratch.
         """
         # Extract the parameters.
         self.parameters: Parameters = Parameters(parameters)
