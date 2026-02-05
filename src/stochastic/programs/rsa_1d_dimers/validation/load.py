@@ -89,6 +89,21 @@ def _validate_form(dictionary: dict) -> None:
     _validate_form_metadata(dictionary["_metadata"])
 
 
+def _validate_form__metadata(dictionary: dict) -> None:
+    """
+        Validates that the metadata is properly set.
+
+        :param dictionary: The dictionary to be validated.
+
+        :param ValueError: If any of the values are not properly set.
+    """
+    # Auxiliary variables.
+    metadata: dict = BASE["_metadata"]
+
+    # Keys and types must match.
+    validate_dictionary(metadata, dictionary, error=True)
+
+
 def _validate_form_keys(dictionary: dict) -> None:
     """
         Validates that the dictionary has the proper base keys.
@@ -110,21 +125,6 @@ def _validate_form_keys(dictionary: dict) -> None:
             f"keys. Current keys: {current or '{}'}, expected keys: "
             f"{expected_0 or '{}'} or {expected_1 or '{}'}."
         )
-
-
-def _validate_form_metadata(dictionary: dict) -> None:
-    """
-        Validates that the metadata is properly set.
-
-        :param dictionary: The dictionary to be validated.
-
-        :param ValueError: If any of the values are not properly set.
-    """
-    # Auxiliary variables.
-    metadata: dict = BASE["_metadata"]
-
-    # Keys and types must match.
-    validate_dictionary(metadata, dictionary, error=True)
 
 
 def _validate_values(dictionary: dict) -> None:
