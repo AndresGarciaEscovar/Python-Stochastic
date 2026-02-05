@@ -10,6 +10,7 @@
 
 # Standard library.
 import json
+import pickle
 import random
 
 from datetime import datetime
@@ -106,7 +107,8 @@ class Simulation:
         """
         # Get the working directory.
         directory: Path = Path(self.parameters.output["working"])
-        file: str = f"{directory / 'save.json'}"
+        file_json: str = f"{directory / 'save.json'}"
+        file_pickle: str = f"{directory / 'generator.pkl'}"
 
         # State variables.
         if stype == "partial":
@@ -136,8 +138,12 @@ class Simulation:
         }
 
         # Save the dictionary.
-        with open(file, encoding="utf-8", mode="w") as stream:
+        with open(file_json, encoding="utf-8", mode="w") as stream:
             json.dump(state, stream, indent=4)
+
+        # Pickle the generator.
+        with open(file_pickle, mode="wb") as stream:
+            pickle.dump(self.generator, stream)
 
     # /////////////////////////////////////////////////////////////////////////
     # Methods
@@ -176,17 +182,17 @@ class Simulation:
     # Constructor
     # /////////////////////////////////////////////////////////////////////////
 
-    def __init__(self, parameters: dict) -> None:
+    def __init__(self, parameters: dict = None) -> None:
         """
             Constructor for the object.
 
             :param parameters: The simulation parameters that contains all the
-             information needed for the simulation.
-
-            :param file: A string with the path to the file to load a
-             simulation. If the string is "None", the simulation starts from
-             scratch.
+             information needed for the simulation. If the "parameters"
+             parameter is None, the default parameters are set.
         """
+        # Extract the parameters.
+        parameters = {} if parameters is None else parameters
+
         # Extract the parameters.
         self.parameters: Parameters = Parameters(parameters)
         seed: int = self.parameters.simulation["seed"]
