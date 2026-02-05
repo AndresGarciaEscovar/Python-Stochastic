@@ -86,7 +86,7 @@ def _validate_form(dictionary: dict) -> None:
     """
     # Validate the different quantities.
     _validate_form_keys(dictionary)
-    _validate_form_metadata(dictionary["_metadata"])
+    _validate_form__metadata(dictionary["_metadata"])
 
 
 def _validate_form__metadata(dictionary: dict) -> None:
