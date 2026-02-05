@@ -183,7 +183,7 @@ class Simulation:
     # Constructor
     # /////////////////////////////////////////////////////////////////////////
 
-    def __init__(self, parameters: dict = None , load: bool = False) -> None:
+    def __init__(self, parameters: dict = None, load: bool = False) -> None:
         """
             Constructor for the object.
 
