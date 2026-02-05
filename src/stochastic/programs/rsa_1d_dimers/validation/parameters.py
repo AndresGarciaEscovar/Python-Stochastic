@@ -9,6 +9,7 @@
 
 
 # Standard library.
+import copy as cp
 import json
 import time
 
@@ -204,13 +205,14 @@ def validate(parameters: dict) -> dict:
         :return: A dictionary with the complete simulation parameters.
     """
     # Auxiliary variables.
+    temporary: dict = cp.deepcopy(parameters)
     default: dict = load_base()
 
     # Validate the dictionary structure.
-    if parameters != {}:
+    if temporary != {}:
         # Validate the dictionary format and extract the parameters.
-        validate_dictionary_sub(default, parameters, error=True)
-        default = format_dictionary(default, parameters)
+        validate_dictionary_sub(default, temporary, error=True)
+        default = format_dictionary(default, temporary)
 
     # Validate the specific parameters.
     default = validate_parameters(default)
