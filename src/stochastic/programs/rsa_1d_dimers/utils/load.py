@@ -17,6 +17,9 @@ from pathlib import Path
 
 # User.
 from stochastic.programs.rsa_1d_dimers.simulation import Simulation
+from stochastic.programs.rsa_1d_dimers.validation.load import (
+    validate_parameters
+)
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -88,6 +91,8 @@ def _set_simulation(simulation: Simulation, parameters: dict) -> None:
          has (potentially) been running.
 
     """
+    # Validate the parameters.
+    validate_parameters(parameters)
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
