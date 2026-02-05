@@ -104,6 +104,8 @@ def load_simulation(file_json: str, file_pickle: str) -> Simulation:
     # Set the simulation.
     _set_generator(simulation, generator)
 
+    raise NotImplementedError("Continue here!!!")
+
     return simulation
 
 
