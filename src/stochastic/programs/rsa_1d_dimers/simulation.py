@@ -85,19 +85,20 @@ class Simulation:
         self.lattice.reset()
         self.statistics.reset()
 
-    def _set_working_directory(self) -> None:
+    def _set_working_directory(self, load: bool) -> None:
         """
             Sets the working directory to the place where the results will
             be stored.
         """
-        # Auxiliary variables.
-        date: str = datetime.now().strftime("%Y%m%d%H%M%S")
-        directory: str = f"{PROGRAM.replace(' ', '-')}_{date}"
-        path: Path = Path(self.parameters.output["working"]) / directory
+        if not load:
+            # Auxiliary variables.
+            date: str = datetime.now().strftime("%Y%m%d%H%M%S")
+            directory: str = f"{PROGRAM.replace(' ', '-')}_{date}"
+            path: Path = Path(self.parameters.output["working"]) / directory
 
-        # Set and create the working directory.
-        path.mkdir(exist_ok=True, parents=False)
-        self.parameters.output["working"] = f"{path}"
+            # Set and create the working directory.
+            path.mkdir(exist_ok=True, parents=False)
+            self.parameters.output["working"] = f"{path}"
 
     def _simulation_save(self, stype: str) -> None:
         """
@@ -210,5 +211,4 @@ class Simulation:
         self.statistics: Statistics = Statistics(self.parameters.simulation)
 
         # Finish setting other quantities.
-        if not load:
-            self._set_working_directory()
+        self._set_working_directory(load)
