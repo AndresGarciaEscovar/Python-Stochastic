@@ -76,6 +76,19 @@ def _set_generator(simulation: Simulation, generator: random.Random) -> None:
     simulation.generator = generator
 
 
+def _set_simulation(simulation: Simulation, parameters: dict) -> None:
+    """
+        Sets the parameters of each object in the simulation.
+
+        :param simulation: The simulation object on which the generator is
+         going to be set.
+
+        :param generator: The already initialized random number generator,
+         i.e., a non-None random.Random object that is already seeded and
+         has (potentially) been running.
+
+    """
+
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Functions - Main
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -103,6 +116,7 @@ def load_simulation(file_json: str, file_pickle: str) -> Simulation:
 
     # Set the simulation.
     _set_generator(simulation, generator)
+    _set_simulation(simulation, parameters)
 
     return simulation
 
