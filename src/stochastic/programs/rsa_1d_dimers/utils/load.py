@@ -118,7 +118,7 @@ def load_simulation(file_json: str, file_pickle: str) -> Simulation:
     generator: random.Random = _load_generator(file_pickle)
 
     # Create the simulation.
-    simulation: Simulation = Simulation()
+    simulation: Simulation = Simulation(load=True)
 
     # Set the simulation.
     _set_generator(simulation, generator)
