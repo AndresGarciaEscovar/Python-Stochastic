@@ -86,22 +86,9 @@ def _validate_form(dictionary: dict) -> None:
     """
     # Validate the different quantities.
     _validate_form_keys(dictionary)
-    _validate_form__metadata(dictionary["_metadata"])
 
-
-def _validate_form__metadata(dictionary: dict) -> None:
-    """
-        Validates that the metadata is properly set.
-
-        :param dictionary: The dictionary to be validated.
-
-        :param ValueError: If any of the values are not properly set.
-    """
-    # Auxiliary variables.
-    metadata: dict = BASE["_metadata"]
-
-    # Keys and types must match.
-    validate_dictionary(metadata, dictionary, error=True)
+    for key, value in dictionary.items():
+        validate_dictionary(BASE[key], value, error=True)
 
 
 def _validate_form_keys(dictionary: dict) -> None:
