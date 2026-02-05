@@ -13,6 +13,9 @@ from datetime import datetime
 
 # User.
 from stochastic.programs.rsa_1d_dimers.simulation import PROGRAM
+from stochastic.programs.rsa_1d_dimers.validation.parameters import (
+    validate as vparameters
+)
 from stochastic.utilities.validate import validate_dictionary
 
 
@@ -120,13 +123,44 @@ def _validate_values(dictionary: dict) -> None:
 
         :param dictionary: The dictionary to be validated.
     """
-    # Validate the values.
-    _validate_values_metadata(dictionary["_metadata"])
+    # Validate the parameters.
+    _: dict = vparameters(dictionary["parameters"])
+    del _
+
+    # Validate the other.
+    _validate_values__metadata(dictionary["_metadata"])
 
 
-def _validate_values_metadata(dictionary: dict) -> None:
+
+def _validate_values__metadata(dictionary: dict) -> None:
     """
         Validates that the metadata is properly set.
+
+        :param dictionary: The dictionary to be validated.
+
+        :param ValueError: If any of the values are not properly set.
+    """
+    # Auxiliary variables.
+    metadata: dict = BASE["_metadata"]
+
+    # The names must match.
+    key: str = "name"
+
+    if dictionary[key] != metadata[key]:
+        raise ValueError(
+            f"The metadata \"{key}\" entry does not match the required value. "
+            f"Required value: \"{metadata[key]}\", current value: "
+            f"\"{dictionary[key]}\"."
+        )
+
+    # The date must be valid and have the proper format.
+    key = "save_date"
+    datetime.strptime(dictionary[key], metadata[key])
+
+
+def _validate_values_parameters(dictionary: dict) -> None:
+    """
+        Validates that the parameters are properly set.
 
         :param dictionary: The dictionary to be validated.
 
