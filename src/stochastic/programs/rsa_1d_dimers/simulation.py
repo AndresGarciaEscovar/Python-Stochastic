@@ -182,13 +182,17 @@ class Simulation:
     # Constructor
     # /////////////////////////////////////////////////////////////////////////
 
-    def __init__(self, parameters: dict = None) -> None:
+    def __init__(self, parameters: dict = None , load: bool = False) -> None:
         """
             Constructor for the object.
 
             :param parameters: The simulation parameters that contains all the
              information needed for the simulation. If the "parameters"
              parameter is None, the default parameters are set.
+
+            :param load: A boolean flag that indicates whether the simulation
+             is being loaded. True, if the simulation is being loaded; False,
+             otherwise.
         """
         # Extract the parameters.
         parameters = {} if parameters is None else parameters
@@ -206,4 +210,5 @@ class Simulation:
         self.statistics: Statistics = Statistics(self.parameters.simulation)
 
         # Finish setting other quantities.
-        self._set_working_directory()
+        if not load:
+            self._set_working_directory()
