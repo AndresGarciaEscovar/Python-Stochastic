@@ -89,6 +89,7 @@ def _set_simulation(simulation: Simulation, parameters: dict) -> None:
 
     """
 
+
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Functions - Main
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -143,7 +144,7 @@ def to_delete():
     load_simulation(path_json, path_pickle)
 
     # Continue in this file!
-    raise NotImplementedError("Continue here!!!")
+    # raise NotImplementedError("Continue here!!!")
 
 
 if __name__ == "__main__":
