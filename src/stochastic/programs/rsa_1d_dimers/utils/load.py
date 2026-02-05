@@ -104,8 +104,6 @@ def load_simulation(file_json: str, file_pickle: str) -> Simulation:
     # Set the simulation.
     _set_generator(simulation, generator)
 
-    raise NotImplementedError("Continue here!!!")
-
     return simulation
 
 
@@ -129,6 +127,9 @@ def to_delete():
 
     # Load the simulation.
     load_simulation(path_json, path_pickle)
+
+    # Continue in this file!
+    raise NotImplementedError("Continue here!!!")
 
 
 if __name__ == "__main__":
