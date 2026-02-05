@@ -105,8 +105,8 @@ def _validate_form_keys(dictionary: dict) -> None:
     """
     # Auxiliary variables.
     current: set = set(dictionary.keys())
-    expected_0: set =set(REQUIRED_KEYS)
-    expected_1: set =set(REQUIRED_KEYS[:-2])
+    expected_0: set = set(REQUIRED_KEYS)
+    expected_1: set = set(REQUIRED_KEYS[:-2])
 
     # Validate the keys.
     if current not in (expected_0, expected_1):
