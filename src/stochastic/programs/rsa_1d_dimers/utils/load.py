@@ -62,8 +62,12 @@ def load_simulation(file_pickle: str) -> Simulation:
     # Load the parameters and generator.
     parameters: dict = _load_simulation(file_pickle)
 
-    # Create the simulation.
+    # Validate the parameters before loading.
+    validate_parameters(parameters)
+
+    # Create the simulation, and mark it as loaded.
     simulation: Simulation = parameters["simulation"]
+    simulation.loaded = True
 
     return simulation
 

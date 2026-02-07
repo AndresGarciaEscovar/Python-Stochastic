@@ -158,23 +158,19 @@ class Simulation:
     # Constructor
     # /////////////////////////////////////////////////////////////////////////
 
-    def __init__(self, parameters: dict = None, load: bool = False) -> None:
+    def __init__(self, parameters: dict = None) -> None:
         """
             Constructor for the object.
 
             :param parameters: The simulation parameters that contains all the
              information needed for the simulation. If the "parameters"
              parameter is None, the default parameters are set.
-
-            :param load: A boolean flag that indicates whether the simulation
-             is being loaded. True, if the simulation is being loaded; False,
-             otherwise.
         """
         # Extract the parameters.
         parameters = {} if parameters is None else parameters
 
         # Extract the parameters.
-        self.loaded: bool = load
+        self.loaded: bool = False
         self.parameters: Parameters = Parameters(parameters)
         seed: int = self.parameters.simulation["seed"]
 
