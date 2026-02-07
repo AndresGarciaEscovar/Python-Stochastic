@@ -31,9 +31,6 @@ BASE: dict = {
     "simulation": None,
 }
 
-# Possible keys.
-REQUIRED_KEYS: tuple = tuple(BASE.keys())
-
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Functions - Auxiliary
@@ -49,8 +46,6 @@ def _validate_form(dictionary: dict) -> None:
     # Validate the different quantities.
     _validate_form_keys(dictionary)
 
-    print("HERE")
-
 
 def _validate_form_keys(dictionary: dict) -> None:
     """
@@ -63,7 +58,7 @@ def _validate_form_keys(dictionary: dict) -> None:
     """
     # Auxiliary variables.
     current: set = set(dictionary.keys())
-    expected: set = set(REQUIRED_KEYS)
+    expected: set = set(BASE.keys())
 
     # Validate the keys.
     if current != expected:
