@@ -92,7 +92,7 @@ def to_delete():
     load_simulation(f"{path_pickle}")
 
     # Continue in this file!
-    # raise NotImplementedError("Continue here!!!")
+    raise NotImplementedError("Need to finish loading the simulation properly")
 
 
 if __name__ == "__main__":
