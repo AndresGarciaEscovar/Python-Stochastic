@@ -89,15 +89,13 @@ class Simulation:
             Sets the working directory to the place where the results will
             be stored.
         """
-        if not self.loaded:
-            # Auxiliary variables.
-            date: str = datetime.now().strftime("%Y%m%d%H%M%S")
-            directory: str = f"{PROGRAM.replace(' ', '-')}_{date}"
-            path: Path = Path(self.parameters.output["working"]) / directory
+        date: str = datetime.now().strftime("%Y%m%d%H%M%S")
+        directory: str = f"{PROGRAM.replace(' ', '-')}_{date}"
+        path: Path = Path(self.parameters.output["working"]) / directory
 
-            # Set and create the working directory.
-            path.mkdir(exist_ok=True, parents=False)
-            self.parameters.output["working"] = f"{path}"
+        # Set and create the working directory.
+        path.mkdir(exist_ok=True, parents=False)
+        self.parameters.output["working"] = f"{path}"
 
     def _simulation_save(self, attempts: int) -> None:
         """
