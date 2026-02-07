@@ -78,6 +78,7 @@ def _validate_values(dictionary: dict) -> None:
     """
     # Validate the different entries.
     _validate_values__metadata(dictionary["_metadata"])
+    _validate_values_simulation(dictionary["simulation"])
 
 
 def _validate_values__metadata(dictionary: dict) -> None:
@@ -86,6 +87,11 @@ def _validate_values__metadata(dictionary: dict) -> None:
         expected.
 
         :param dictionary: The dictionary of metadata values to be validated.
+
+        :raise KeyError: If the dictionary keys are not valid.
+
+        :raise ValueError: If any of the values of the dictionary are not
+         valid.
     """
     # Auxiliary variables.
     metadata: dict = BASE["_metadata"]
@@ -120,6 +126,24 @@ def _validate_values__metadata(dictionary: dict) -> None:
 
     # Try to load the date.
     datetime.strptime(dictionary["save_date"], metadata["save_date"])
+
+
+def _validate_values_simulation(simulation: Any) -> None:
+    """
+        Validates that the dictionary values are consistent with what is
+        expected.
+
+        :param simulation: The object to be validated.
+
+        :raise TypeError: If the simulation object is not an instance of the
+         Simulation type.
+    """
+    # Validate the simulation object is a Simulation object.
+    if not isinstance(simulation, Simulation):
+        raise TypeError(
+            f"The simulation must be of type Simulation; current object is of "
+            f"type {type(simulation)}."
+        )
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
