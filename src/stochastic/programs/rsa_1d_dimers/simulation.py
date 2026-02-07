@@ -74,7 +74,7 @@ class Simulation:
             self.statistics.update_statistics(self.lattice.lattice, successful)
 
         # Save the complete simulation.
-        self._simulation_save("complete")
+        self._simulation_save(0)
 
     def _set_simulation(self) -> None:
         """
