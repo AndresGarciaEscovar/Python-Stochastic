@@ -9,7 +9,6 @@
 
 
 # Standard library.
-import json
 import pickle
 import random
 
@@ -100,51 +99,27 @@ class Simulation:
             path.mkdir(exist_ok=True, parents=False)
             self.parameters.output["working"] = f"{path}"
 
-    def _simulation_save(self, stype: str) -> None:
+    def _simulation_save(self, attempts: int) -> None:
         """
             Saves the simulation to a json file.
-
-            :param stype: The type of simulation to be saved.
         """
         # Get the working directory.
         directory: Path = Path(self.parameters.output["working"])
-        file_json: str = f"{directory / 'save.json'}"
-        file_pickle: str = f"{directory / 'generator.pkl'}"
+        file_pickle: str = f"{directory / 'simulation.sim'}"
 
-        # State variables.
-        if stype == "partial":
-            state: dict = {
-                "parameters": self.parameters.get_dictionary(),
-                "results": self.results.get_dictionary(),
-            }
-
-        elif stype == "complete":
-            state: dict = {
-                "parameters": self.parameters.get_dictionary(),
-                "lattice": self.lattice.get_dictionary(),
-                "results": self.results.get_dictionary(),
-                "statistics": self.statistics.get_dictionary(),
-            }
-
-        else:
-            raise ValueError(
-                f"The requested save type is not valid; must be either "
-                f"'complete' or 'partial'; current value of {stype = }."
-            )
-
-        # Add some other data.
-        state["_metadata"] = {
-            "name": PROGRAM,
-            "save_date": datetime.now().strftime("%Y%m%d%H%M%S")
+        # Extract the parameters in the dictionary.
+        dictionary: dict = {
+            "_metadata": {
+                "attempts": attempts,
+                "name": PROGRAM,
+                "save_date": datetime.now().strftime("%Y%m%d%H%M%S")
+            },
+            "simulation": self
         }
 
-        # Save the dictionary.
-        with open(file_json, encoding="utf-8", mode="w") as stream:
-            json.dump(state, stream, indent=4)
-
-        # Pickle the generator.
+        # Pickle the simulation state.
         with open(file_pickle, mode="wb") as stream:
-            pickle.dump(self.generator, stream)
+            pickle.dump(dictionary, stream)
 
     # /////////////////////////////////////////////////////////////////////////
     # Methods
