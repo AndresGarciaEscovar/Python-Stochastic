@@ -84,7 +84,7 @@ def to_delete():
     # Auxiliary variables.
     path_pickle: str = Path(
         "/home/andres/Projects/Python/Stochastic/temp/scripts",
-        "RSA-1D-Dimers_20260206210439",
+        "RSA-1D-Dimers_20260206221856",
         'simulation.sim'
     )
 

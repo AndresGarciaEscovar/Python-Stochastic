@@ -10,13 +10,10 @@
 
 # Standard library.
 from datetime import datetime
+from typing import Any
 
 # User.
-from stochastic.programs.rsa_1d_dimers.simulation import PROGRAM
-from stochastic.programs.rsa_1d_dimers.validation.parameters import (
-    validate as vparameters
-)
-from stochastic.utilities.validate import validate_dictionary
+from stochastic.programs.rsa_1d_dimers.simulation import PROGRAM, Simulation
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -27,49 +24,11 @@ from stochastic.utilities.validate import validate_dictionary
 # Base dictionary with which to compare.
 BASE: dict = {
     "_metadata": {
+        "attempts": 0,
         "name": PROGRAM,
         "save_date": "%Y%m%d%H%M%S"
     },
-    "parameters": {
-        "history": {
-            "file": "",
-            "frequency": 0,
-            "save": False
-        },
-        "output": {
-            "file": "",
-            "working": ""
-        },
-        "simulation": {
-            "attempts": 0,
-            "length": 0,
-            "periodic": False,
-            "repetitions": 0,
-            "seed": 0
-        }
-    },
-    "results": {
-        "simulations": 0,
-        "attempts": [],
-        "coverage": [],
-        "empty_single": [],
-        "empty_double": [],
-        "empty_triple": []
-    },
-    "lattice": {
-        "lattice": [],
-        "length": 0,
-        "periodic": False
-    },
-    "statistics": {
-        "attempts": [],
-        "coverage": [],
-        "empty_single": [],
-        "empty_double": [],
-        "empty_triple": [],
-        "length": 0,
-        "periodic": False
-    }
+    "simulation": None,
 }
 
 # Possible keys.
@@ -90,8 +49,7 @@ def _validate_form(dictionary: dict) -> None:
     # Validate the different quantities.
     _validate_form_keys(dictionary)
 
-    for key, value in dictionary.items():
-        validate_dictionary(BASE[key], value, error=True)
+    print("HERE")
 
 
 def _validate_form_keys(dictionary: dict) -> None:
@@ -105,83 +63,68 @@ def _validate_form_keys(dictionary: dict) -> None:
     """
     # Auxiliary variables.
     current: set = set(dictionary.keys())
-    expected_0: set = set(REQUIRED_KEYS)
-    expected_1: set = set(REQUIRED_KEYS[:-2])
+    expected: set = set(REQUIRED_KEYS)
 
     # Validate the keys.
-    if current not in (expected_0, expected_1):
+    if current != expected:
         raise KeyError(
             f"The key of the loaded dictionary do not match the required "
             f"keys. Current keys: {current or '{}'}, expected keys: "
-            f"{expected_0 or '{}'} or {expected_1 or '{}'}."
+            f"{expected or '{}'}."
         )
 
 
 def _validate_values(dictionary: dict) -> None:
     """
-        Validates the values in the dictionary.
+        Validates that the dictionary values are consistent with what is
+        expected.
 
         :param dictionary: The dictionary to be validated.
     """
-    # Validate the parameters.
-    _: dict = vparameters(dictionary["parameters"])
-    del _
-
-    # Validate the other.
+    # Validate the different entries.
     _validate_values__metadata(dictionary["_metadata"])
-
 
 
 def _validate_values__metadata(dictionary: dict) -> None:
     """
-        Validates that the metadata is properly set.
+        Validates that the dictionary values are consistent with what is
+        expected.
 
-        :param dictionary: The dictionary to be validated.
-
-        :param ValueError: If any of the values are not properly set.
+        :param dictionary: The dictionary of metadata values to be validated.
     """
     # Auxiliary variables.
     metadata: dict = BASE["_metadata"]
 
-    # The names must match.
-    key: str = "name"
+    expected: set = set(metadata.keys())
+    current: set = set(dictionary.keys())
 
-    if dictionary[key] != metadata[key]:
-        raise ValueError(
-            f"The metadata \"{key}\" entry does not match the required value. "
-            f"Required value: \"{metadata[key]}\", current value: "
-            f"\"{dictionary[key]}\"."
+    # Validate the keys.
+    if current != expected:
+        raise KeyError(
+            f"The key of the metadata dictionary do not match the required "
+            f"keys. Current keys: {current or '{}'}, expected keys: "
+            f"{expected or '{}'}."
         )
 
-    # The date must be valid and have the proper format.
-    key = "save_date"
-    datetime.strptime(dictionary[key], metadata[key])
+    # Validate the attempts.
+    attempts: Any = dictionary["attempts"]
 
-
-def _validate_values_parameters(dictionary: dict) -> None:
-    """
-        Validates that the parameters are properly set.
-
-        :param dictionary: The dictionary to be validated.
-
-        :param ValueError: If any of the values are not properly set.
-    """
-    # Auxiliary variables.
-    metadata: dict = BASE["_metadata"]
-
-    # The names must match.
-    key: str = "name"
-
-    if dictionary[key] != metadata[key]:
+    if not isinstance(attempts, int) or attempts < metadata["attempts"]:
         raise ValueError(
-            f"The metadata \"{key}\" entry does not match the required value. "
-            f"Required value: \"{metadata[key]}\", current value: "
-            f"\"{dictionary[key]}\"."
+            f"The number of \"attempts\" must be a number greater than or "
+            f"equal to zero; current type: {type(attempts)}, current value: "
+            f"{attempts}."
         )
 
-    # The date must be valid and have the proper format.
-    key = "save_date"
-    datetime.strptime(dictionary[key], metadata[key])
+    # Validate that the date has the correct form.
+    if dictionary["name"] != metadata["name"]:
+        raise ValueError(
+            f"The name of the simulation must be \"{metadata['name']}\", this "
+            f"does not correspond to a {metadata['name']} simulation."
+        )
+
+    # Try to load the date.
+    datetime.strptime(dictionary["save_date"], metadata["save_date"])
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
