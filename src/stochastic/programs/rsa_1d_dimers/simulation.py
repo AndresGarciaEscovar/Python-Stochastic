@@ -182,3 +182,5 @@ class Simulation:
 
         # Finish setting other quantities.
         self._set_working_directory()
+
+        raise NotImplementedError("Need to finish loading the simulation properly")
