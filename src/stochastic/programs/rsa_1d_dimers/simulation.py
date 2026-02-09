@@ -244,13 +244,16 @@ class Simulation:
              saved. True, if the simulation must be saved; False, otherwise.
         """
         # Auxiliary variables.
+        total_attempts: int = self.parameters.simulation["attempts"]
         frequency: int = self.parameters.history["frequency"]
         flag: bool = frequency > 0
 
         # Check the end condition and frequency condition.
         if flag:
-            flag = end and attempts == frequency
-            flag = flag or (not end and attempts % frequency == 0)
+            cond: bool = total_attempts == frequency
+
+            flag = end and cond
+            flag = flag or (not end and not cond and attempts % frequency == 0)
 
         return flag
 
