@@ -78,27 +78,3 @@ def load_simulation(file_pickle: str) -> Simulation:
     )
 
     return simulation
-
-
-# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-# TO DELETE!!
-# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-
-def to_delete():
-    """
-        Runs the main program.
-    """
-    # Auxiliary variables.
-    path_pickle: str = Path(
-        "/home/andres/Projects/Python/Stochastic/temp/scripts",
-        "RSA-1D-Dimers_20260206221856",
-        'simulation.sim'
-    )
-
-    # Load the simulation.
-    _simulation: Simulation = load_simulation(f"{path_pickle}")
-
-
-if __name__ == "__main__":
-    to_delete()

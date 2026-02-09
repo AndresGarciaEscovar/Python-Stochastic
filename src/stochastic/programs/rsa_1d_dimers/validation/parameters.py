@@ -106,7 +106,7 @@ def _validate_parameters_history(parameters: dict, attempts: int) -> None:
         )
 
     # Validate the frequency is a positive number.
-    if not (0 <= parameters["frequency"] < attempts):
+    if not 0 <= parameters["frequency"] < attempts:
         raise ValueError(
             f"The saving frequency must be greater than or equal to zero; "
             f"current frequency setting: {parameters['frequency']}."
