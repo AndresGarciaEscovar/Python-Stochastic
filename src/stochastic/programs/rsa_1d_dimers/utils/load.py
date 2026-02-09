@@ -11,8 +11,6 @@
 # Standard library.
 import pickle
 
-from pathlib import Path
-
 # User.
 from stochastic.programs.rsa_1d_dimers.simulation import Simulation
 from stochastic.programs.rsa_1d_dimers.validation.load import (
