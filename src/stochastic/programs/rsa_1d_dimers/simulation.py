@@ -216,12 +216,11 @@ class Simulation:
              saved. True, if the simulation must be saved; False, otherwise.
         """
         # Auxiliary variables.
+        frequency: int = self.parameters.history_lattice["frequency"]
         flag: bool = frequency > 0
 
         # Check the end condition and frequency condition.
         if flag:
-            frequency: int = self.parameters.history_lattice["frequency"]
-
             flag = end and attempts == frequency
             flag = flag or (not end and attempts % frequency == 0)
 
@@ -242,12 +241,11 @@ class Simulation:
              saved. True, if the simulation must be saved; False, otherwise.
         """
         # Auxiliary variables.
+        frequency: int = self.parameters.history["frequency"]
         flag: bool = frequency > 0
 
         # Check the end condition and frequency condition.
         if flag:
-            frequency: int = self.parameters.history["frequency"]
-
             flag = end and attempts == frequency
             flag = flag or (not end and attempts % frequency == 0)
 
