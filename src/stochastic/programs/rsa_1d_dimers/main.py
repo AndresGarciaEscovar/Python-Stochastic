@@ -47,4 +47,6 @@ def run(parameters: dict) -> dict:
     """
     # Create and run the simulation.
     simulation: Simulation = Simulation(parameters)
-    simulation.run_simulations()
+
+    print(simulation)
+    # simulation.run_simulations()

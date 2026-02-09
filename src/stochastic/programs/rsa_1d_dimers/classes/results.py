@@ -80,7 +80,7 @@ def _get_string_table(table: list) -> str:
     # Set the string.
     if len(table) <= 1:
         # No data to show.
-        string += "No data to show."
+        string += "No data to show.\n"
 
     else:
         # Table dimensions

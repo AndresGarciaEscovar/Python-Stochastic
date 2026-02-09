@@ -32,6 +32,25 @@ PROGRAM: str = "RSA 1D Dimers"
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# Functions - Auxiliary
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+def _get_banner(text: str) -> str:
+    """
+        Gets the banner for the section.
+
+        :param text: The text to be placed in the header banner.
+
+        :return: The banner with the required text.
+    """
+    # Auxiliary variables.
+    base: str = f"# {'$' * 78}"
+
+    return f"{base}\n# {text}\n{base}\n"
+
+
+# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Classes
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
@@ -167,6 +186,21 @@ class Simulation:
     # /////////////////////////////////////////////////////////////////////////
     # Methods - Dunder
     # /////////////////////////////////////////////////////////////////////////
+
+    def __str__(self) -> str:
+        """
+            The string representation of the simulation class with the current
+            state at the time it is invoked.
+
+            :return: The string with the class representation.
+        """
+        # Auxiliary variables.
+        string: str = f"\n{_get_banner('Parameters')}\n{self.parameters}\n"
+        string += f"\n{_get_banner('Lattice')}\n{self.lattice}\n"
+        string += f"\n{_get_banner('Statistics')}\n{self.statistics}\n"
+        string += f"\n{_get_banner('Results')}\n{self.results}\n"
+
+        return string
 
     # /////////////////////////////////////////////////////////////////////////
     # Methods
