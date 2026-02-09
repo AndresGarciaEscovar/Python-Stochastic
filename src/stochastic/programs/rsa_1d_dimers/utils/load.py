@@ -68,6 +68,15 @@ def load_simulation(file_pickle: str) -> Simulation:
     # Create the simulation, and mark it as loaded.
     simulation: Simulation = parameters["simulation"]
 
+    # Message to the user.
+    print(
+        f"Remember to setup the working directory before starting the "
+        f"simulation; current working directory:\n"
+        f"    {simulation.parameters.output['working']}\n"
+        f"This can be done through the "
+        "simulation.paramaters.output['working'] dictionary entry."
+    )
+
     return simulation
 
 
@@ -89,11 +98,6 @@ def to_delete():
 
     # Load the simulation.
     _simulation: Simulation = load_simulation(f"{path_pickle}")
-
-    print(_simulation.results)
-    print(_simulation.loaded)
-    # Continue in this file!
-    # raise NotImplementedError("Need to finish loading the simulation properly")
 
 
 if __name__ == "__main__":
