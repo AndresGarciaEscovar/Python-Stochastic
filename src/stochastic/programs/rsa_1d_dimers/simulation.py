@@ -87,9 +87,6 @@ class Simulation:
         self.lattice.reset()
         self.statistics.reset()
 
-        # Mark as unloaded.
-        self.parameters.loaded = False
-
     def _set_working_directory(self) -> None:
         """
             Sets the working directory to the place where the results will
