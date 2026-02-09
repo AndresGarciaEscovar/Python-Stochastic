@@ -117,6 +117,13 @@ class Simulation:
             directory: Path = Path(self.parameters.output["working"])
             file_pickle: str = f"{directory / 'simulation.sim'}"
 
+            # Check the directory exists.
+            if not directory.is_dir():
+                raise ValueError(
+                    f"Select a valid directory, current directory is not "
+                    f"valid: {directory}"
+                )
+
             # Extract the parameters in the dictionary.
             dictionary: dict = {
                 "_metadata": {
@@ -194,6 +201,13 @@ class Simulation:
         # Auxiliary variables.
         path: Path = Path(self.parameters.output["working"])
         file: Path = path / self.parameters.output["file"]
+
+        # Check the directory exists.
+        if not path.is_dir():
+            raise ValueError(
+                f"Select a valid directory, current directory is not "
+                f"valid: {path}"
+            )
 
         # Name of the file.
         with open(f"{file}", encoding="utf-8", mode="w") as stream:
