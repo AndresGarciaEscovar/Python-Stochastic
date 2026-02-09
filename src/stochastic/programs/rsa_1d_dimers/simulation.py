@@ -113,7 +113,7 @@ class Simulation:
             self.statistics.update_statistics(self.lattice.lattice, successful)
             self.parameters.current_attempts += 1
 
-    def _save_lattice(self, end: bool, attempts: int = 0) -> None:
+    def _save_lattice(self, end: bool, attempts: int) -> None:
         """
             Saves the lattice to a text file.
 
@@ -216,13 +216,16 @@ class Simulation:
              saved. True, if the simulation must be saved; False, otherwise.
         """
         # Auxiliary variables.
+        total_attempts: int = self.parameters.simulation["attempts"]
         frequency: int = self.parameters.history_lattice["frequency"]
         flag: bool = frequency > 0
 
         # Check the end condition and frequency condition.
         if flag:
-            flag = end and attempts == frequency
-            flag = flag or (not end and attempts % frequency == 0)
+            cond: bool = total_attempts == frequency
+
+            flag = end and cond
+            flag = flag or (not end and not cond and attempts % frequency == 0)
 
         return flag
 
@@ -288,15 +291,16 @@ class Simulation:
             self._run_simulation()
             self.results.statistics_add(self.statistics)
 
+            # Save the lattice.
+            self._save_lattice(True, attempts)
+
             # Try to save the simulation at the end.
             self.parameters.current_attempts = 0
             self.parameters.current_repetition += 1
 
             # Reset the variables.
             self._set_simulation()
-
             self._save_simulation(True, attempts)
-            self._save_lattice(True, attempts)
 
         # Process the statistics.
         self.results.statistics_process()
