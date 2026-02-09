@@ -67,7 +67,6 @@ def load_simulation(file_pickle: str) -> Simulation:
 
     # Create the simulation, and mark it as loaded.
     simulation: Simulation = parameters["simulation"]
-    simulation.loaded = True
 
     return simulation
 
