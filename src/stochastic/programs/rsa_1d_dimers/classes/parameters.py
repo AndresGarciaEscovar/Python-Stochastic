@@ -110,9 +110,6 @@ class Parameters:
         # Validate the parameters.
         final: dict = validate(parameters)
 
-        # Other parameters.
-        self.loaded: bool = False
-
         # Extract the dictionaries.
         self.history: dict = final["history"]
         self.output: dict = final["output"]
