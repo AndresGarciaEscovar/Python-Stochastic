@@ -49,6 +49,7 @@ class Parameters:
         """
         return {
             "history": self.history,
+            "history_lattice": self.history_lattice,
             "output": self.output,
             "simulation": self.simulation,
         }
@@ -64,6 +65,7 @@ class Parameters:
         # Auxiliary variables.
         parameters: dict = {
             "history": self.history,
+            "history_lattice": self.history_lattice,
             "output": self.output,
             "simulation": self.simulation
         }
@@ -79,6 +81,7 @@ class Parameters:
         string: str = "{\n"
         entries: tuple = (
             ("history", self.history),
+            ("history_lattice", self.history_lattice),
             ("output", self.output),
             ("simulation", self.simulation)
         )
@@ -112,6 +115,7 @@ class Parameters:
 
         # Extract the dictionaries.
         self.history: dict = final["history"]
+        self.history_lattice: dict = final["history_lattice"]
         self.output: dict = final["output"]
         self.simulation: dict = final["simulation"]
 
