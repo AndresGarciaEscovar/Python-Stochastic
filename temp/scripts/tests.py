@@ -23,22 +23,25 @@ from stochastic.programs.rsa_1d_dimers.main import run
 
 # Simulation parameters.
 PARAMETERS: dict = {
-    "simulation": {
-        "attempts": 10,
-        "length": 100,
-        "periodic": False,
-        "repetitions": 10,
-        "seed": -1
-    },
     "history": {
         "file": "history.txt",
         "frequency": 0,
-        "save": False
+    },
+    "history_lattice": {
+        "file": "lattice.txt",
+        "frequency": 0,
     },
     "output": {
         "file": "output.txt",
         "working": ""
-    }
+    },
+    "simulation": {
+        "attempts": 10,
+        "length": 20,
+        "periodic": False,
+        "repetitions": 10,
+        "seed": -1
+    },
 }
 
 
