@@ -65,24 +65,30 @@ class Simulation:
         attempts: int = self.parameters.simulation["attempts"]
         length: int = self.parameters.simulation["length"] - 1
 
-        # Get a new lattice and statistics.
-        self._set_simulation()
+        # Start the simulation.
+        for _ in range(self.parameters.current_attempts, attempts):
+            self._simulation_save(False, self.parameters.current_attempts)
 
-        for _ in range(attempts):
             site: int = self.generator.randint(0, length)
             successful: bool = self.lattice.particle_adsorb([site, site + 1])
-            self.statistics.update_statistics(self.lattice.lattice, successful)
 
-        # Save the complete simulation.
-        self._simulation_save(0)
+            self.statistics.update_statistics(self.lattice.lattice, successful)
+            self.parameters.current_attempts += 1
+
+        # Update the simulations completed.
+        self.parameters.current_attempts = 0
+        self.parameters.current_repetition += 1
 
     def _set_simulation(self) -> None:
         """
             Sets a simulation before starting to run a single simulation.
         """
-        # For the moment, set the simulation.
+        # Set the simulation.
         self.lattice.reset()
         self.statistics.reset()
+
+        # Mark as unloaded.
+        self.parameters.loaded = False
 
     def _set_working_directory(self) -> None:
         """
@@ -97,27 +103,62 @@ class Simulation:
         path.mkdir(exist_ok=True, parents=False)
         self.parameters.output["working"] = f"{path}"
 
-    def _simulation_save(self, attempts: int) -> None:
+    def _simulation_save(self, end: bool, attempts: int = 0) -> None:
         """
             Saves the simulation to a json file.
+
+            :param end: A boolean flag indicating whether the save is performed
+             at the end of the simulation. True, if the save is being attempted
+             at the end of the simulation; False, if the simulation is intended
+             to be saved in the course of the simulation.
+
+            :param attempts: The current number of attempts; zero by default.
         """
-        # Get the working directory.
-        directory: Path = Path(self.parameters.output["working"])
-        file_pickle: str = f"{directory / 'simulation.sim'}"
+        # Save if needed.
+        if self._validate_save(end, attempts):
+            # Get the working directory.
+            directory: Path = Path(self.parameters.output["working"])
+            file_pickle: str = f"{directory / 'simulation.sim'}"
 
-        # Extract the parameters in the dictionary.
-        dictionary: dict = {
-            "_metadata": {
-                "attempts": attempts,
-                "name": PROGRAM,
-                "save_date": datetime.now().strftime("%Y%m%d%H%M%S")
-            },
-            "simulation": self
-        }
+            # Extract the parameters in the dictionary.
+            dictionary: dict = {
+                "_metadata": {
+                    "attempts": attempts,
+                    "name": PROGRAM,
+                    "save_date": datetime.now().strftime("%Y%m%d%H%M%S")
+                },
+                "simulation": self
+            }
 
-        # Pickle the simulation state.
-        with open(file_pickle, mode="wb") as stream:
-            pickle.dump(dictionary, stream)
+            # Pickle the simulation state.
+            with open(file_pickle, mode="wb") as stream:
+                pickle.dump(dictionary, stream)
+
+    def _validate_save(self, end: bool, attempts: int) -> bool:
+        """
+            Saves the simulation to a json file.
+
+            :param end: A boolean flag indicating whether the save is performed
+             at the end of the simulation. True, if the save is being attempted
+             at the end of the simulation; False, if the simulation is intended
+             to be saved in the course of the simulation.
+
+            :param attempts: The current number of attempts.
+
+            :return: A boolean flag indicating whether the simulation must be
+             saved. True, if the simulation must be saved; False, otherwise.
+        """
+        # Auxiliary variables.
+        flag: bool = self.parameters.history["save"]
+
+        # Check the conditions are appropriate to save the simulation.
+        if flag:
+            frequency: int = self.parameters.history["frequency"]
+
+            flag = not end and frequency > 0 and attempts % frequency == 0
+            flag = flag or (end and frequency < 1)
+
+        return flag
 
     # /////////////////////////////////////////////////////////////////////////
     # Methods
@@ -130,9 +171,18 @@ class Simulation:
         # Auxiliary variables.
         repetitions: int = self.parameters.simulation["repetitions"]
 
-        for _ in range(repetitions):
+        for _ in range(self.parameters.current_repetition, repetitions):
+            # Run the simulation.
             self._run_simulation()
             self.results.statistics_add(self.statistics)
+
+            # Try to save the simulation at the end.
+            self.parameters.current_attempts = 0
+            self.parameters.current_repetition += 1
+
+            # Reset the variables.
+            self._set_simulation()
+            self._simulation_save(end=True)
 
         # Process the statistics.
         self.results.statistics_process()
@@ -183,4 +233,4 @@ class Simulation:
         # Finish setting other quantities.
         self._set_working_directory()
 
-        raise NotImplementedError("Need to finish loading the simulation properly")
+        # raise NotImplementedError("Need to finish loading the simulation properly")

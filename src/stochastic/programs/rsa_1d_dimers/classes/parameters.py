@@ -117,3 +117,7 @@ class Parameters:
         self.history: dict = final["history"]
         self.output: dict = final["output"]
         self.simulation: dict = final["simulation"]
+
+        # Current iteration and repetition.
+        self.current_attempts: int = 0
+        self.current_repetition: int = 0
