@@ -27,7 +27,7 @@ from stochastic.utilities.validate import validate_dictionary_sub
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
-def load_base() -> dict:
+def _load_base() -> dict:
     """
         From the json file, imports the base dictionary.
 
@@ -44,7 +44,7 @@ def load_base() -> dict:
         return json.load(stream)
 
 
-def validate_parameters(parameters: dict) -> None:
+def _validate_parameters(parameters: dict) -> None:
     """
         Validates that the different quantities take appropriate values for the
         simulation.
@@ -54,24 +54,31 @@ def validate_parameters(parameters: dict) -> None:
     """
     # Auxiliary variables (LEAVE IN THIS ORDER).
     functions: dict = {
-        "output": validate_parameters_output,
-        "history": validate_parameters_history,
-        "simulation": validate_parameters_simulation,
+        "output": _validate_parameters_output,
+        "history": _validate_parameters_history,
+        "simulation": _validate_parameters_simulation,
     }
 
     # Validate and updated the parameters.
     for name, function in functions.items():
+        if name == "history":
+            attempts: int = parameters["simulation"]["attempts"]
+            parameters[name] = function(parameters[name], attempts)
+            continue
+
         parameters[name] = function(parameters[name])
 
     return parameters
 
 
-def validate_parameters_history(parameters: dict) -> None:
+def _validate_parameters_history(parameters: dict, attempts: int) -> None:
     """
         Validates the parameters specific to the history.
 
         :param parameters: The dictionary of parameters related to the
          "history" entry.
+
+        :param attempts: The frequency with which the simulation must be saved.
 
         :return: A dictionary with the history parameters.
     """
@@ -99,7 +106,7 @@ def validate_parameters_history(parameters: dict) -> None:
         )
 
     # Validate the frequency is a positive number.
-    if parameters["frequency"] < 0:
+    if not (0 <= parameters["frequency"] < attempts):
         raise ValueError(
             f"The saving frequency must be greater than or equal to zero; "
             f"current frequency setting: {parameters['frequency']}."
@@ -108,7 +115,7 @@ def validate_parameters_history(parameters: dict) -> None:
     return parameters
 
 
-def validate_parameters_output(parameters: dict) -> None:
+def _validate_parameters_output(parameters: dict) -> None:
     """
         Validates the parameters specific to the output.
 
@@ -154,7 +161,7 @@ def validate_parameters_output(parameters: dict) -> None:
     return parameters
 
 
-def validate_parameters_simulation(parameters: dict) -> None:
+def _validate_parameters_simulation(parameters: dict) -> None:
     """
         Validates the parameters specific to the simulation.
 
@@ -206,7 +213,7 @@ def validate(parameters: dict) -> dict:
     """
     # Auxiliary variables.
     temporary: dict = cp.deepcopy(parameters)
-    default: dict = load_base()
+    default: dict = _load_base()
 
     # Validate the dictionary structure.
     if temporary != {}:
@@ -215,6 +222,6 @@ def validate(parameters: dict) -> dict:
         default = format_dictionary(default, temporary)
 
     # Validate the specific parameters.
-    default = validate_parameters(default)
+    default = _validate_parameters(default)
 
     return default
