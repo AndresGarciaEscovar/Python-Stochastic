@@ -25,11 +25,11 @@ from stochastic.programs.rsa_1d_dimers.main import run
 PARAMETERS: dict = {
     "history": {
         "file": "history.txt",
-        "frequency": 0,
+        "frequency": 10,
     },
     "history_lattice": {
         "file": "lattice.txt",
-        "frequency": 0,
+        "frequency": 10,
     },
     "output": {
         "file": "output.txt",
