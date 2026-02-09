@@ -76,6 +76,21 @@ class Simulation:
     # Methods - Private
     # /////////////////////////////////////////////////////////////////////////
 
+    def _get_info_string(self) -> str:
+        """
+            Gets the simulation class specific parameters as a string.
+
+            :return: A string specific with the simulation class parameters
+             that are not nested in classes.
+        """
+        # Auxiliary variables.
+        string: str = f"\n{_get_banner('Simulation')}\n"
+        string += f"current repetition: {self.parameters.current_repetition}\n"
+        string += f"current attempts: {self.parameters.current_attempts}\n"
+        string += f"loaded: {self.loaded}\n"
+
+        return string
+
     def _run_simulation(self) -> None:
         """
             Runs the simulations.
@@ -194,8 +209,9 @@ class Simulation:
 
             :return: The string with the class representation.
         """
-        # Auxiliary variables.
-        string: str = f"\n{_get_banner('Parameters')}\n{self.parameters}\n"
+        # Append all the strings.
+        string: str = self._get_info_string()
+        string += f"\n{_get_banner('Parameters')}\n{self.parameters}\n"
         string += f"\n{_get_banner('Lattice')}\n{self.lattice}\n"
         string += f"\n{_get_banner('Statistics')}\n{self.statistics}\n"
         string += f"\n{_get_banner('Results')}\n{self.results}\n"
