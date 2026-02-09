@@ -56,12 +56,13 @@ def _validate_parameters(parameters: dict) -> None:
     functions: dict = {
         "output": _validate_parameters_output,
         "history": _validate_parameters_history,
+        "history_lattice": _validate_parameters_lattice,
         "simulation": _validate_parameters_simulation,
     }
 
     # Validate and updated the parameters.
     for name, function in functions.items():
-        if name == "history":
+        if name.startswith("history"):
             attempts: int = parameters["simulation"]["attempts"]
             parameters[name] = function(parameters[name], attempts)
             continue
@@ -83,7 +84,7 @@ def _validate_parameters_history(parameters: dict, attempts: int) -> None:
         :return: A dictionary with the history parameters.
     """
     # No need to check the parameters.
-    if not parameters["save"]:
+    if parameters["frequency"] == 0:
         return parameters
 
     # Check the output file path.
@@ -106,7 +107,53 @@ def _validate_parameters_history(parameters: dict, attempts: int) -> None:
         )
 
     # Validate the frequency is a positive number.
-    if not 0 <= parameters["frequency"] < attempts:
+    if not 0 <= parameters["frequency"] <= attempts:
+        raise ValueError(
+            f"The saving frequency must be greater than or equal to zero; "
+            f"current frequency setting: {parameters['frequency']}."
+        )
+
+    return parameters
+
+
+def _validate_parameters_lattice(parameters: dict, attempts: int) -> None:
+    """
+        Validates the parameters specific to the lattice history.
+
+        :param parameters: The dictionary of parameters related to the
+         "history_lattice" entry.
+
+        :param attempts: The frequency with which the simulation must be saved.
+
+        :return: A dictionary with the history parameters.
+    """
+    # No need to check the parameters.
+    if parameters["frequency"] == 0:
+        return parameters
+
+    # Check the output file path.
+    file: Path = Path(parameters["file"])
+
+    if len(file.parts) != 1:
+        raise ValueError(
+            f"The name of the history file must not have any addtional path, "
+            f"i.e., it must only be the name of the file; current path: "
+            f"{file}."
+        )
+
+    if f"{file.with_suffix('')}".strip() == "":
+        raise ValueError(
+            "The name of the lattice history file cannot be empty."
+        )
+
+    if file.suffix != ".txt":
+        raise ValueError(
+            f"The name of the lattice history file must have a \".txt\" "
+            f"extension; current extension: \"{file.suffix}\"."
+        )
+
+    # Validate the frequency is a positive number.
+    if not 0 <= parameters["frequency"] <= attempts:
         raise ValueError(
             f"The saving frequency must be greater than or equal to zero; "
             f"current frequency setting: {parameters['frequency']}."

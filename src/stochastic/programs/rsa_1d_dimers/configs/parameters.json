@@ -1,8 +1,11 @@
 {
     "history": {
         "file": "history.txt",
-        "frequency": 0,
-        "save": false
+        "frequency": 0
+    },
+    "history_lattice": {
+        "file": "lattice.txt",
+        "frequency": 0
     },
     "output": {
         "file": "output.txt",
