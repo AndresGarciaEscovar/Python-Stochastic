@@ -73,7 +73,7 @@ class Simulation:
           simulation will be stored.
     """
     # /////////////////////////////////////////////////////////////////////////
-    # Methods - Private
+    # Methods - Auxiliary
     # /////////////////////////////////////////////////////////////////////////
 
     def _get_info_string(self) -> str:
@@ -100,18 +100,85 @@ class Simulation:
         length: int = self.parameters.simulation["length"] - 1
 
         # Start the simulation.
-        for _ in range(self.parameters.current_attempts, attempts):
-            self._simulation_save(False, self.parameters.current_attempts)
+        for attempt in range(self.parameters.current_attempts, attempts):
+            # Periodically save the simulation.
+            self._save_simulation(False, attempt)
+            self._save_lattice(False, attempt)
 
+            # Make the move.
             site: int = self.generator.randint(0, length)
             successful: bool = self.lattice.particle_adsorb([site, site + 1])
 
+            # Take the statistics and update the counter.
             self.statistics.update_statistics(self.lattice.lattice, successful)
             self.parameters.current_attempts += 1
 
-        # Update the simulations completed.
-        self.parameters.current_attempts = 0
-        self.parameters.current_repetition += 1
+    def _save_lattice(self, end: bool, attempts: int = 0) -> None:
+        """
+            Saves the lattice to a text file.
+
+            :param end: A boolean flag indicating whether the save is performed
+             at the end of the simulation. True, if the save is being attempted
+             at the end of the simulation; False, if the simulation is intended
+             to be saved in the course of the simulation.
+
+            :param attempts: The current number of attempts; zero by default.
+        """
+        # Save if needed.
+        if self._validate_save_lattice(end, attempts):
+            # Get the working directory.
+            directory: Path = Path(self.parameters.output["working"])
+            file_pickle: str = f"{directory / 'lattice.txt'}"
+
+            # Check the directory exists.
+            if not directory.is_dir():
+                raise ValueError(
+                    f"Select a valid directory, current directory is not "
+                    f"valid: {directory}"
+                )
+
+            # Write the simulation state.
+            with open(file_pickle, encoding="utf-8", mode="a") as stream:
+                attempts: int = self.parameters.current_attempts
+                stream.write(f"Current attempts: {attempts}\n")
+                stream.write(f"{self.lattice.get_lattice_string()}\n\n")
+
+    def _save_simulation(self, end: bool, attempts: int = 0) -> None:
+        """
+            Saves the simulation to a binary file.
+
+            :param end: A boolean flag indicating whether the save is performed
+             at the end of the simulation. True, if the save is being attempted
+             at the end of the simulation; False, if the simulation is intended
+             to be saved in the course of the simulation.
+
+            :param attempts: The current number of attempts; zero by default.
+        """
+        # Save if needed.
+        if self._validate_save_simulation(end, attempts):
+            # Get the working directory.
+            directory: Path = Path(self.parameters.output["working"])
+            file_pickle: str = f"{directory / 'simulation.sim'}"
+
+            # Check the directory exists.
+            if not directory.is_dir():
+                raise ValueError(
+                    f"Select a valid directory, current directory is not "
+                    f"valid: {directory}"
+                )
+
+            # Extract the parameters in the dictionary.
+            dictionary: dict = {
+                "_metadata": {
+                    "name": PROGRAM,
+                    "save_date": datetime.now().strftime("%Y%m%d%H%M%S")
+                },
+                "simulation": self
+            }
+
+            # Pickle the simulation state.
+            with open(file_pickle, mode="wb") as stream:
+                pickle.dump(dictionary, stream)
 
     def _set_simulation(self) -> None:
         """
@@ -134,47 +201,9 @@ class Simulation:
         path.mkdir(exist_ok=True, parents=False)
         self.parameters.output["working"] = f"{path}"
 
-    def _simulation_save(self, end: bool, attempts: int = 0) -> None:
+    def _validate_save_lattice(self, end: bool, attempts: int) -> bool:
         """
-            Saves the simulation to a json file.
-
-            :param end: A boolean flag indicating whether the save is performed
-             at the end of the simulation. True, if the save is being attempted
-             at the end of the simulation; False, if the simulation is intended
-             to be saved in the course of the simulation.
-
-            :param attempts: The current number of attempts; zero by default.
-        """
-        # Save if needed.
-        if self._validate_save(end, attempts):
-            # Get the working directory.
-            directory: Path = Path(self.parameters.output["working"])
-            file_pickle: str = f"{directory / 'simulation.sim'}"
-
-            # Check the directory exists.
-            if not directory.is_dir():
-                raise ValueError(
-                    f"Select a valid directory, current directory is not "
-                    f"valid: {directory}"
-                )
-
-            # Extract the parameters in the dictionary.
-            dictionary: dict = {
-                "_metadata": {
-                    "attempts": attempts,
-                    "name": PROGRAM,
-                    "save_date": datetime.now().strftime("%Y%m%d%H%M%S")
-                },
-                "simulation": self
-            }
-
-            # Pickle the simulation state.
-            with open(file_pickle, mode="wb") as stream:
-                pickle.dump(dictionary, stream)
-
-    def _validate_save(self, end: bool, attempts: int) -> bool:
-        """
-            Saves the simulation to a json file.
+            Validates the lattice is to be saved.
 
             :param end: A boolean flag indicating whether the save is performed
              at the end of the simulation. True, if the save is being attempted
@@ -187,14 +216,40 @@ class Simulation:
              saved. True, if the simulation must be saved; False, otherwise.
         """
         # Auxiliary variables.
-        flag: bool = self.parameters.history["save"]
+        flag: bool = frequency > 0
 
-        # Check the conditions are appropriate to save the simulation.
+        # Check the end condition and frequency condition.
+        if flag:
+            frequency: int = self.parameters.history_lattice["frequency"]
+
+            flag = end and attempts == frequency
+            flag = flag or (not end and attempts % frequency == 0)
+
+        return flag
+
+    def _validate_save_simulation(self, end: bool, attempts: int) -> bool:
+        """
+            Validates the simulation is to be saved.
+
+            :param end: A boolean flag indicating whether the save is performed
+             at the end of the simulation. True, if the save is being attempted
+             at the end of the simulation; False, if the simulation is intended
+             to be saved in the course of the simulation.
+
+            :param attempts: The current number of attempts.
+
+            :return: A boolean flag indicating whether the simulation must be
+             saved. True, if the simulation must be saved; False, otherwise.
+        """
+        # Auxiliary variables.
+        flag: bool = frequency > 0
+
+        # Check the end condition and frequency condition.
         if flag:
             frequency: int = self.parameters.history["frequency"]
 
-            flag = not end and frequency > 0 and attempts % frequency == 0
-            flag = flag or (end and frequency < 1)
+            flag = end and attempts == frequency
+            flag = flag or (not end and attempts % frequency == 0)
 
         return flag
 
@@ -227,6 +282,7 @@ class Simulation:
             Runs the simulations.
         """
         # Auxiliary variables.
+        attempts: int = self.parameters.simulation["attempts"]
         repetitions: int = self.parameters.simulation["repetitions"]
 
         for _ in range(self.parameters.current_repetition, repetitions):
@@ -240,7 +296,9 @@ class Simulation:
 
             # Reset the variables.
             self._set_simulation()
-            self._simulation_save(end=True)
+
+            self._save_simulation(True, attempts)
+            self._save_lattice(True, attempts)
 
         # Process the statistics.
         self.results.statistics_process()
