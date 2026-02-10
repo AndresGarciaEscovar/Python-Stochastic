@@ -1,3 +1,7 @@
+[[Main Index](../index.md)]
+
+---
+
 # 1D Random Sequential Adsorption (RSA) of Dimers
 
 ## Index
