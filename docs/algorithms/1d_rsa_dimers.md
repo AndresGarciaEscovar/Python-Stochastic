@@ -5,6 +5,7 @@
 - [Introduction](#introduction)
    - [Model Description](#model-description)
    - [Simulation Algorithm - Pseudocode](#simulation-algorithm---pseudocode)
+   - [Results Processing](#results-processing)
 - [Program Implementation](#program-implementation)
    - [Quick Start](#quick-start)
    - [Setting Up the Environment](#setting-up-the-environment)
@@ -127,6 +128,76 @@ If at any point the simulation crashes, or an error occurs, the program will be
 left to fail, and the error message will be printed to the console. Details on
 how to run the program, and how to save and load simulations are provided in the
 next section.
+
+### Results Processing
+
+#### Accumulating the Statistics
+
+For consistency, the lattice must be at least 4 sites long, since the quantity
+`T(t)` tracks the percentage of three consecutive sites that are not occupied,
+and if the lattice is shorter than 4 sites, and the lattice is periodic, there
+will be redundacy when calculating `T(t)`.
+
+The process for gathering the statistics works the same for any of the
+quantities being tracked, i.e., `C(t)`, `S(t)`, `D(t)`, and `T(t)`; thus, the
+process is described in a general way, and it can be applied to any of the
+quantities being tracked. For simplicity, the process is described for the
+quantity `C(t)`.
+
+For the `n`th repetition, where `1 <= n <= nsims`, of the simulation, define a
+variable `Cn`
+```text
+Cn = [[0, 0], [1, 0], [2, 0], ...,[Na, 0]]
+```
+and `Cn(t) = [t, Cn(t)]`, where `0 <= t <= Na`, and `Na` is the total number of
+deposition attempts. _After_ an attempt `i` (`0 <= i <= Na) is made, count
+the number of occupied sites `Nn(i)` on the lattice, and register the value
+at the location `Cn(i) = [i, Nn(i)]`. Repeat this process for each deposition
+attempt. When the number of deposition attempts `Na` is reached the variable
+`Cn` will contain the values of `Cn(t)` at the different times:
+```text
+Cn = [[0, Nn(0)], [1, Nn(1)], [2, Nn(2)], ...,[Na, Nn(Na)]]
+```
+that is:
+```text
+Ci[t] = [time_i * Length, number of occupied sites at time_i]
+```
+Accumulate the values of `Cn(t)` in the variable `stats.C` such that:
+```text
+stats.C = [
+    [0, 0],
+    [1, N1[1] + N2[1] + ... + Nnsims[1]],
+    [2, N1[2] + N2[2] + ... + Nnsims[2]],
+    ...,
+    [Na, N1[Na] + N2[Na] + ... + Nnsims[Na]]
+]
+```
+that is:
+```text
+stats.C(i) = [time_i * Length, sum(1, NSims, Ni(Na))]
+```
+Thus, to convert the number of attempts to time, the first element of each pair
+in `stats.C` is multiplied by `1/L`, where `L` is the length of the lattice.
+To get the average coverage at time `t`, the second element of each pair in
+`stats.C` is divided by the number of simulations, `nsims` multiplied by the
+length of the lattice, `L`. This will turn the total coverage into the average
+percentage coverage.
+```text
+stats.c(i) = [stats.C(i)[0] / L, stats.C(i)[1] / (nsims * L)]
+```
+Such that:
+```text
+stats.c = [
+    [0, 0],
+    [time_1, average coverage at time_1],
+    [time_2, average coverage at time_2],
+    ...,
+    [time_Na, average coverage at time_Na]
+]
+```
+The same reasoning can be applied to the other quantities being tracked, i.e.,
+`S(t)`, `D(t)`, and `T(t)`, to obtain the average values of those quantities at
+the different times.
 
 ## Program Implementation
 
