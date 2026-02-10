@@ -72,9 +72,61 @@ The different quantities to be tracked are defined as follows:
 - `T(t)`: The percentage of three consecutive sites that are **NOT** occupied at
    time `t`.
 
+A single simulation is not enought to determine the behavior of the system,
+since the process is stochastic and there might be multiple outcomes for the
+same initial conditions, and number of deposition attempts. Therefore, it is
+necessary to perform multiple simulations and average the different ensembles to
+obtain a more accurate representation of the system's behavior.
+
 ### Simulation Algorithm - Pseudocode
 
-The
+The following pseudocode outlines the algorithm for simulating the 1D RSA of
+dimers. Additional actions like saving the state of the system, or data
+processing are not included in the pseudocode, but they are implemented in the
+program:
+
+1. Define a lattice of length `L` initialized with all sites empty.
+1. Setup the variables:
+   - The variables where to save the results of `C(t)`, `S(t)`, `D(t)`, and
+     `T(t)`.
+   - Define a variable where to track the accumulated statistics of the
+     different repetitions of the simulation, call it `stats`, that must contain
+     the variables to save the accumulated results of `C(t)`, `S(t)`, `D(t)`,
+     and `T(t)`.
+   - A variable that defines the number of repetitions of the simulation, call
+     it `nsims`.
+   - A variable that defines the number of deposition attempts, call it
+     `nattempts`.
+1. For each simulation from `1` to `nsims`:
+   1. Empty the lattice and reset the time `t` to `0`.
+   1. Empty the statistics variables `C(t)`, `S(t)`, `D(t)`, and `T(t)`.
+   1. For each deposition attempt from `1` to `nattempts`:
+      1. Increase the number of deposition attempts `Na` by 1, `Na = Na + 1`.
+      1. Randomly select a site `i` on the lattice, i.e., a site from `0` to
+        `L-1`; because the array indexing starts at `0`.
+      1. Attempt to deposit a dimer on the selected site `i` and the adjacent
+         site `i+1`. In the case of a periodic lattice, if the selected site is
+         `L-1`, the adjacent site will be `0`.
+      1. Increase the time `t` by 1, since integer numbers are more accurate to
+         track than floating point numbers, and the time can be calculated as
+         `t = Na / L`.
+      1. Record the values of `C(t)`, `S(t)`, `D(t)`, and `T(t)` at the current
+         time `t`.
+      1. If the maximum number of deposition attempts is reached, exit the loop;
+         otherwise, continue to the next deposition attempt.
+   1. Update the `stats` by accumulating the values of `C(t)`, `S(t)`, `D(t)`,
+      and `T(t)` at the given times.
+   1. Increment the number of simulations performed.
+   1. If the maximum number of simulations has been exceeded, exit the loop;
+1. Process the accumulated statistics in `stats` to obtain the average values of
+   `C(t)`, `S(t)`, `D(t)`, and `T(t)` at the different times.
+1. Save the results to a file or display them as needed.
+1. Finish the program successfully.
+
+If at any point the simulation crashes, or an error occurs, the program will be
+left to fail, and the error message will be printed to the console. Details on
+how to run the program, and how to save and load simulations are provided in the
+next section.
 
 ## Program Implementation
 
