@@ -199,6 +199,11 @@ The same reasoning can be applied to the other quantities being tracked, i.e.,
 `S(t)`, `D(t)`, and `T(t)`, to obtain the average values of those quantities at
 the different times.
 
+The advantage of this method of accumulating the statistics as integer numbers
+is that the numbers are always exact, until the final step of calculating the
+average values, since the integer numbers are not subject to rounding errors,
+as opposed to floating point numbers.
+
 ## Program Implementation
 
 ### Quick Start
