@@ -38,8 +38,8 @@ PARAMETERS: dict = {
     "simulation": {
         "attempts": 4,
         "dimensions": {
-            "length": 30,
-            "width": 30
+            "length": 10,
+            "width": 5
         },
         "periodic": {
             "length": False,
