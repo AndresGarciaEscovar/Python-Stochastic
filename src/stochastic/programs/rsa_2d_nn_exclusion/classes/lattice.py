@@ -40,8 +40,8 @@ class Lattice:
             simulation.
         """
         return {
+            "dimensions": self.dimensions,
             "lattice": self.lattice,
-            "length": self.length,
             "periodic": self.periodic,
         }
 
@@ -60,7 +60,6 @@ class Lattice:
             :return: The string representation of the lattice.
         """
         # Auxiliary variables.
-        string: str = ""
         array: list = [
             [
                 "row\\column",
@@ -71,9 +70,18 @@ class Lattice:
                 for i, row in enumerate(self.lattice)
             ]
         ]
-        widths: list = [len(x) for x in array[0]]
+        string: str = ""
+
+        # Remove the entries, if neeeded.
+        if partial:
+            del array[0]
+
+            for i, _ in enumerate(array):
+                del array[i][0]
 
         # Get the column widths.
+        widths: list = [len(x) for x in array[0]]
+
         for entry in array:
             widths = [max(x, len(y)) for x, y in zip(widths, entry)]
 
@@ -91,7 +99,7 @@ class Lattice:
 
         return string + "\n\n"
 
-    def particle_adsorb(self, site: int) -> bool:
+    def particle_adsorb(self, site_length: list, site_width: list) -> bool:
         """
             Attempts to adsorb the particles at the given sites.
 
@@ -102,34 +110,52 @@ class Lattice:
              were adsorbed, i.e., the requested sites are within the lattice
              and empty.
         """
+        # Auxiliary variables.
+        flag: bool = True
+        length: int = self.dimensions["length"]
+        width: int = self.dimensions["width"]
+
         # All sites must be valid.
-        if not 0 <= site < self.length:
+        if not 0 <= site_length < length:
             raise ValueError(
-                f"The adsorption site for a particle to adsorb is not in the "
-                f"proper range; the site must be inside the lattice "
-                f"(0 <= site < {self.length}); {site = }."
+                f"The row adsorption site for a particle to adsorb is not in "
+                f"the proper range; the site must be inside the lattice "
+                f"(0 <= site < {length}); {site_length = }."
             )
 
-        # Auxliary variables.
+        if not 0 <= site_width < width:
+            raise ValueError(
+                f"The column adsorption site for a particle to adsorb is not "
+                f"in the proper range; the site must be inside the lattice "
+                f"(0 <= site < {width}); {site_width = }."
+            )
+
+        # Neighboring sites.
+        sites: list = [
+            [site_length, site_width],
+            [site_length - 1, site_width],
+            [site_length + 1, site_width],
+            [site_length, site_width - 1],
+            [site_length, site_width + 1]
+        ]
+
+        # Fix the sites.
+        if self.periodic["length"]:
+            sites[1][0] = length - 1 if sites[1][0] < 0 else sites[1][0]
+            sites[2][0] = sites[2][0] % length
+
+        if self.periodic["width"]:
+            sites[3][1] = width - 1 if sites[3][1] < 0 else sites[3][1]
+            sites[4][1] = sites[4][1] % width
+
+        # Check all the sites.
         occupied: int = Lattice.OCCUPIED
 
-        # Check the sites.
-        sites: list = [site - 1, site, site + 1]
+        for site in sites:
+            if site[0] not in range(length) or site[1] not in range(width):
+                continue
 
-        if self.periodic:
-            sites = [
-                x % self.length if x >= 0 else (self.length - 1)
-                for x in sites
-            ]
-
-        flag: bool = all(
-            self.lattice[x] != occupied
-            for x in sites if 0 <= x < self.length
-        )
-
-        # Update the particles in the sites.
-        if flag:
-            self.lattice[site] = occupied
+            flag = flag and self.lattice[site[0]][site[1]] != occupied
 
         return flag
 
@@ -138,10 +164,9 @@ class Lattice:
             Resets the lattice to an empty lattice.
         """
         # Reset to an empty lattice.
-        length: int = len(self.lattice)
-
-        for i in range(length):
-            self.lattice[i] = Lattice.EMPTY
+        for i in range(self.dimensions["length"]):
+            for j in range(self.dimensions["width"]):
+                self.lattice[i][j] = Lattice.EMPTY
 
     # /////////////////////////////////////////////////////////////////////////
     # Methods - Dunder
