@@ -4,15 +4,6 @@
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-# Imports
-# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-
-# Standard library.
-import copy as cp
-
-
-# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Classes
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
@@ -89,7 +80,7 @@ class Lattice:
 
         return string + "\n"
 
-    def particle_adsorb(self, sites: list) -> bool:
+    def particle_adsorb(self, site: int) -> bool:
         """
             Attempts to adsorb the particles at the given sites.
 
@@ -100,30 +91,30 @@ class Lattice:
              and empty.
         """
         # All sites must be valid.
-        if any(x < 0 for x in sites):
+        if not (0 <= site < self.length):
             raise ValueError(
-                f"One of the sites for a particle to adsorb is a negative "
-                f"number; the site must be inside the lattice; {sites = }."
+                f"The adsorption site for a particle to adsorb is not in the "
+                f"proper range; the site must be inside the lattice "
+                f"(0 <= site < {self.length}); {site = }."
             )
 
         # Auxliary variables.
+        sites: list = [site, site + 1]
         occupied: int = Lattice.OCCUPIED
 
         # Check the sites.
-        fsites: list = cp.deepcopy(sites)
-
         if self.periodic:
-            fsites = [x % self.length for x in fsites]
+            sites = [x % self.length for x in sites]
 
         flag: bool = all(
             x < self.length and self.lattice[x] != occupied
-            for x in fsites
+            for x in sites
         )
 
         # Update the particles in the sites.
         if flag:
-            for site in sites:
-                self.lattice[site] = occupied
+            for sitef in sites:
+                self.lattice[sitef] = occupied
 
         return flag
 

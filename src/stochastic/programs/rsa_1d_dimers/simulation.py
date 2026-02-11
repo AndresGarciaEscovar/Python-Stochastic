@@ -107,7 +107,7 @@ class Simulation:
 
             # Make the move.
             site: int = self.generator.randint(0, length)
-            successful: bool = self.lattice.particle_adsorb([site, site + 1])
+            successful: bool = self.lattice.particle_adsorb(site)
 
             # Take the statistics and update the counter.
             self.statistics.update_statistics(self.lattice.lattice, successful)
