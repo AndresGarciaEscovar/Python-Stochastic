@@ -1,0 +1,21 @@
+{
+    "history": {
+        "file": "simulation.sim",
+        "frequency": 0
+    },
+    "history_lattice": {
+        "file": "lattice.txt",
+        "frequency": 0
+    },
+    "output": {
+        "file": "output.txt",
+        "working": ""
+    },
+    "simulation": {
+        "attempts": 100,
+        "length": 100,
+        "periodic": false,
+        "repetitions": 10,
+        "seed": -1
+    }
+}
