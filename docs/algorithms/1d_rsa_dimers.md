@@ -187,7 +187,7 @@ To get the average coverage at time `t`, the second element of each pair in
 length of the lattice, `L`. This will turn the total coverage into the average
 fraction coverage.
 ```text
-stats.c(i) = [stats.C(i)[0] / L, stats.C(i)[1] / (nsims * L)]
+stats.c(i) = [stats.C(i)[0]/L, stats.C(i)[1]/(nsims * L)]
 ```
 Such that:
 ```text
