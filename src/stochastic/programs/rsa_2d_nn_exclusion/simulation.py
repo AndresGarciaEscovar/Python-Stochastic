@@ -36,7 +36,7 @@ from stochastic.programs.rsa_2d_nn_exclusion.classes.statistics import (
 
 
 # Name of the program.
-PROGRAM: str = "RSA 1D Nearest Neighbor Exclusion"
+PROGRAM: str = "RSA 2D Nearest Neighbor Exclusion"
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
