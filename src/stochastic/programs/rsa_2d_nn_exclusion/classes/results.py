@@ -12,7 +12,7 @@
 from datetime import datetime
 
 # User.
-from stochastic.programs.rsa_1d_nn_exclusion.classes.statistics import (
+from stochastic.programs.rsa_2d_nn_exclusion.classes.statistics import (
     Statistics
 )
 
@@ -210,7 +210,7 @@ class Results:
             this method to process, the statistics arrays must contain the same
             time stamps.
 
-            :param statistics: A RSA1DDimersStatistics object that contains the
+            :param statistics: A Statistics object that contains the
              statistiscs of a SINGLE run.
         """
         # Extract the statistics.

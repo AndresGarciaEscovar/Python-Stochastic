@@ -210,8 +210,8 @@ class Results:
             this method to process, the statistics arrays must contain the same
             time stamps.
 
-            :param statistics: A RSA1DDimersStatistics object that contains the
-             statistiscs of a SINGLE run.
+            :param statistics: Statistics object that contains the statistiscs
+             of a SINGLE run.
         """
         # Extract the statistics.
         if self.simulations == 0:

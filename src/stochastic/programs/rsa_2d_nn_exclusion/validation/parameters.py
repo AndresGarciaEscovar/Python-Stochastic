@@ -17,7 +17,7 @@ from importlib.resources import files as ifiles
 from pathlib import Path
 
 # User.
-from stochastic.programs.rsa_1d_nn_exclusion import configs
+from stochastic.programs.rsa_2d_nn_exclusion import configs
 from stochastic.utilities.general import format_dictionary
 from stochastic.utilities.validate import validate_dictionary_sub
 

@@ -12,7 +12,7 @@
 from typing import Any
 
 # User.
-from stochastic.programs.rsa_1d_nn_exclusion.validation.parameters import (
+from stochastic.programs.rsa_2d_nn_exclusion.validation.parameters import (
     validate
 )
 
