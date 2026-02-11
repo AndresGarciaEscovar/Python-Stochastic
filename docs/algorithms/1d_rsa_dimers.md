@@ -11,9 +11,9 @@
    - [Simulation Algorithm - Pseudocode](#simulation-algorithm---pseudocode)
    - [Results Processing](#results-processing)
 - [Program Implementation](#program-implementation)
-   - [Quick Start](#quick-start)
-   - [Setting Up the Environment](#setting-up-the-environment)
-   - [Running the Simulation](#running-the-simulation)
+   - [Setting Up the Configuration File](#setting-up-the-configuration-file)
+   - [Running the Simulation - Command Line Interface (CLI)](#running-the-simulation---command-line-interface-cli)
+   - [Running the Simulation - From a Python Script](#running-the-simulation---from-a-python-script)
    - [Saving and Loading a Simulation](#saving-and-loading-a-simulation)
    - [Analysis and Results](#analysis-and-results)
 
@@ -210,11 +210,110 @@ as opposed to floating point numbers.
 
 ## Program Implementation
 
-### Quick Start
+### Setting Up the Configuration File
 
-### Setting Up the Environment
+Before running the simulation, it is necessary to set up the configuration file
+that contains the different options for the simulation:
+```json
+{
+    "history": {
+        "file": "history.txt",
+        "frequency": 0
+    },
+    "history_lattice": {
+        "file": "lattice.txt",
+        "frequency": 0
+    },
+    "output": {
+        "file": "output.txt",
+        "working": ""
+    },
+    "simulation": {
+        "attempts": 100,
+        "length": 100,
+        "periodic": false,
+        "repetitions": 10,
+        "seed": -1
+    }
+}
+```
+The description of the different options is:
 
-### Running the Simulation
+- `history`: Contains the options related to periodically saving the state
+    of the simulation, in the case the simulation is interrupted, for whatever
+    reason, and needs to be resumed later.
+    - `file`: The name of the file where to save the state of the
+        simulation. This must be the name of the file, without the path, since
+        the file will be saved in the working directory defined in the
+        `output` section.
+    - `frequency`: The frequency, in terms of the number of deposition
+        attempts, at which to save the state of the simulation. If the value
+        is `0`, the state of the simulation will not be saved. If the
+        frequency is equal to the number of deposition attempts, the state of
+        the simulation will be saved at the end of each simulation repetition.
+
+- `history_lattice`: Contains the options related to periodically saving the
+    state of the lattice, in the case that instanteous snapshots of the
+    lattice are needed for visualization or analysis purposes.
+    - `file`: The name of the file where to save the state of the
+        lattice. This must be the name of the file, without the path, since
+        the file will be saved in the working directory defined in the
+        `output` section.
+    - `frequency`: The frequency, in terms of the number of deposition
+        attempts, at which to save the state of the lattice. If the value
+        is `0`, the state of the lattice will not be saved. If the
+        frequency is equal to the number of deposition attempts, the state of
+        the lattice will be saved at the end of each lattice repetition.
+
+- `output`: Contains the options related to saving the results of the
+    simulation.
+    - `file`: The name of the file where to save the final results of the
+        simulation. This must be the name of the file, without the path, since
+        the file will be saved in the working directory defined in the
+        `output` section.
+    - `working`: The path of the working directory where to save the results
+        of the simulation. If the value is an empty string, the results will
+        be saved in the current directory. For this to be properly set, the
+        path to the directory **MUST** exist.
+- `simulation`: Contains the options related to the simulation itself.
+    - `attempts`: The number of deposition attempts to perform in each
+        simulation repetition.
+    - `length`: The length of the lattice.
+    - `periodic`: A boolean value that indicates whether the lattice is
+        periodic or not. True, if the lattice is periodic; False, otherwise.
+    - `repetitions`: The number of repetitions to perform for the
+        simulation.
+    - `seed`: The seed to use for the random number generator. If the value
+        is `-1`, the seed will be set to the current system time, that is,
+        the seed will be different for each simulation run.
+
+The quantity types in the configuration file must match those in the default
+configuration file, otherwise, the program will fail; however, the program will
+check  these types when loading the configuration file.
+
+### Running the Simulation - Command Line Interface (CLI)
+
+With the configuration file set up, the simulation can be run from the command
+line interface (CLI) as follows:
+
+1. Open a terminal window.
+
+1. If the virtual environment where the `stochastic` package is installed is not
+   activated, activate it. Otherwise, make sure that the `stochastic` package is
+   installed in the current Python environment.
+
+1. From the terminal type the command:
+   ```bash
+   stochastic-1d-rsa-dimers -c path/to/configuration_file.json
+   ```
+   where `path/to/configuration_file.json` is the path to the configuration
+   file set up in the previous section.
+
+1. Wait for the simulation to finish. The results will be saved in the working
+   directory defined in the configuration file, with the name defined in the
+   `output` section of the configuration file.
+
+### Running the Simulation - From a Python Script
 
 ### Saving and Loading a Simulation
 
