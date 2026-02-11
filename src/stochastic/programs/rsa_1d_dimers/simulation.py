@@ -158,7 +158,9 @@ class Simulation:
         if self._validate_save_simulation(end, attempts):
             # Get the working directory.
             directory: Path = Path(self.parameters.output["working"])
-            file_pickle: str = f"{directory / 'simulation.sim'}"
+            file: str = self.parameters.history["file"]
+
+            file_pickle: str = f"{directory / file}"
 
             # Check the directory exists.
             if not directory.is_dir():
