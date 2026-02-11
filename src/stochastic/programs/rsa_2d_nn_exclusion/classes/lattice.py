@@ -15,12 +15,14 @@ class Lattice:
         PARAMETERS:
         ___________
 
-        - self.lattice: The array that contains the particles.
+        - self.lattice: The 2D array that contains the particles with "length"
+          rows of "width" number of entries.
 
-        - self.length: The length of the lattice.
+        - self.dimensions: A dictionary with the "length" and the "width" of
+          the 2D lattice.
 
-        - self.periodic: A boolean flag indicating whether the lattice is
-          periodic. True, if the lattice is periodic; False, otherwise.
+        - self.periodic: A dictionary with the periodicity of the "length" and
+          the "width" of the 2D lattice.
     """
     # /////////////////////////////////////////////////////////////////////////
     # Class Variables
