@@ -61,24 +61,35 @@ class Lattice:
         """
         # Auxiliary variables.
         string: str = ""
-        ents: tuple = tuple(f"{part}" for part in self.lattice)
-        sites: tuple = tuple(f"{site}" for site in range(self.length))
-        widths: tuple = tuple(max(len(x), len(y)) for x, y in zip(ents, sites))
+        array: list = [
+            [
+                "row\\column",
+                *[f"{i}" for i in range(self.dimensions['width'])]
+            ],
+            *[
+                [f"{i}", *[f"{x}" for x in row]]
+                for i, row in enumerate(self.lattice)
+            ]
+        ]
+        widths: list = [len(x) for x in array[0]]
 
-        # Determine if partial full lattice needs to be returned.
-        if not partial:
-            for i, (site, length) in enumerate(zip(sites, widths)):
-                char: str = " | " if i > 0 else ""
-                string += f"{char}{site:>{length}}"
+        # Get the column widths.
+        for entry in array:
+            widths = [max(x, len(y)) for x, y in zip(widths, entry)]
 
-            string += "\n"
+        # Update the string.
+        for i, row in enumerate(array):
+            string += " | ".join(
+                f"{entry:^{width}}" for entry, width in zip(row, widths)
+            ) + "\n"
 
-        # Get the particles in the site.
-        for i, (ent, length) in enumerate(zip(ents, widths)):
-            char: str = " | " if i > 0 else ""
-            string += f"{char}{ent:>{length}}"
+            if i < len(array) - 1:
+                string += "---".join(
+                    f"{'-' * width:^{width}}"
+                    for entry, width in zip(row, widths)
+                ) + "\n"
 
-        return string + "\n"
+        return string + "\n\n"
 
     def particle_adsorb(self, site: int) -> bool:
         """
@@ -146,8 +157,12 @@ class Lattice:
         # Parameters.
         string: str = "\n    ".join([
             "Parameters:",
-            f"length: {self.length}",
-            f"periodic: {self.periodic}"
+            "dimensions:",
+            f"    length: {self.dimensions['length']}",
+            f"     width: {self.dimensions['width']}",
+            "periodic:",
+            f"    length: {self.periodic['length']}",
+            f"     width: {self.periodic['width']}"
         ]) + "\n\n"
 
         return f"{string}Lattice:\n\n{self.get_lattice_string(partial=False)}"
@@ -165,8 +180,11 @@ class Lattice:
              operations.
         """
         # Initialize the parameters.
-        self.length: int = parameters["length"]
+        self.dimensions: int = parameters["dimensions"]
         self.periodic: bool = parameters["periodic"]
 
         # Update the lattice.
-        self.lattice: list = [Lattice.EMPTY for _ in range(self.length)]
+        self.lattice: list = [
+            [Lattice.EMPTY for _ in range(self.dimensions["width"])]
+            for _ in range(self.dimensions["length"])
+        ]
