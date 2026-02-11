@@ -217,7 +217,7 @@ that contains the different options for the simulation:
 ```json
 {
     "history": {
-        "file": "history.txt",
+        "file": "history.sim",
         "frequency": 0
     },
     "history_lattice": {
@@ -315,6 +315,130 @@ line interface (CLI) as follows:
 
 ### Running the Simulation - From a Python Script
 
+The proper way to run a "1D Random Sequential Adsorption for Dimers" simulation
+from a Python script is to install the `stochastic` package in the current
+Python environment, and then import the `Simulation` class from the
+`stochastic.programs.rsa_1d_dimers.simulation` path:
+```python
+# Import the Simulation class.
+from stochastic.programs.rsa_1d_dimers.simulation import Simulation
+```
+After importing the `Simulation` class, a dictionary with the configuration
+options must be defined. It can be the whole configuration or a subset of the
+configuration:
+```python
+# Import the Simulation class.
+from stochastic.programs.rsa_1d_dimers.simulation import Simulation
+
+# Set up the configuration for the simulation.
+config: dict = {
+    "history": {
+        "file": "history.sim",
+        "frequency": 0
+    },
+    "history_lattice": {
+        "file": "lattice.txt",
+        "frequency": 0
+    },
+    "output": {
+        "file": "output.txt",
+        "working": ""
+    },
+    "simulation": {
+        "attempts": 100,
+        "length": 100,
+        "periodic": false,
+        "repetitions": 10,
+        "seed": -1
+    }
+}
+
+# Create the Simulation object with the configuration.
+simulation: Simulation = Simulation(config)
+```
+This will validate the configuration and set up the simulation. It is strongly
+recommended to **NOT** modify the `Simulation` object directly, since the
+configuration is validated when creating the `Simulation` object, and modifying
+the `Simulation` object directly might lead to an invalid configuration.
+
+To run the simulation, call the `run_simulations` method of the `Simulation`
+object:
+```python
+# Import the Simulation class.
+from stochastic.programs.rsa_1d_dimers.simulation import Simulation
+
+# Set up the configuration for the simulation.
+config: dict = {
+    "history": {
+        "file": "history.sim",
+        "frequency": 0
+    },
+    "history_lattice": {
+        "file": "lattice.txt",
+        "frequency": 0
+    },
+    "output": {
+        "file": "output.txt",
+        "working": ""
+    },
+    "simulation": {
+        "attempts": 100,
+        "length": 100,
+        "periodic": false,
+        "repetitions": 10,
+        "seed": -1
+    }
+}
+
+# Create the Simulation object with the configuration.
+simulation: Simulation = Simulation(config)
+
+# Run the simulation.
+simulation.run_simulations()
+```
+This will run the simulation with the given configuration and save the results
+in the working directory defined in the configuration file.
+
 ### Saving and Loading a Simulation
+
+The simulation can be periodically saved during the simulation run. To enable
+this feature, set the `history.frequency` option in the configuration file to
+a positive integer value, that must range from `1` to the total number of
+deposition attempts (`simulation.attempts`). This will save the state of the
+simulation every such number of deposition attempts.
+
+```python
+# Import the Simulation class.
+from stochastic.programs.rsa_1d_dimers.simulation import Simulation
+
+# Set up the configuration for the simulation.
+config: dict = {
+    "history": {
+        "file": "history.sim",
+        "frequency": 0
+    },
+    "history_lattice": {
+        "file": "lattice.txt",
+        "frequency": 0
+    },
+    "output": {
+        "file": "output.txt",
+        "working": ""
+    },
+    "simulation": {
+        "attempts": 100,
+        "length": 100,
+        "periodic": false,
+        "repetitions": 10,
+        "seed": -1
+    }
+}
+
+# Create the Simulation object with the configuration.
+simulation: Simulation = Simulation(config)
+
+# Run the simulation.
+simulation.run_simulations()
+```
 
 ### Analysis and Results
