@@ -100,9 +100,9 @@ def _validate_parameters_history(parameters: dict, attempts: int) -> None:
     if f"{file.with_suffix('')}".strip() == "":
         raise ValueError("The name of the history file cannot be empty.")
 
-    if file.suffix != ".txt":
+    if file.suffix != ".sim":
         raise ValueError(
-            f"The name of the history file must have a \".txt\" extension; "
+            f"The name of the history file must have a \".sim\" extension; "
             f"current extension: \"{file.suffix}\"."
         )
 
