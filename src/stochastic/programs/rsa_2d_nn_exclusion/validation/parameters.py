@@ -15,6 +15,7 @@ import time
 
 from importlib.resources import files as ifiles
 from pathlib import Path
+from typing import Any
 
 # User.
 from stochastic.programs.rsa_2d_nn_exclusion import configs
@@ -223,7 +224,7 @@ def _validate_parameters_simulation(parameters: dict) -> None:
 
     # Check the other values.
     message: str = ""
-    skip: tuple = ("periodic",)
+    skip: tuple = ("dimensions", "periodic",)
 
     for key, value in parameters.items():
         # No neeed to check these parameters.
@@ -238,11 +239,23 @@ def _validate_parameters_simulation(parameters: dict) -> None:
                 f"or equal to zero. "
             )
 
-    # Lattice must be at least 4 sites long.
-    if parameters["length"] < 4:
+    # Lattice must be at least 4 sites long and wide.
+    dimension: Any = parameters["dimensions"]["length"]
+
+    if not (isinstance(dimension, int) and dimension >= 4):
         message += (
-            f"The length of the lattice must be at least 4; requested length "
-            f"is {parameters['length']}. "
+            f"The length of the lattice must be an integer greater than or "
+            f"equal to 4; current type: {type(dimension).__name__}, "
+            f"requested length is {dimension}. "
+        )
+
+    dimension = parameters["dimensions"]["width"]
+
+    if not (isinstance(dimension, int) and dimension >= 4):
+        message += (
+            f"The width of the lattice must be an integer greater than or "
+            f"equal to 4; current type: {type(dimension).__name__}, "
+            f"requested width is {dimension}. "
         )
 
     # Check if an error must be thrown.
