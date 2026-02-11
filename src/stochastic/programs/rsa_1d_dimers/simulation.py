@@ -128,7 +128,8 @@ class Simulation:
         if self._validate_save_lattice(end, attempts):
             # Get the working directory.
             directory: Path = Path(self.parameters.output["working"])
-            file_pickle: str = f"{directory / 'lattice.txt'}"
+            file: str = self.parameters.history_lattice["file"]
+            file_text: str = f"{directory / file}"
 
             # Check the directory exists.
             if not directory.is_dir():
@@ -138,7 +139,7 @@ class Simulation:
                 )
 
             # Write the simulation state.
-            with open(file_pickle, encoding="utf-8", mode="a") as stream:
+            with open(file_text, encoding="utf-8", mode="a") as stream:
                 attempts: int = self.parameters.current_attempts
                 stream.write(f"Current attempts: {attempts}\n")
                 stream.write(f"{self.lattice.get_lattice_string()}\n\n")
@@ -159,7 +160,6 @@ class Simulation:
             # Get the working directory.
             directory: Path = Path(self.parameters.output["working"])
             file: str = self.parameters.history["file"]
-
             file_pickle: str = f"{directory / file}"
 
             # Check the directory exists.
