@@ -2,7 +2,7 @@
 
 ---
 
-# 1D Random Sequential Adsorption (RSA) of Dimers
+# 1D Random Sequential Adsorption (RSA) with Nearest Neighbor Exclusion
 
 ## Index
 
@@ -33,7 +33,7 @@ random sequential adsorption mechanism.
 
 ### Model Description
 
-<img src="../images/model_1d_rsa_dimers.png" alt="1D RSA of Dimers" width="200"/>
+<img src="../images/model_1d_rsa_nn_exclusion.png" alt="1D RSA with Nearest Neighbor Exclusion" width="200"/>
 
 Consider a one-dimensional discrete substrate of length \(`L`\) where particles
 can adsorb, but cannot desorb or move once they are adsorbed. The lattice can be
@@ -43,13 +43,17 @@ position on the lattice and `L` is the length of the lattice, that is also the
 period of the lattice.
 
 Each site can have one of two states: occupied or empty, and each site can only
-be occupied by one particle. In this model, two joined particles, i.e., dimers,
-are deposited onto the lattice at a constant rate `k`. Since the rate is
-constant, `k` can be set to 1 without loss of generality. For a dimer to be
-adsorbed, two adjacent sites must be empty. If the deposition attempt is
-successful, the two sites become occupied and no more particles can be adsorbed
-on those sites. If any of the sites where the particle is trying to adsorb is
-already occupied, the deposition attempt fails and the system remains unchanged.
+be occupied by one particle. In this model, single particles are deposited onto
+the lattice at a constant rate `k`, provided that the adsorption site has not
+filled neighboring sites. Since the rate is constant, `k` can be set to 1
+without loss of generality. For a particle to be adsorbed, not only must the
+adsorption site be empty, but the neighboring site must also be empty; in the
+case of non-periodic lattices, the end sites have an advantage since the
+neighboring sites outside of the lattice count as empty sites. If the deposition
+attempt is successful, the site becomes occupied and no more particles can be
+adsorbed on the site. If the site or any of the neighboring sites where the
+particle is trying to adsorb are already occupied, the deposition attempt fails
+and the system remains unchanged.
 
 The different quantities to be tracked are defined as follows:
 
@@ -71,11 +75,10 @@ The different quantities to be tracked are defined as follows:
    Can be calculated as `S(t) = 1 - C(t)`.
 
 - `D(t)`: The fraction of pair sites that are **NOT** occupied at time `t`.
-   This gives an idea of how many more dimers can be adsorbed on the lattice at
-   time `t`.
 
 - `T(t)`: The fraction of three consecutive sites that are **NOT** occupied at
-   time `t`.
+   time `t`. This gives an idea of how many more particles can be adsorbed on
+   the lattice at time `t`.
 
 A single simulation is not enought to determine the behavior of the system,
 since the process is stochastic and there might be multiple outcomes for the
@@ -86,9 +89,9 @@ obtain a more accurate representation of the system's behavior.
 ### Simulation Algorithm - Pseudocode
 
 The following pseudocode outlines the algorithm for simulating the 1D RSA of
-dimers. Additional actions like saving the state of the system, or data
-processing are not included in the pseudocode, but they are implemented in the
-program:
+particles with nearest neighbor exclusion. Additional actions like saving the
+state of the system, or data processing are not included in the pseudocode, but
+they are implemented in the program:
 
 1. Define a lattice of length `L` initialized with all sites empty.
 1. Setup the variables:
@@ -109,9 +112,9 @@ program:
       1. Increase the number of deposition attempts `Na` by 1, `Na = Na + 1`.
       1. Randomly select a site `i` on the lattice, i.e., a site from `0` to
         `L-1`; because the array indexing starts at `0`.
-      1. Attempt to deposit a dimer on the selected site `i` and the adjacent
-         site `i+1`. In the case of a periodic lattice, if the selected site is
-         `L-1`, the adjacent site will be `0`.
+      1. Attempt to deposit a particle on the selected site `i`. In the case of
+         a periodic lattice, if the selected site is `L-1`, the adjacent sites
+         will be `0` and `L-2`.
       1. Increase the time `t` by 1, since integer numbers are more accurate to
          track than floating point numbers, and the time can be calculated as
          `t = Na/L`.
@@ -185,7 +188,7 @@ in `stats.C` is multiplied by `1/L`, where `L` is the length of the lattice.
 To get the average coverage at time `t`, the second element of each pair in
 `stats.C` is divided by the number of simulations, `nsims` multiplied by the
 length of the lattice, `L`. This will turn the total coverage into the average
-fraction coverage.
+fractional coverage.
 ```text
 stats.c(i) = [stats.C(i)[0]/L, stats.C(i)[1]/(nsims * L)]
 ```
@@ -304,7 +307,7 @@ line interface (CLI) as follows:
 
 1. From the terminal type the command:
    ```bash
-   stochastic-1d-rsa-dimers -c path/to/configuration_file.json
+   stochastic-1d-rsa-nn-exclusion -c path/to/configuration_file.json
    ```
    where `path/to/configuration_file.json` is the path to the configuration
    file set up in the previous section.
@@ -315,20 +318,21 @@ line interface (CLI) as follows:
 
 ### Running the Simulation - From a Python Script
 
-The proper way to run a "1D Random Sequential Adsorption of Dimers" simulation
-from a Python script is to install the `stochastic` package in the current
-Python environment, and then import the `Simulation` class from the
-`stochastic.programs.rsa_1d_dimers.simulation` module:
+The proper way to run a "1D Random Sequential Adsorption of Particles with
+Nearest Neighbor Exclusion" simulation from a Python script is to install the
+`stochastic` package in the current Python environment, and then import the
+`Simulation` class from the `stochastic.programs.rsa_1d_nn_exclusion.simulation`
+module:
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_1d_dimers.simulation import Simulation
+from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
 ```
 After importing the `Simulation` class, a dictionary with the configuration
 options must be defined. It can be the whole configuration or a subset of the
 configuration:
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_1d_dimers.simulation import Simulation
+from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
 
 # Set up the configuration for the simulation.
 config: dict = {
@@ -366,7 +370,7 @@ object:
 
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_1d_dimers.simulation import Simulation
+from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
 
 # Set up the configuration for the simulation.
 config: dict = {
@@ -414,7 +418,7 @@ simulation every such number of deposition attempts:
 
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_1d_dimers.simulation import Simulation
+from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
 
 # Set up the configuration for the simulation.
 config: dict = {
@@ -437,12 +441,12 @@ directory defined in the configuration file, in the `pickle` format.
 At one point, the simulation might be interrupted, for whatever reason, and it
 might be necessary to resume the simulation later. To do this, import the
 `load_simulation` function from the
-`stochastic.programs.rsa_1d_dimers.utils.load` module and call it with the path
+`stochastic.programs.rsa_1d_nn_exclusion.utils.load` module and call it with the path
 to the file where the state of the simulation was saved:
 ```python
 # Import the load_simulation function.
-from stochastic.programs.rsa_1d_dimers.simulation import Simulation
-from stochastic.programs.rsa_1d_dimers.utils.load import load_simulation
+from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
+from stochastic.programs.rsa_1d_nn_exclusion.utils.load import load_simulation
 
 # Load the simulation.
 simulation: Simulation = load_simulation("path/to/history.sim")
@@ -458,8 +462,8 @@ simulation can be saved in the correct location.
 
 It is worth noting that there is a validation process when loading the
 simulation, such that if the file does not correspond to a valid
-"1D Random Sequential Adsorption of Dimers" simulation, or if the file is
-corrupted, the loading process will fail.
+"1D Random Sequential Adsorption of Particles with Nearest Neighbor Exclusion"
+simulation, or if the file is corrupted, the loading process will fail.
 
 ### Analysis and Results
 

@@ -100,22 +100,25 @@ class Lattice:
             )
 
         # Auxliary variables.
-        sites: list = [site, site + 1]
         occupied: int = Lattice.OCCUPIED
 
         # Check the sites.
+        sites: list = [site - 1, site, site + 1]
+
         if self.periodic:
-            sites = [x % self.length for x in sites]
+            sites = [
+                x % self.length if x >= 0 else (self.length - 1)
+                for x in sites
+            ]
 
         flag: bool = all(
-            x < self.length and self.lattice[x] != occupied
-            for x in sites
+            self.lattice[x] != occupied
+            for x in sites if 0 <= x < self.length
         )
 
         # Update the particles in the sites.
         if flag:
-            for sitef in sites:
-                self.lattice[sitef] = occupied
+            self.lattice[site] = occupied
 
         return flag
 
