@@ -64,17 +64,17 @@ The different quantities to be tracked are defined as follows:
 
 - `C(t)`: The coverage of the lattice at time `t`, defined as the fraction of
   occupied sites on the lattice. It is calculated as `C(t) = N(t) / L`, that is
-  the percentage of occupied sites, where `N(t)` is the number of occupied sites
+  the fraction of occupied sites, where `N(t)` is the number of occupied sites
   at time `t`.
 
-- `S(t)`: The percentage of single sites that are **NOT** occupied at time `t`.
+- `S(t)`: The fraction of single sites that are **NOT** occupied at time `t`.
    Can be calculated as `S(t) = 1 - C(t)`.
 
-- `D(t)`: The percentage of pair sites that are **NOT** occupied at time `t`.
+- `D(t)`: The fraction of pair sites that are **NOT** occupied at time `t`.
    This gives an idea of how many more dimers can be adsorbed on the lattice at
    time `t`.
 
-- `T(t)`: The percentage of three consecutive sites that are **NOT** occupied at
+- `T(t)`: The fraction of three consecutive sites that are **NOT** occupied at
    time `t`.
 
 A single simulation is not enought to determine the behavior of the system,
@@ -138,7 +138,7 @@ next section.
 #### Accumulating the Statistics
 
 For consistency, the lattice must be at least 4 sites long, since the quantity
-`T(t)` tracks the percentage of three consecutive sites that are not occupied,
+`T(t)` tracks the fraction of three consecutive sites that are not occupied,
 and if the lattice is shorter than 4 sites, and the lattice is periodic, there
 will be redundacy when calculating `T(t)`.
 
@@ -185,7 +185,7 @@ in `stats.C` is multiplied by `1/L`, where `L` is the length of the lattice.
 To get the average coverage at time `t`, the second element of each pair in
 `stats.C` is divided by the number of simulations, `nsims` multiplied by the
 length of the lattice, `L`. This will turn the total coverage into the average
-percentage coverage.
+fraction coverage.
 ```text
 stats.c(i) = [stats.C(i)[0] / L, stats.C(i)[1] / (nsims * L)]
 ```
@@ -193,10 +193,10 @@ Such that:
 ```text
 stats.c = [
     [0, 0],
-    [time_1, average coverage percentage at time_1],
-    [time_2, average coverage percentage at time_2],
+    [time_1, average coverage fraction at time_1],
+    [time_2, average coverage fraction at time_2],
     ...,
-    [time_Na, average coverage percentage at time_Na]
+    [time_Na, average coverage fraction at time_Na]
 ]
 ```
 The same reasoning can be applied to the other quantities being tracked, i.e.,
