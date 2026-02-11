@@ -84,7 +84,8 @@ class Lattice:
         """
             Attempts to adsorb the particles at the given sites.
 
-            :param sites: A list of sites where to adsorb the particles.
+            :param site: The site where the adsorption is inteded to take
+             place.
 
             :return: A boolean flag that indicates whether ALL the particles
              were adsorbed, i.e., the requested sites are within the lattice

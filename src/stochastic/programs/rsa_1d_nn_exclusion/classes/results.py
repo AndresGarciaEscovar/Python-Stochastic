@@ -12,7 +12,9 @@
 from datetime import datetime
 
 # User.
-from stochastic.programs.rsa_1d_dimers.classes.statistics import Statistics
+from stochastic.programs.rsa_1d_nn_exclusion.classes.statistics import (
+    Statistics
+)
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

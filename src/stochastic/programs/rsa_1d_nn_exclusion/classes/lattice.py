@@ -4,15 +4,6 @@
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-# Imports
-# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-
-# Standard library.
-import copy as cp
-
-
-# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 # Classes
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
@@ -89,41 +80,45 @@ class Lattice:
 
         return string + "\n"
 
-    def particle_adsorb(self, sites: list) -> bool:
+    def particle_adsorb(self, site: int) -> bool:
         """
             Attempts to adsorb the particles at the given sites.
 
-            :param sites: A list of sites where to adsorb the particles.
+            :param site: The site where the adsorption is inteded to take
+             place.
 
             :return: A boolean flag that indicates whether ALL the particles
              were adsorbed, i.e., the requested sites are within the lattice
              and empty.
         """
         # All sites must be valid.
-        if any(x < 0 for x in sites):
+        if not (0 <= site < self.length):
             raise ValueError(
-                f"One of the sites for a particle to adsorb is a negative "
-                f"number; the site must be inside the lattice; {sites = }."
+                f"The adsorption site for a particle to adsorb is not in the "
+                f"proper range; the site must be inside the lattice "
+                f"(0 <= site < {self.length}); {site = }."
             )
 
         # Auxliary variables.
         occupied: int = Lattice.OCCUPIED
 
         # Check the sites.
-        fsites: list = cp.deepcopy(sites)
+        sites: list = [site - 1, site, site + 1]
 
         if self.periodic:
-            fsites = [x % self.length for x in fsites]
+            sites = [
+                x % self.length if x >= 0 else (self.length - 1)
+                for x in sites
+            ]
 
         flag: bool = all(
-            x < self.length and self.lattice[x] != occupied
-            for x in fsites
+            self.lattice[x] != occupied
+            for x in sites if 0 <= x < self.length
         )
 
         # Update the particles in the sites.
         if flag:
-            for site in sites:
-                self.lattice[site] = occupied
+            self.lattice[site] = occupied
 
         return flag
 

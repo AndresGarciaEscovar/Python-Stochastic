@@ -13,7 +13,9 @@ from datetime import datetime
 from typing import Any
 
 # User.
-from stochastic.programs.rsa_1d_dimers.simulation import PROGRAM, Simulation
+from stochastic.programs.rsa_1d_nn_exclusion.simulation import (
+    PROGRAM, Simulation
+)
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
