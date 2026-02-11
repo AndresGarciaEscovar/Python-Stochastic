@@ -57,13 +57,13 @@ The different quantities to be tracked are defined as follows:
 
 - `t`: The physical time of the system, that is proportional to the number of
   of deposition attempts. The proportionality constant is the inverse length of
-  the lattice, `1/(kL)`, over the total rate of the system; since the deposition
+  the lattice over the total rate of the system, `1/(kL)`; since the deposition
   rate is set to 1, `k = 1`, it can be simplied to `1/L`.  Thus, the elapsed
-  time can be calculated as `t = Na / L`, where `Na` is the number of deposition
+  time can be calculated as `t = Na/L`, where `Na` is the number of deposition
   attempts.
 
 - `C(t)`: The coverage of the lattice at time `t`, defined as the fraction of
-  occupied sites on the lattice. It is calculated as `C(t) = N(t) / L`, that is
+  occupied sites on the lattice. It is calculated as `C(t) = N(t)/L`, that is
   the fraction of occupied sites, where `N(t)` is the number of occupied sites
   at time `t`.
 
@@ -114,7 +114,7 @@ program:
          `L-1`, the adjacent site will be `0`.
       1. Increase the time `t` by 1, since integer numbers are more accurate to
          track than floating point numbers, and the time can be calculated as
-         `t = Na / L`.
+         `t = Na/L`.
       1. Record the values of `C(t)`, `S(t)`, `D(t)`, and `T(t)` at the current
          time `t`.
       1. If the maximum number of deposition attempts is reached, exit the loop;
