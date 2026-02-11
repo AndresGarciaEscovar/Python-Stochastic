@@ -338,6 +338,7 @@ class Simulation:
 
         # Name of the file.
         with open(f"{file}", encoding="utf-8", mode="w") as stream:
+            stream.write(f"{PROGRAM}\n\n")
             stream.write(f"{self.results}")
 
     # /////////////////////////////////////////////////////////////////////////
