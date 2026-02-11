@@ -314,7 +314,10 @@ class Simulation:
         # Print the location of the saved results.
         directory: str = self.parameters.output["working"]
 
-        print(f"Simulation has been saved in the directory: {directory}")
+        print(
+            f"Simulation results have been saved in the directory: "
+            f"{directory}"
+        )
 
     def save_results(self) -> None:
         """
