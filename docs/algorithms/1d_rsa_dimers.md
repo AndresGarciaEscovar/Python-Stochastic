@@ -154,7 +154,7 @@ variable `Cn`
 Cn = [[0, 0], [1, 0], [2, 0], ...,[Na, 0]]
 ```
 and `Cn(t) = [t, Cn(t)]`, where `0 <= t <= Na`, and `Na` is the total number of
-deposition attempts. _After_ an attempt `i` (`0 <= i <= Na) is made, count
+deposition attempts. _After_ an attempt `i` (`0 <= i <= Na`) is made, count
 the number of occupied sites `Nn(i)` on the lattice, and register the value
 at the location `Cn(i) = [i, Nn(i)]`. Repeat this process for each deposition
 attempt. When the number of deposition attempts `Na` is reached the variable
