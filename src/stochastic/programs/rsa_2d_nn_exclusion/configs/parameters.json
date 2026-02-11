@@ -13,9 +13,16 @@
     },
     "simulation": {
         "attempts": 100,
-        "length": 100,
-        "periodic": false,
+        "dimensions": {
+            "length": 30,
+            "width": 30
+        },
+        "periodic": {
+            "length": false,
+            "width": false
+        },
         "repetitions": 10,
-        "seed": -1
+        "seed": -1,
+        "width": 100
     }
 }
