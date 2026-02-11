@@ -22,7 +22,7 @@ from stochastic.programs.rsa_1d_nn_exclusion.classes.lattice import (
 from stochastic.programs.rsa_1d_nn_exclusion.classes.parameters import (
     Parameters
 )
-from stochastic.programs.rsa_1d_nn_exclusion.classes.results import (\
+from stochastic.programs.rsa_1d_nn_exclusion.classes.results import (
     Results
 )
 from stochastic.programs.rsa_1d_nn_exclusion.classes.statistics import (

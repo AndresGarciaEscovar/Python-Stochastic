@@ -92,7 +92,7 @@ class Lattice:
              and empty.
         """
         # All sites must be valid.
-        if not (0 <= site < self.length):
+        if not 0 <= site < self.length:
             raise ValueError(
                 f"The adsorption site for a particle to adsorb is not in the "
                 f"proper range; the site must be inside the lattice "
