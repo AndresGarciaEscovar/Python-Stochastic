@@ -46,11 +46,14 @@ Each site can have one of two states: occupied or empty, and each site can only
 be occupied by one particle. In this model, single particles are deposited onto
 the lattice at a constant rate `k`, provided that the adsorption site has not
 filled neighboring sites. Since the rate is constant, `k` can be set to 1
-without loss of generality. For a dimer to be adsorbed, two adjacent sites must
-be empty. If the deposition attempt is successful, the two sites become occupied
-and no more particles can be adsorbed on those sites. If any of the sites where
-the particle is trying to adsorb is already occupied, the deposition attempt
-fails and the system remains unchanged.
+without loss of generality. For a particle to be adsorbed, not only must the
+adsorption site be empty, but the neighboring site must also be empty; in the
+case of non-periodic lattices, the end sites have an advantage since the
+neighboring sites outside of the lattice count as empty sites. If the deposition
+attempt is successful, the site becomes occupied and no more particles can be
+adsorbed on the site. If the site, or any of the neighboring sites, where the
+particle is trying to adsorb is already occupied, the deposition attempt fails
+and the system remains unchanged.
 
 The different quantities to be tracked are defined as follows:
 
@@ -65,15 +68,15 @@ The different quantities to be tracked are defined as follows:
 
 - `C(t)`: The coverage of the lattice at time `t`, defined as the fraction of
   occupied sites on the lattice. It is calculated as `C(t) = N(t) / L`, that is
-  the percentage of occupied sites, where `N(t)` is the number of occupied sites
+  the fraction of occupied sites, where `N(t)` is the number of occupied sites
   at time `t`.
 
-- `S(t)`: The percentage of single sites that are **NOT** occupied at time `t`.
+- `S(t)`: The fraction of single sites that are **NOT** occupied at time `t`.
    Can be calculated as `S(t) = 1 - C(t)`.
 
-- `D(t)`: The percentage of pair sites that are **NOT** occupied at time `t`.
+- `D(t)`: The fraction of pair sites that are **NOT** occupied at time `t`.
 
-- `T(t)`: The percentage of three consecutive sites that are **NOT** occupied at
+- `T(t)`: The fraction of three consecutive sites that are **NOT** occupied at
    time `t`. This gives an idea of how many more particles can be adsorbed on
    the lattice at time `t`.
 
@@ -109,9 +112,9 @@ they are implemented in the program:
       1. Increase the number of deposition attempts `Na` by 1, `Na = Na + 1`.
       1. Randomly select a site `i` on the lattice, i.e., a site from `0` to
         `L-1`; because the array indexing starts at `0`.
-      1. Attempt to deposit a dimer on the selected site `i` and the adjacent
-         site `i+1`. In the case of a periodic lattice, if the selected site is
-         `L-1`, the adjacent site will be `0`.
+      1. Attempt to deposit a particle on the selected site `i`. In the case of
+         a periodic lattice, if the selected site is `L-1`, the adjacent sites
+         will be `0` and `L-2`.
       1. Increase the time `t` by 1, since integer numbers are more accurate to
          track than floating point numbers, and the time can be calculated as
          `t = Na / L`.
@@ -138,7 +141,7 @@ next section.
 #### Accumulating the Statistics
 
 For consistency, the lattice must be at least 4 sites long, since the quantity
-`T(t)` tracks the percentage of three consecutive sites that are not occupied,
+`T(t)` tracks the fraction of three consecutive sites that are not occupied,
 and if the lattice is shorter than 4 sites, and the lattice is periodic, there
 will be redundacy when calculating `T(t)`.
 
@@ -185,7 +188,7 @@ in `stats.C` is multiplied by `1/L`, where `L` is the length of the lattice.
 To get the average coverage at time `t`, the second element of each pair in
 `stats.C` is divided by the number of simulations, `nsims` multiplied by the
 length of the lattice, `L`. This will turn the total coverage into the average
-percentage coverage.
+fractional coverage.
 ```text
 stats.c(i) = [stats.C(i)[0] / L, stats.C(i)[1] / (nsims * L)]
 ```
@@ -193,10 +196,10 @@ Such that:
 ```text
 stats.c = [
     [0, 0],
-    [time_1, average coverage percentage at time_1],
-    [time_2, average coverage percentage at time_2],
+    [time_1, average coverage fraction at time_1],
+    [time_2, average coverage fraction at time_2],
     ...,
-    [time_Na, average coverage percentage at time_Na]
+    [time_Na, average coverage fraction at time_Na]
 ]
 ```
 The same reasoning can be applied to the other quantities being tracked, i.e.,
