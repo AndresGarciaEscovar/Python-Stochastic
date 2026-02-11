@@ -462,3 +462,60 @@ simulation, such that if the file does not correspond to a valid
 corrupted, the loading process will fail.
 
 ### Analysis and Results
+
+When a complete simulation is run, the results are saved in the working
+directory defined in the configuration file. A typical output file will look
+like this:
+```text
+# ------------------------------------------------------------------------------
+# Parameters
+# ------------------------------------------------------------------------------
+
+Date (YYYY-MM-DD hh:mm:ss): 2026-02-10 21:57:56
+Attempts: 4
+Length: 20
+Periodic: False
+Repetitions: 10
+Seed: 1770782276
+
+# ------------------------------------------------------------------------------
+# Attempts
+# ------------------------------------------------------------------------------
+
+         Time Elapsed | 0.0 | 0.05 | 0.1 | 0.15 |  0.2
+Successful / Attempts | 0.0 |  0.9 | 0.9 |  0.8 | 0.75
+
+# ------------------------------------------------------------------------------
+# Coverage
+# ------------------------------------------------------------------------------
+
+     Time Elapsed | 0.0 | 0.05 |  0.1 | 0.15 | 0.2
+Occupied / Length | 0.0 | 0.09 | 0.18 | 0.24 | 0.3
+
+# ------------------------------------------------------------------------------
+# Empties - Single
+# ------------------------------------------------------------------------------
+
+ Time Elapsed | 0.0 | 0.05 |  0.1 | 0.15 | 0.2
+Free / Length | 0.0 | 0.91 | 0.82 | 0.76 | 0.7
+
+# ------------------------------------------------------------------------------
+# Empties - Double
+# ------------------------------------------------------------------------------
+
+ Time Elapsed | 0.0 | 0.05 |   0.1 | 0.15 |  0.2
+Free / Length | 0.0 | 0.82 | 0.685 |  0.6 | 0.52
+
+# ------------------------------------------------------------------------------
+# Empties - Triple
+# ------------------------------------------------------------------------------
+
+ Time Elapsed | 0.0 | 0.05 |   0.1 |  0.15 |  0.2
+Free / Length | 0.0 | 0.73 | 0.565 | 0.455 | 0.37
+```
+The values here are just an example, and they do not correspond to a thorough
+simulation, however, they show the format of the output file.
+
+This file is readable by any standard text editor, and it can be processed by
+any programming language, along with plotting software, to visualize the results
+of the simulation.
