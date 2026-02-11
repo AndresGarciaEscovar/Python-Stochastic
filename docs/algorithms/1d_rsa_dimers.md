@@ -315,10 +315,10 @@ line interface (CLI) as follows:
 
 ### Running the Simulation - From a Python Script
 
-The proper way to run a "1D Random Sequential Adsorption for Dimers" simulation
+The proper way to run a "1D Random Sequential Adsorption of Dimers" simulation
 from a Python script is to install the `stochastic` package in the current
 Python environment, and then import the `Simulation` class from the
-`stochastic.programs.rsa_1d_dimers.simulation` path:
+`stochastic.programs.rsa_1d_dimers.simulation` module:
 ```python
 # Import the Simulation class.
 from stochastic.programs.rsa_1d_dimers.simulation import Simulation
@@ -363,6 +363,7 @@ the `Simulation` object directly might lead to an invalid configuration.
 
 To run the simulation, call the `run_simulations` method of the `Simulation`
 object:
+
 ```python
 # Import the Simulation class.
 from stochastic.programs.rsa_1d_dimers.simulation import Simulation
@@ -399,13 +400,17 @@ simulation.run_simulations()
 This will run the simulation with the given configuration and save the results
 in the working directory defined in the configuration file.
 
+When the simulation is done, a message will be printed to the console indicating
+that the simulation has finished successfully, along with the path to the
+directory where the results have been saved.
+
 ### Saving and Loading a Simulation
 
 The simulation can be periodically saved during the simulation run. To enable
 this feature, set the `history.frequency` option in the configuration file to
 a positive integer value, that must range from `1` to the total number of
 deposition attempts (`simulation.attempts`). This will save the state of the
-simulation every such number of deposition attempts.
+simulation every such number of deposition attempts:
 
 ```python
 # Import the Simulation class.
@@ -415,22 +420,7 @@ from stochastic.programs.rsa_1d_dimers.simulation import Simulation
 config: dict = {
     "history": {
         "file": "history.sim",
-        "frequency": 0
-    },
-    "history_lattice": {
-        "file": "lattice.txt",
-        "frequency": 0
-    },
-    "output": {
-        "file": "output.txt",
-        "working": ""
-    },
-    "simulation": {
-        "attempts": 100,
-        "length": 100,
-        "periodic": false,
-        "repetitions": 10,
-        "seed": -1
+        "frequency": 7
     }
 }
 
@@ -440,5 +430,35 @@ simulation: Simulation = Simulation(config)
 # Run the simulation.
 simulation.run_simulations()
 ```
+In this example, the state of the simulation will be saved **after** every 7
+deposition attempts have been made, in the file `history.sim` in the working
+directory defined in the configuration file, in the `pickle` format.
+
+At one point, the simulation might be interrupted, for whatever reason, and it
+might be necessary to resume the simulation later. To do this, import the
+`load_simulation` function from the
+`stochastic.programs.rsa_1d_dimers.utils.load` module and call it with the path
+to the file where the state of the simulation was saved:
+```python
+# Import the load_simulation function.
+from stochastic.programs.rsa_1d_dimers.simulation import Simulation
+from stochastic.programs.rsa_1d_dimers.utils.load import load_simulation
+
+# Load the simulation.
+simulation: Simulation = load_simulation("path/to/history.sim")
+
+# UPDATE THE WORKING DIRECTORY SO THAT IT CAN SAVE THE RESULTS.
+simulation.parameters.output["working"] = "path/to/working/directory"
+
+# Start the simulation from the loaded state.
+simulation.run_simulations()
+```
+Always remember to update the working directory so that the results of the
+simulation can be saved in the correct location.
+
+It is worth noting that there is a validation process when loading the
+simulation, such that if the file does not correspond to a valid
+"1D Random Sequential Adsorption of Dimers" simulation, or if the file is
+corrupted, the loading process will fail.
 
 ### Analysis and Results
