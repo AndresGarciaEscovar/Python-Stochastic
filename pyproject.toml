@@ -1,0 +1,72 @@
+# This is the installation script for the package "stochastic" For more
+# information on how more parameters can be added, see:
+# https://setuptools.readthedocs.io/en/latest/userguide/declarative_config.html
+
+
+# ------------------------------- Build System ------------------------------- #
+
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+
+# ------------------------------ Project Details ----------------------------- #
+
+
+[project]
+name = "stochastic"
+authors = [
+    {name = "Andres Garcia Escovar", email = "andrumen1@yahoo.com"},
+]
+description = "A suite where multiple types of stochastic simulations can be performed."
+readme = "README.md"
+requires-python = ">=3.11"
+keywords = ["", "stochastic"]
+license = {text = "MIT"}
+dependencies = []
+version = "0.0.1"
+
+
+# ----------------------------- Package Commands ----------------------------- #
+
+
+[project.optional-dependencies]
+linting = [
+    "flake8",
+    "pylint"
+]
+
+
+# ----------------------------- Package Commands ----------------------------- #
+
+
+[project.scripts]
+ccheckers = "ccheckers.__main__:main"
+
+
+# ------------------------------- Package URLS ------------------------------- #
+
+
+[project.urls]
+repository = "https://github.com/AndresGarciaEscovar/Stochastic"
+
+
+# ------------------ Tools: Setuptools - Packages to Include ----------------- #
+
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = false
+
+
+# ------------------------------- Tools: Pylint ------------------------------ #
+
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = [
+    "duplicate-code"
+]
