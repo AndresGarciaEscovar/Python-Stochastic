@@ -13,7 +13,7 @@ from pathlib import Path
 from shutil import rmtree
 
 # User.
-from stochastic.programs.rsa_1d_nn_exclusion.main import run
+from stochastic.programs.rsa_2d_nn_exclusion.main import run
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -37,8 +37,14 @@ PARAMETERS: dict = {
     },
     "simulation": {
         "attempts": 4,
-        "length": 20,
-        "periodic": False,
+        "dimensions": {
+            "length": 30,
+            "width": 30
+        },
+        "periodic": {
+            "length": False,
+            "width": False
+        },
         "repetitions": 10,
         "seed": -1
     },
