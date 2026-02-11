@@ -238,6 +238,13 @@ def _validate_parameters_simulation(parameters: dict) -> None:
                 f"or equal to zero. "
             )
 
+    # Lattice must be at least 4 sites long.
+    if parameters["length"] < 4:
+        message += (
+            f"The length of the lattice must be at least 4; requested length "
+            f"is {parameters['length']}. "
+        )
+
     # Check if an error must be thrown.
     if message != "":
         raise ValueError(message)
