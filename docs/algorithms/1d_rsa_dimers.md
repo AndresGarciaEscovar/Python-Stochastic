@@ -164,7 +164,7 @@ Cn = [[0, Nn(0)], [1, Nn(1)], [2, Nn(2)], ...,[Na, Nn(Na)]]
 ```
 that is:
 ```text
-Ci[t] = [time_i * Length, number of occupied sites at time_i]
+Ci(t) = [time_i * Length, number of occupied sites at time_i]
 ```
 Accumulate the values of `Cn(t)` in the variable `stats.C` such that:
 ```text
@@ -193,10 +193,10 @@ Such that:
 ```text
 stats.c = [
     [0, 0],
-    [time_1, average coverage at time_1],
-    [time_2, average coverage at time_2],
+    [time_1, average coverage percentage at time_1],
+    [time_2, average coverage percentage at time_2],
     ...,
-    [time_Na, average coverage at time_Na]
+    [time_Na, average coverage percentage at time_Na]
 ]
 ```
 The same reasoning can be applied to the other quantities being tracked, i.e.,
