@@ -118,11 +118,17 @@ class Simulation:
             self._save_lattice(False, attempt)
 
             # Make the move.
+            side: str = self.generator.choices(Lattice.DIRECTIONS)
             site: int = self.generator.randint(0, total_sites)
+
             site_x: int = site // width
             site_y: int = site % width
 
-            successful: bool = self.lattice.particle_adsorb(site_x, site_y)
+            successful: bool = self.lattice.particle_adsorb(
+                site_x,
+                site_y,
+                side
+            )
 
             # Take the statistics and update the counter.
             self.statistics.update_statistics(self.lattice.lattice, successful)

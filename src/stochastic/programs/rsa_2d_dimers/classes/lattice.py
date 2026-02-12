@@ -32,6 +32,53 @@ class Lattice:
     EMPTY: int = 0
     OCCUPIED: int = 1
 
+    # Adsorption directions.
+    DIRECTIONS: tuple =  "up", "down", "left", "right"
+
+    # /////////////////////////////////////////////////////////////////////////
+    # Methods - Auxiliary
+    # /////////////////////////////////////////////////////////////////////////
+
+    def _get_site(self, site: list, direction: str) -> list:
+        """
+            Gets the site where the particle will be attempted to be adsorbed.
+
+            :param site: The current adsorption site.
+
+            :param direction: The direction where the particles are meant to be
+             adsorbed.
+
+            :return: A list with the place where a particle is meant to be
+             adsorbed.
+        """
+        # Check the direction is valid.
+        if direction not in Lattice.DIRECTIONS:
+            raise ValueError(
+                f"The direction value must take only one of these values: "
+                f"{Lattice.DIRECTIONS}; current value: \"{direction}\"."
+            )
+
+        # Auxiliary variables.
+        length: int = self.dimensions["length"]
+        width: int = self.dimensions["width"]
+
+        # Determine the direction.
+        if direction in Lattice.DIRECTIONS[:2]:
+            # Flip the site up or down.
+            site[0] += 1 if direction == "up" else -1
+
+            if self.periodic["length"]:
+                site[0] = length - 1 if site[0] < 0 else site[0] % length
+
+        else:
+            # Flip the left or right.
+            site[1] += 1 if direction == "right" else -1
+
+            if self.periodic["width"]:
+                site[1] = width - 1 if site[1] < 0 else site[1] % width
+
+        return site
+
     # /////////////////////////////////////////////////////////////////////////
     # Methods
     # /////////////////////////////////////////////////////////////////////////
@@ -101,12 +148,24 @@ class Lattice:
 
         return string + "\n\n"
 
-    def particle_adsorb(self, site_length: list, site_width: list) -> bool:
+    def particle_adsorb(
+        self,
+        site_length: list,
+        site_width: list,
+        direction: str
+    ) -> bool:
         """
             Attempts to adsorb the particles at the given sites.
 
-            :param site: The site where the adsorption is inteded to take
-             place.
+            :param site_length: The site along the length of the lattice where
+             the adsorption is inteded to take place.
+
+            :param site_width: The site along the width of the lattice where
+             the adsorption is inteded to take place.
+
+            :param direction: A string with the direction in wich the
+             adsorption will take place. Must be "up", "down", "left", or
+             "right".
 
             :return: A boolean flag that indicates whether ALL the particles
              were adsorbed, i.e., the requested sites are within the lattice
@@ -135,31 +194,21 @@ class Lattice:
         # Neighboring sites.
         sites: list = [
             [site_length, site_width],
-            [site_length - 1, site_width],
-            [site_length + 1, site_width],
-            [site_length, site_width - 1],
-            [site_length, site_width + 1]
+            self._get_site([site_length, site_width], direction)
         ]
-
-        # Fix the sites.
-        if self.periodic["length"]:
-            sites[1][0] = length - 1 if sites[1][0] < 0 else sites[1][0]
-            sites[2][0] = sites[2][0] % length
-
-        if self.periodic["width"]:
-            sites[3][1] = width - 1 if sites[3][1] < 0 else sites[3][1]
-            sites[4][1] = sites[4][1] % width
 
         # Check all the sites.
         for site in sites:
-            if site[0] not in range(length) or site[1] not in range(width):
-                continue
-
+            flag = flag and (0 <= site[0] < length or 0 <= site[1] < width)
             flag = flag and self.lattice[site[0]][site[1]] == Lattice.EMPTY
 
-        # Set the site to occupied if it can adsorb.
-        if flag:
-            self.lattice[site_length][site_width] = Lattice.OCCUPIED
+            if not flag:
+                break
+
+        else:
+            # Set the sites to occupied.
+            for site in sites:
+                self.lattice[site[0]][site[1]] = Lattice.OCCUPIED
 
         return flag
 
