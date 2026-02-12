@@ -120,17 +120,16 @@ they are implemented in the program:
          Where `I` can be either `L` or `W`, depending on the dimension.
       1. Increase the time `t` by 1, since integer numbers are more accurate to
          track than floating point numbers, and the time can be calculated as
-         `t = Na/L`.
-      1. Record the values of `C(t)`, `S(t)`, `D(t)`, and `T(t)` at the current
-         time `t`.
+         `t = Na/(LW)`.
+      1. Record the values of `C(t)` at the current time `t`.
       1. If the maximum number of deposition attempts is reached, exit the loop;
          otherwise, continue to the next deposition attempt.
-   1. Update the `stats` by accumulating the values of `C(t)`, `S(t)`, `D(t)`,
-      and `T(t)` at the given times.
+   1. Update the `stats` by accumulating the values of `C(t)` at the given
+      times.
    1. Increment the number of simulations performed.
    1. If the maximum number of simulations has been exceeded, exit the loop;
 1. Process the accumulated statistics in `stats` to obtain the average values of
-   `C(t)`, `S(t)`, `D(t)`, and `T(t)` at the different times.
+   `C(t)` at the different times.
 1. Save the results to a file or display them as needed.
 1. Finish the program successfully.
 
@@ -143,16 +142,13 @@ next section.
 
 #### Accumulating the Statistics
 
-For consistency, the lattice must be at least 4 sites long, since the quantity
-`T(t)` tracks the fraction of three consecutive sites that are not occupied,
-and if the lattice is shorter than 4 sites, and the lattice is periodic, there
-will be redundacy when calculating `T(t)`.
+For consistency, the lattice must be at least 4 sites long, along each
+dimension, since there might be redundancy when calculating the different
+quantities being tracked.
 
 The process for gathering the statistics works the same for any of the
-quantities being tracked, i.e., `C(t)`, `S(t)`, `D(t)`, and `T(t)`; thus, the
-process is described in a general way, and it can be applied to any of the
-quantities being tracked. For simplicity, the process is described for the
-quantity `C(t)`.
+quantities being tracked, that is, the coverage and/or the number of attempts.
+For simplicity, the process is described for the quantity `C(t)`.
 
 For the `n`th repetition, where `1 <= n <= nsims`, of the simulation, define a
 variable `Cn`
