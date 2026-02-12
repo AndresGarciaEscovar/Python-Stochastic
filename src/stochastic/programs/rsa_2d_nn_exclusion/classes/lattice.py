@@ -105,8 +105,11 @@ class Lattice:
         """
             Attempts to adsorb the particles at the given sites.
 
-            :param site: The site where the adsorption is inteded to take
-             place.
+            :param site_length: The site along the length of the lattice where
+             the adsorption is inteded to take place.
+
+            :param site_width: The site along the width of the lattice where
+             the adsorption is inteded to take place.
 
             :return: A boolean flag that indicates whether ALL the particles
              were adsorbed, i.e., the requested sites are within the lattice
