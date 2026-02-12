@@ -8,11 +8,9 @@
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
-# Standard library.
-from typing import Any
-
 # User.
 from stochastic.programs.rsa_1d_dimers.validation.parameters import validate
+from stochastic.utilities.general import convert_dict_to_str
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -28,11 +26,6 @@ class Parameters:
         ___________
 
         - self.history: A dictionary with the history parameters.
-
-        - self.loaded: A boolean flag indicating whether the simulation was
-          loaded or it has not been loaded. True, if the simulation has been
-          loaded from an external file; False, otherwise. Set initially to
-          False.
 
         - self.output: A dictionary with the output parameters.
 
@@ -62,42 +55,13 @@ class Parameters:
         """
             Prints the current dictionary parameters in a reproducible way.
         """
-        # Auxiliary variables.
-        parameters: dict = {
-            "history": self.history,
-            "history_lattice": self.history_lattice,
-            "output": self.output,
-            "simulation": self.simulation
-        }
-
-        return f"{parameters}"
+        return f"{self.get_dictionary()}"
 
     def __str__(self) -> str:
         """
             Prints the current dictionary parameters in a friendly format.
         """
-        # Auxiliary variables.
-        indent: str = " " * 4
-        string: str = "{\n"
-        entries: tuple = (
-            ("history", self.history),
-            ("history_lattice", self.history_lattice),
-            ("output", self.output),
-            ("simulation", self.simulation)
-        )
-
-        # Print every dictionary.
-        for key, dictionary in entries:
-            string = f"{string}{indent}'{key}': " + "{\n"
-
-            for subkey, value in dictionary.items():
-                value: Any = f"'{value}'" if isinstance(value, str) else value
-                string = f"{string}{indent * 2}'{subkey}': {value},\n"
-
-            # More strings.
-            string = f"{string}{indent}" + "},\n"
-
-        return f"{string}" + "}"
+        return convert_dict_to_str(self.get_dictionary())
 
     # /////////////////////////////////////////////////////////////////////////
     # Constructor
