@@ -34,7 +34,7 @@ random sequential adsorption mechanism.
 ### Model Description
 
 <img
-    src="../images/model_2d_rsa.png"
+    src="../images/model_2d_rsa_nn_exclusion.png"
     alt="2D RSA with Nearest Neighbor Exclusion"
     width="200"
 />
