@@ -33,7 +33,7 @@ class Lattice:
     OCCUPIED: int = 1
 
     # Adsorption directions.
-    DIRECTIONS: tuple =  "up", "down", "left", "right"
+    DIRECTIONS: tuple = "up", "down", "left", "right"
 
     # /////////////////////////////////////////////////////////////////////////
     # Methods - Auxiliary
