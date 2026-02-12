@@ -42,8 +42,8 @@ def convert_dict_to_str(dictionary: dict) -> str:
             :return: The string with the dictionary.
         """
         # Auxiliary variables.
-        indent0_: str = " " * (4  * level_)
-        indent1_: str = " " * (4  * (level_ + 1))
+        indent0_: str = " " * (4 * level_)
+        indent1_: str = " " * (4 * (level_ + 1))
 
         string_: str = "{\n"
 
