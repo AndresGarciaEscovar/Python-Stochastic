@@ -219,7 +219,7 @@ that contains the different options for the simulation:
 ```json
 {
     "history": {
-        "file": "history.sim",
+        "file": "simulation.sim",
         "frequency": 0
     },
     "history_lattice": {
@@ -232,8 +232,14 @@ that contains the different options for the simulation:
     },
     "simulation": {
         "attempts": 100,
-        "length": 100,
-        "periodic": false,
+        "dimensions": {
+            "length": 30,
+            "width": 30
+        },
+        "periodic": {
+            "length": false,
+            "width": false
+        },
         "repetitions": 10,
         "seed": -1
     }
@@ -280,9 +286,17 @@ The description of the different options is:
 - `simulation`: Contains the options related to the simulation itself.
     - `attempts`: The number of deposition attempts to perform in each
         simulation repetition.
-    - `length`: The length of the lattice.
-    - `periodic`: A boolean value that indicates whether the lattice is
-        periodic or not. True, if the lattice is periodic; False, otherwise.
+    - `dimensions`: The dimensions of the lattice, that is, the length and width
+      of the lattice.
+      - `length`: The length of the lattice.
+      - `width`: The width of the lattice.
+    - `periodic`: The periodicity of the lattice along each dimension.
+      - `length`: A boolean value that indicates whether the lattice is
+        periodic along the length. True, if the lattice is periodic; False,
+        otherwise.
+      - `width`: A boolean value that indicates whether the lattice is
+        periodic along the width. True, if the lattice is periodic; False,
+        otherwise.
     - `repetitions`: The number of repetitions to perform for the
         simulation.
     - `seed`: The seed to use for the random number generator. If the value
@@ -306,7 +320,7 @@ line interface (CLI) as follows:
 
 1. From the terminal type the command:
    ```bash
-   stochastic-1d-rsa-nn-exclusion -c path/to/configuration_file.json
+   stochastic-2d-rsa-nn-exclusion -c path/to/configuration_file.json
    ```
    where `path/to/configuration_file.json` is the path to the configuration
    file set up in the previous section.
@@ -317,26 +331,26 @@ line interface (CLI) as follows:
 
 ### Running the Simulation - From a Python Script
 
-The proper way to run a "1D Random Sequential Adsorption of Particles with
+The proper way to run a "2D Random Sequential Adsorption of Particles with
 Nearest Neighbor Exclusion" simulation from a Python script is to install the
 `stochastic` package in the current Python environment, and then import the
-`Simulation` class from the `stochastic.programs.rsa_1d_nn_exclusion.simulation`
+`Simulation` class from the `stochastic.programs.rsa_2d_nn_exclusion.simulation`
 module:
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
+from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
 ```
 After importing the `Simulation` class, a dictionary with the configuration
 options must be defined. It can be the whole configuration or a subset of the
 configuration:
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
+from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
 
 # Set up the configuration for the simulation.
 config: dict = {
     "history": {
-        "file": "history.sim",
+        "file": "simulation.sim",
         "frequency": 0
     },
     "history_lattice": {
@@ -349,8 +363,14 @@ config: dict = {
     },
     "simulation": {
         "attempts": 100,
-        "length": 100,
-        "periodic": false,
+        "dimensions": {
+            "length": 30,
+            "width": 30
+        },
+        "periodic": {
+            "length": False,
+            "width": False
+        },
         "repetitions": 10,
         "seed": -1
     }
@@ -369,12 +389,12 @@ object:
 
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
+from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
 
 # Set up the configuration for the simulation.
 config: dict = {
     "history": {
-        "file": "history.sim",
+        "file": "simulation.sim",
         "frequency": 0
     },
     "history_lattice": {
@@ -387,8 +407,14 @@ config: dict = {
     },
     "simulation": {
         "attempts": 100,
-        "length": 100,
-        "periodic": false,
+        "dimensions": {
+            "length": 30,
+            "width": 30
+        },
+        "periodic": {
+            "length": False,
+            "width": False
+        },
         "repetitions": 10,
         "seed": -1
     }
@@ -417,7 +443,7 @@ simulation every such number of deposition attempts:
 
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
+from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
 
 # Set up the configuration for the simulation.
 config: dict = {
@@ -440,12 +466,12 @@ directory defined in the configuration file, in the `pickle` format.
 At one point, the simulation might be interrupted, for whatever reason, and it
 might be necessary to resume the simulation later. To do this, import the
 `load_simulation` function from the
-`stochastic.programs.rsa_1d_nn_exclusion.utils.load` module and call it with the path
+`stochastic.programs.rsa_2d_nn_exclusion.utils.load` module and call it with the path
 to the file where the state of the simulation was saved:
 ```python
 # Import the load_simulation function.
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
-from stochastic.programs.rsa_1d_nn_exclusion.utils.load import load_simulation
+from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
+from stochastic.programs.rsa_2d_nn_exclusion.utils.load import load_simulation
 
 # Load the simulation.
 simulation: Simulation = load_simulation("path/to/history.sim")
@@ -461,14 +487,14 @@ simulation can be saved in the correct location.
 
 It is worth noting that there is a validation process when loading the
 simulation, such that if the file does not correspond to a valid
-"1D Random Sequential Adsorption of Particles with Nearest Neighbor Exclusion"
+"2D Random Sequential Adsorption of Particles with Nearest Neighbor Exclusion"
 simulation, or if the file is corrupted, the loading process will fail.
 
 ### Analysis and Results
 
 When a complete simulation is run, the results are saved in the working
 directory defined in the configuration file. A typical output file will look
-like this:
+similar to this:
 ```text
 # ------------------------------------------------------------------------------
 # Parameters
@@ -494,27 +520,6 @@ Successful / Attempts | 0.0 |  0.9 | 0.9 |  0.8 | 0.75
 
      Time Elapsed | 0.0 | 0.05 |  0.1 | 0.15 | 0.2
 Occupied / Length | 0.0 | 0.09 | 0.18 | 0.24 | 0.3
-
-# ------------------------------------------------------------------------------
-# Empties - Single
-# ------------------------------------------------------------------------------
-
- Time Elapsed | 0.0 | 0.05 |  0.1 | 0.15 | 0.2
-Free / Length | 0.0 | 0.91 | 0.82 | 0.76 | 0.7
-
-# ------------------------------------------------------------------------------
-# Empties - Double
-# ------------------------------------------------------------------------------
-
- Time Elapsed | 0.0 | 0.05 |   0.1 | 0.15 |  0.2
-Free / Length | 0.0 | 0.82 | 0.685 |  0.6 | 0.52
-
-# ------------------------------------------------------------------------------
-# Empties - Triple
-# ------------------------------------------------------------------------------
-
- Time Elapsed | 0.0 | 0.05 |   0.1 |  0.15 |  0.2
-Free / Length | 0.0 | 0.73 | 0.565 | 0.455 | 0.37
 ```
 The values here are just an example, and they do not correspond to a thorough
 simulation, however, they show the format of the output file.

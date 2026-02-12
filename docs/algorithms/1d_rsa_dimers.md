@@ -351,7 +351,7 @@ config: dict = {
     "simulation": {
         "attempts": 100,
         "length": 100,
-        "periodic": false,
+        "periodic": False,
         "repetitions": 10,
         "seed": -1
     }
@@ -389,7 +389,7 @@ config: dict = {
     "simulation": {
         "attempts": 100,
         "length": 100,
-        "periodic": false,
+        "periodic": False,
         "repetitions": 10,
         "seed": -1
     }
@@ -469,7 +469,7 @@ corrupted, the loading process will fail.
 
 When a complete simulation is run, the results are saved in the working
 directory defined in the configuration file. A typical output file will look
-like this:
+similar to this:
 ```text
 # ------------------------------------------------------------------------------
 # Parameters
