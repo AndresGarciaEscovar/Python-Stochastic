@@ -181,14 +181,14 @@ class Lattice:
             raise ValueError(
                 f"The row adsorption site for a particle to adsorb is not in "
                 f"the proper range; the site must be inside the lattice "
-                f"(0 <= site < {length}); {site_length = }."
+                f"(0 <= site_length < {length}); {site_length = }."
             )
 
         if not 0 <= site_width < width:
             raise ValueError(
                 f"The column adsorption site for a particle to adsorb is not "
                 f"in the proper range; the site must be inside the lattice "
-                f"(0 <= site < {width}); {site_width = }."
+                f"(0 <= site_width < {width}); {site_width = }."
             )
 
         # Neighboring sites.
