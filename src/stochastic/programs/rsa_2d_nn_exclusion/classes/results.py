@@ -170,12 +170,6 @@ class Results:
         - self.coverage: The array with the total number of particles and the
           inverse elapsed time, i.e., the number of attempts.
 
-        - self.length: The length of the 1D lattice, a number  greater than
-          zero.
-
-        - self.periodic: A boolean flag indicating whether the lattice is
-          periodic. True, if the lattice is periodic; False, otherwise.
-
         - self.simulations: The number of simulations stored.
     """
     # /////////////////////////////////////////////////////////////////////////
