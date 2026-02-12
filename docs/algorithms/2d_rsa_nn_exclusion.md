@@ -2,7 +2,7 @@
 
 ---
 
-# 1D Random Sequential Adsorption (RSA) with Nearest Neighbor Exclusion
+# 2D Random Sequential Adsorption (RSA) with Nearest Neighbor Exclusion
 
 ## Index
 
@@ -34,55 +34,52 @@ random sequential adsorption mechanism.
 ### Model Description
 
 <img
-    src="../images/model_1d_rsa_nn_exclusion.png"
-    alt="1D RSA with Nearest Neighbor Exclusion"
+    src="../images/model_2d_rsa.png"
+    alt="2D RSA with Nearest Neighbor Exclusion"
     width="200"
 />
 
-Consider a one-dimensional discrete substrate of length \(`L`\) where particles
-can adsorb, but cannot desorb or move once they are adsorbed. The lattice can be
-finite or infinite, i.e., in the case of an infinite lattice, it is modeled as a
-lattice with periodic boundary conditions, `x = x + L`, where `x` is the
-position on the lattice and `L` is the length of the lattice, that is also the
-period of the lattice.
+See the image to the right.
+
+Consider a two-dimensional discrete substrate of length \(`L`\) and
+width \(`W`\) where particles can adsorb, but cannot desorb or move once they
+are adsorbed. The lattice can be finite or infinite towards either dimensions,
+i.e., in the case of an infinite lattice, it is modeled as a lattice with
+periodic boundary conditions, `x = x + L` and `y = y + W`, where `x` and `y` are
+the positions of the sites along the length and width on the lattice, and `L`
+and `W` are the length and width of the lattice, that are also the
+periods of the lattice along the corresponding dimensions.
 
 Each site can have one of two states: occupied or empty, and each site can only
 be occupied by one particle. In this model, single particles are deposited onto
 the lattice at a constant rate `k`, provided that the adsorption site has not
-filled neighboring sites. Since the rate is constant, `k` can be set to 1
-without loss of generality. For a particle to be adsorbed, not only must the
-adsorption site be empty, but the neighboring site must also be empty; in the
-case of non-periodic lattices, the end sites have an advantage since the
-neighboring sites outside of the lattice count as empty sites. If the deposition
-attempt is successful, the site becomes occupied and no more particles can be
-adsorbed on the site. If the site or any of the neighboring sites where the
-particle is trying to adsorb are already occupied, the deposition attempt fails
-and the system remains unchanged.
+occupied neighboring sites (top, bottom, left, and right sites). Since the rate
+is constant, `k` can be set to 1 without loss of generality. For a particle to
+be adsorbed, not only must the adsorption site be empty, but the neighboring
+site must also be empty; in the case of non-periodic lattices, the end sites
+have an advantage since the neighboring sites outside of the lattice count as
+empty sites. If the deposition attempt is successful, the site becomes occupied
+and no more particles can be adsorbed on the site. If the site or any of the
+neighboring sites where the particle is trying to adsorb are already occupied,
+the deposition attempt fails and the system remains unchanged.
 
 The different quantities to be tracked are defined as follows:
 
 - `L`: Length of the lattice.
 
+- `W`: Width of the lattice.
+
 - `t`: The physical time of the system, that is proportional to the number of
-  of deposition attempts. The proportionality constant is the inverse length of
-  the lattice over the total rate of the system, `1/(kL)`; since the deposition
-  rate is set to 1, `k = 1`, it can be simplied to `1/L`.  Thus, the elapsed
-  time can be calculated as `t = Na/L`, where `Na` is the number of deposition
-  attempts.
+  of deposition attempts. The proportionality constant is the inverse of the
+  total number of site of the lattice over the total rate of the system,
+  `1/(kLW)`; since the deposition rate is set to 1, `k = 1`, it can be simplied
+  to `1/(LW)`. Thus, the elapsed time can be calculated as `t = Na/(LW)`, where
+  `Na` is the number of deposition attempts.
 
 - `C(t)`: The coverage of the lattice at time `t`, defined as the fraction of
-  occupied sites on the lattice. It is calculated as `C(t) = N(t)/L`, that is
+  occupied sites on the lattice. It is calculated as `C(t) = N(t)/(LW)`, that is
   the fraction of occupied sites, where `N(t)` is the number of occupied sites
   at time `t`.
-
-- `S(t)`: The fraction of single sites that are **NOT** occupied at time `t`.
-   Can be calculated as `S(t) = 1 - C(t)`.
-
-- `D(t)`: The fraction of pair sites that are **NOT** occupied at time `t`.
-
-- `T(t)`: The fraction of three consecutive sites that are **NOT** occupied at
-   time `t`. This gives an idea of how many more particles can be adsorbed on
-   the lattice at time `t`.
 
 A single simulation is not enough to determine the behavior of the system,
 since the process is stochastic and there might be multiple outcomes for the
@@ -92,46 +89,47 @@ obtain a more accurate representation of the system's behavior.
 
 ### Simulation Algorithm - Pseudocode
 
-The following pseudocode outlines the algorithm for simulating the 1D RSA of
+The following pseudocode outlines the algorithm for simulating the 2D RSA of
 particles with nearest neighbor exclusion. Additional actions like saving the
 state of the system, or data processing are not included in the pseudocode, but
 they are implemented in the program:
 
-1. Define a lattice of length `L` initialized with all sites empty.
+1. Define a lattice of length `L` and width `W`, initialized with all sites
+   empty.
 1. Setup the variables:
-   - The variables where to save the results of `C(t)`, `S(t)`, `D(t)`, and
-     `T(t)`.
+   - The variables where to save the results of `C(t)`.
    - Define a variable where to track the accumulated statistics of the
      different repetitions of the simulation, call it `stats`, that must contain
-     the variables to save the accumulated results of `C(t)`, `S(t)`, `D(t)`,
-     and `T(t)`.
+     the variables to save the accumulated results of `C(t)`.
    - A variable that defines the number of repetitions of the simulation, call
      it `nsims`.
    - A variable that defines the number of deposition attempts, call it
      `nattempts`.
 1. For each simulation from `1` to `nsims`:
    1. Empty the lattice and reset the time `t` to `0`.
-   1. Empty the statistics variables `C(t)`, `S(t)`, `D(t)`, and `T(t)`.
+   1. Empty the statistics variables `C(t)`.
    1. For each deposition attempt from `1` to `nattempts`:
       1. Increase the number of deposition attempts `Na` by 1, `Na = Na + 1`.
       1. Randomly select a site `i` on the lattice, i.e., a site from `0` to
-        `L-1`; because the array indexing starts at `0`.
-      1. Attempt to deposit a particle on the selected site `i`. In the case of
-         a periodic lattice, if the selected site is `L-1`, the adjacent sites
-         will be `0` and `L-2`.
+        `LW - 1`; because the array indexing starts at `0`.
+      1. Calculate the coordinates of the selected site `i` on the lattice, that
+         is, `site_column = i % W` and `site_row = i // W`.
+      1. Attempt to deposit a particle on the selected site of coordinates
+         `(site_row, site_column)`. In the case of a periodic lattice, along the
+         given dimension, the neighboring sites of `I - 1` are `I - 2` and `0`.
+         Where `I` can be either `L` or `W`, depending on the dimension.
       1. Increase the time `t` by 1, since integer numbers are more accurate to
          track than floating point numbers, and the time can be calculated as
-         `t = Na/L`.
-      1. Record the values of `C(t)`, `S(t)`, `D(t)`, and `T(t)` at the current
-         time `t`.
+         `t = Na/(LW)`.
+      1. Record the values of `C(t)` at the current time `t`.
       1. If the maximum number of deposition attempts is reached, exit the loop;
          otherwise, continue to the next deposition attempt.
-   1. Update the `stats` by accumulating the values of `C(t)`, `S(t)`, `D(t)`,
-      and `T(t)` at the given times.
+   1. Update the `stats` by accumulating the values of `C(t)` at the given
+      times.
    1. Increment the number of simulations performed.
    1. If the maximum number of simulations has been exceeded, exit the loop;
 1. Process the accumulated statistics in `stats` to obtain the average values of
-   `C(t)`, `S(t)`, `D(t)`, and `T(t)` at the different times.
+   `C(t)` at the different times.
 1. Save the results to a file or display them as needed.
 1. Finish the program successfully.
 
@@ -144,16 +142,13 @@ next section.
 
 #### Accumulating the Statistics
 
-For consistency, the lattice must be at least 4 sites long, since the quantity
-`T(t)` tracks the fraction of three consecutive sites that are not occupied,
-and if the lattice is shorter than 4 sites, and the lattice is periodic, there
-will be redundacy when calculating `T(t)`.
+For consistency, the lattice must be at least 4 sites long, along each
+dimension, since there might be redundancy when calculating the different
+quantities being tracked.
 
 The process for gathering the statistics works the same for any of the
-quantities being tracked, i.e., `C(t)`, `S(t)`, `D(t)`, and `T(t)`; thus, the
-process is described in a general way, and it can be applied to any of the
-quantities being tracked. For simplicity, the process is described for the
-quantity `C(t)`.
+quantities being tracked, that is, the coverage and/or the number of attempts.
+For simplicity, the process is described for the quantity `C(t)`.
 
 For the `n`th repetition, where `1 <= n <= nsims`, of the simulation, define a
 variable `Cn`
@@ -224,7 +219,7 @@ that contains the different options for the simulation:
 ```json
 {
     "history": {
-        "file": "history.sim",
+        "file": "simulation.sim",
         "frequency": 0
     },
     "history_lattice": {
@@ -237,8 +232,14 @@ that contains the different options for the simulation:
     },
     "simulation": {
         "attempts": 100,
-        "length": 100,
-        "periodic": false,
+        "dimensions": {
+            "length": 30,
+            "width": 30
+        },
+        "periodic": {
+            "length": false,
+            "width": false
+        },
         "repetitions": 10,
         "seed": -1
     }
@@ -285,9 +286,17 @@ The description of the different options is:
 - `simulation`: Contains the options related to the simulation itself.
     - `attempts`: The number of deposition attempts to perform in each
         simulation repetition.
-    - `length`: The length of the lattice.
-    - `periodic`: A boolean value that indicates whether the lattice is
-        periodic or not. True, if the lattice is periodic; False, otherwise.
+    - `dimensions`: The dimensions of the lattice, that is, the length and width
+      of the lattice.
+      - `length`: The length of the lattice.
+      - `width`: The width of the lattice.
+    - `periodic`: The periodicity of the lattice along each dimension.
+      - `length`: A boolean value that indicates whether the lattice is
+        periodic along the length. True, if the lattice is periodic; False,
+        otherwise.
+      - `width`: A boolean value that indicates whether the lattice is
+        periodic along the width. True, if the lattice is periodic; False,
+        otherwise.
     - `repetitions`: The number of repetitions to perform for the
         simulation.
     - `seed`: The seed to use for the random number generator. If the value
@@ -311,7 +320,7 @@ line interface (CLI) as follows:
 
 1. From the terminal type the command:
    ```bash
-   stochastic-1d-rsa-nn-exclusion -c path/to/configuration_file.json
+   stochastic-2d-rsa-nn-exclusion -c path/to/configuration_file.json
    ```
    where `path/to/configuration_file.json` is the path to the configuration
    file set up in the previous section.
@@ -322,26 +331,26 @@ line interface (CLI) as follows:
 
 ### Running the Simulation - From a Python Script
 
-The proper way to run a "1D Random Sequential Adsorption of Particles with
+The proper way to run a "2D Random Sequential Adsorption of Particles with
 Nearest Neighbor Exclusion" simulation from a Python script is to install the
 `stochastic` package in the current Python environment, and then import the
-`Simulation` class from the `stochastic.programs.rsa_1d_nn_exclusion.simulation`
+`Simulation` class from the `stochastic.programs.rsa_2d_nn_exclusion.simulation`
 module:
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
+from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
 ```
 After importing the `Simulation` class, a dictionary with the configuration
 options must be defined. It can be the whole configuration or a subset of the
 configuration:
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
+from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
 
 # Set up the configuration for the simulation.
 config: dict = {
     "history": {
-        "file": "history.sim",
+        "file": "simulation.sim",
         "frequency": 0
     },
     "history_lattice": {
@@ -354,8 +363,14 @@ config: dict = {
     },
     "simulation": {
         "attempts": 100,
-        "length": 100,
-        "periodic": False,
+        "dimensions": {
+            "length": 30,
+            "width": 30
+        },
+        "periodic": {
+            "length": False,
+            "width": False
+        },
         "repetitions": 10,
         "seed": -1
     }
@@ -374,12 +389,12 @@ object:
 
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
+from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
 
 # Set up the configuration for the simulation.
 config: dict = {
     "history": {
-        "file": "history.sim",
+        "file": "simulation.sim",
         "frequency": 0
     },
     "history_lattice": {
@@ -392,8 +407,14 @@ config: dict = {
     },
     "simulation": {
         "attempts": 100,
-        "length": 100,
-        "periodic": False,
+        "dimensions": {
+            "length": 30,
+            "width": 30
+        },
+        "periodic": {
+            "length": False,
+            "width": False
+        },
         "repetitions": 10,
         "seed": -1
     }
@@ -422,7 +443,7 @@ simulation every such number of deposition attempts:
 
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
+from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
 
 # Set up the configuration for the simulation.
 config: dict = {
@@ -445,12 +466,12 @@ directory defined in the configuration file, in the `pickle` format.
 At one point, the simulation might be interrupted, for whatever reason, and it
 might be necessary to resume the simulation later. To do this, import the
 `load_simulation` function from the
-`stochastic.programs.rsa_1d_nn_exclusion.utils.load` module and call it with the path
+`stochastic.programs.rsa_2d_nn_exclusion.utils.load` module and call it with the path
 to the file where the state of the simulation was saved:
 ```python
 # Import the load_simulation function.
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
-from stochastic.programs.rsa_1d_nn_exclusion.utils.load import load_simulation
+from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
+from stochastic.programs.rsa_2d_nn_exclusion.utils.load import load_simulation
 
 # Load the simulation.
 simulation: Simulation = load_simulation("path/to/history.sim")
@@ -466,7 +487,7 @@ simulation can be saved in the correct location.
 
 It is worth noting that there is a validation process when loading the
 simulation, such that if the file does not correspond to a valid
-"1D Random Sequential Adsorption of Particles with Nearest Neighbor Exclusion"
+"2D Random Sequential Adsorption of Particles with Nearest Neighbor Exclusion"
 simulation, or if the file is corrupted, the loading process will fail.
 
 ### Analysis and Results
@@ -481,8 +502,12 @@ similar to this:
 
 Date (YYYY-MM-DD hh:mm:ss): 2026-02-10 21:57:56
 Attempts: 4
-Length: 20
-Periodic: False
+Dimensions:
+    Length: 20
+    Width: 20
+Periodic:
+    Length: False
+    Width: False
 Repetitions: 10
 Seed: 1770782276
 
@@ -499,27 +524,6 @@ Successful / Attempts | 0.0 |  0.9 | 0.9 |  0.8 | 0.75
 
      Time Elapsed | 0.0 | 0.05 |  0.1 | 0.15 | 0.2
 Occupied / Length | 0.0 | 0.09 | 0.18 | 0.24 | 0.3
-
-# ------------------------------------------------------------------------------
-# Empties - Single
-# ------------------------------------------------------------------------------
-
- Time Elapsed | 0.0 | 0.05 |  0.1 | 0.15 | 0.2
-Free / Length | 0.0 | 0.91 | 0.82 | 0.76 | 0.7
-
-# ------------------------------------------------------------------------------
-# Empties - Double
-# ------------------------------------------------------------------------------
-
- Time Elapsed | 0.0 | 0.05 |   0.1 | 0.15 |  0.2
-Free / Length | 0.0 | 0.82 | 0.685 |  0.6 | 0.52
-
-# ------------------------------------------------------------------------------
-# Empties - Triple
-# ------------------------------------------------------------------------------
-
- Time Elapsed | 0.0 | 0.05 |   0.1 |  0.15 |  0.2
-Free / Length | 0.0 | 0.73 | 0.565 | 0.455 | 0.37
 ```
 The values here are just an example, and they do not correspond to a thorough
 simulation, however, they show the format of the output file.

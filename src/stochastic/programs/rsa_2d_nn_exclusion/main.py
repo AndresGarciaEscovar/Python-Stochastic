@@ -1,6 +1,6 @@
 """
     Code to run random sequential adsorption of particles with nearest neighbor
-    exclusion into a 1D lattice.
+    exclusion into a 2D lattice.
 """
 
 
@@ -13,8 +13,8 @@
 from importlib.resources import files as ifiles
 
 # User.
-from stochastic.programs.rsa_1d_nn_exclusion import configs
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
+from stochastic.programs.rsa_2d_nn_exclusion import configs
+from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

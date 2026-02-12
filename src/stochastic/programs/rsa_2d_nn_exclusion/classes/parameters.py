@@ -9,7 +9,9 @@
 
 
 # User.
-from stochastic.programs.rsa_1d_dimers.validation.parameters import validate
+from stochastic.programs.rsa_2d_nn_exclusion.validation.parameters import (
+    validate
+)
 from stochastic.utilities.general import convert_dict_to_str
 
 
