@@ -28,52 +28,6 @@ HEADER_EMPTYSTS: tuple = ("Attempts", "Free")
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
-def _get_continuous_empty(lattice: list, number: int, periodic: bool) -> int:
-    """
-        Gets the number of sites that have N (represented by the "number"
-        variable) empty sites. It will consider if the variable is periodic.
-        The lattice must only be made of zeros and ones, where zero (0) is
-        empty and one (1) is occupied.
-
-        :param lattice: The lattice with the particles.
-
-        :param number: The number of consecutive empty sites to check.
-
-        :param periodic: A boolean flag indicating whether the lattice is
-         periodic, i.e., site n = n + N, where N is the length of the lattice.
-         True, if the lattice is periodic; False otherwise.
-    """
-    # Auxiliary variables.
-    count: int = 0
-    empty: int = Lattice.EMPTY
-    length: int = len(lattice)
-
-    # Cannot take these statistics.
-    if number >= length:
-        raise ValueError(
-            "The number of contiguous empty sites cannot be greater than that "
-            "of the lattice length."
-        )
-
-    # Scan the lattice.
-    for site in range(length):
-        # Sites to be examined.
-        sites: list = [
-            (site + i) % length if periodic else (site + i)
-            for i in range(number)
-        ]
-
-        # Reached the end of the lattice.
-        if any(x >= length for x in sites):
-            break
-
-        # Check ALL consecutive sites are empty.
-        if all(lattice[x] == empty for x in sites):
-            count += 1
-
-    return count
-
-
 def _get_coverage(lattice: list) -> int:
     """
         Gets the number of sites that are not empty. The lattice must only
@@ -84,7 +38,13 @@ def _get_coverage(lattice: list) -> int:
 
         :return: An integer number that represents the lattice coverage.
     """
-    return sum(1 for x in lattice if x != 0)
+    # Auxiliary variables.
+    coverage: int = 0
+
+    for row in lattice:
+        coverage += sum(1 for x in row if x != Lattice.EMPTY)
+
+    return coverage
 
 
 def _get_string_table(table: list) -> str:
@@ -154,14 +114,6 @@ class Statistics:
         - self.coverage: The array with the total number of particles and the
           inverse elapsed time, i.e., the number of attempts.
 
-        - self.empty_double: The number of sites that have an empty neighbor
-          to the left.
-
-        - self.empty_single: The number of sites that are empty.
-
-        - self.empty_triple: The number of sites that have two empty neighbors
-          to the left.
-
         - self.length: The length of the 1D lattice, a number  greater than
           zero.
 
@@ -180,9 +132,6 @@ class Statistics:
         return {
             "attempts": self.attempts,
             "coverage": self.coverage,
-            "empty_single": self.empty_single,
-            "empty_double": self.empty_double,
-            "empty_triple": self.empty_triple,
             "length": self.length,
             "periodic": self.periodic
         }
@@ -194,10 +143,6 @@ class Statistics:
         # Reset the parameters.
         self.attempts = [HEADER_ATTEMPTS, (0, 0)]
         self.coverage = [HEADER_COVERAGE, (0, 0)]
-
-        self.empty_single = [HEADER_EMPTYSTS, (0, 0)]
-        self.empty_double = [HEADER_EMPTYSTS, (0, 0)]
-        self.empty_triple = [HEADER_EMPTYSTS, (0, 0)]
 
     def update_statistics(self, lattice: list, successful: bool) -> None:
         """
@@ -217,14 +162,6 @@ class Statistics:
         # Update the number of successful attempts.
         nsuccessful: int = self.attempts[-1][1] + (1 if successful else 0)
         self.attempts.append((attempts, nsuccessful))
-
-        # Alias for function.
-        emp: callable = lambda x, y: _get_continuous_empty(x, y, self.periodic)
-
-        # Update the other quantities.
-        self.empty_single.append((attempts, emp(lattice, 1)))
-        self.empty_double.append((attempts, emp(lattice, 2)))
-        self.empty_triple.append((attempts, emp(lattice, 3)))
 
     # /////////////////////////////////////////////////////////////////////////
     # Methods - Dunder
@@ -250,15 +187,6 @@ class Statistics:
         string += "Coverage:\n\n"
         string += _get_string_table(self.coverage)
 
-        string += "Empties - Single:\n\n"
-        string += _get_string_table(self.empty_single)
-
-        string += "Empties - Double:\n\n"
-        string += _get_string_table(self.empty_double)
-
-        string += "Empties - Triple:\n\n"
-        string += _get_string_table(self.empty_triple)
-
         return string.strip()
 
     # /////////////////////////////////////////////////////////////////////////
@@ -275,10 +203,6 @@ class Statistics:
         # Initialize the parameters.
         self.attempts: list = [HEADER_ATTEMPTS, (0, 0)]
         self.coverage: list = [HEADER_COVERAGE, (0, 0)]
-
-        self.empty_single: list = [HEADER_EMPTYSTS, (0, 0)]
-        self.empty_double: list = [HEADER_EMPTYSTS, (0, 0)]
-        self.empty_triple: list = [HEADER_EMPTYSTS, (0, 0)]
 
         # Useful parameters.
         self.length: int = parameters["length"]

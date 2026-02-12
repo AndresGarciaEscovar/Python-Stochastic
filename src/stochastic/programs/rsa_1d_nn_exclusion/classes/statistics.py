@@ -84,7 +84,7 @@ def _get_coverage(lattice: list) -> int:
 
         :return: An integer number that represents the lattice coverage.
     """
-    return sum(1 for x in lattice if x != 0)
+    return sum(1 for x in lattice if x != Lattice.EMPTY)
 
 
 def _get_string_table(table: list) -> str:
