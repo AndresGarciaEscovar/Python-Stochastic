@@ -89,33 +89,35 @@ obtain a more accurate representation of the system's behavior.
 
 ### Simulation Algorithm - Pseudocode
 
-The following pseudocode outlines the algorithm for simulating the 1D RSA of
+The following pseudocode outlines the algorithm for simulating the 2D RSA of
 particles with nearest neighbor exclusion. Additional actions like saving the
 state of the system, or data processing are not included in the pseudocode, but
 they are implemented in the program:
 
-1. Define a lattice of length `L` initialized with all sites empty.
+1. Define a lattice of length `L` and width `W`, initialized with all sites
+   empty.
 1. Setup the variables:
-   - The variables where to save the results of `C(t)`, `S(t)`, `D(t)`, and
-     `T(t)`.
+   - The variables where to save the results of `C(t)`.
    - Define a variable where to track the accumulated statistics of the
      different repetitions of the simulation, call it `stats`, that must contain
-     the variables to save the accumulated results of `C(t)`, `S(t)`, `D(t)`,
-     and `T(t)`.
+     the variables to save the accumulated results of `C(t)`.
    - A variable that defines the number of repetitions of the simulation, call
      it `nsims`.
    - A variable that defines the number of deposition attempts, call it
      `nattempts`.
 1. For each simulation from `1` to `nsims`:
    1. Empty the lattice and reset the time `t` to `0`.
-   1. Empty the statistics variables `C(t)`, `S(t)`, `D(t)`, and `T(t)`.
+   1. Empty the statistics variables `C(t)`.
    1. For each deposition attempt from `1` to `nattempts`:
       1. Increase the number of deposition attempts `Na` by 1, `Na = Na + 1`.
       1. Randomly select a site `i` on the lattice, i.e., a site from `0` to
-        `L-1`; because the array indexing starts at `0`.
-      1. Attempt to deposit a particle on the selected site `i`. In the case of
-         a periodic lattice, if the selected site is `L-1`, the adjacent sites
-         will be `0` and `L-2`.
+        `LW - 1`; because the array indexing starts at `0`.
+      1. Calculate the coordinates of the selected site `i` on the lattice, that
+         is, `site_column = i % W` and `site_row = i // W`.
+      1. Attempt to deposit a particle on the selected site of coordinates
+         `(site_row, site_column)`. In the case of a periodic lattice, along the
+         given dimension, the neighboring sites of `I - 1` are `I - 2` and `0`.
+         Where `I` can be either `L` or `W`, depending on the dimension.
       1. Increase the time `t` by 1, since integer numbers are more accurate to
          track than floating point numbers, and the time can be calculated as
          `t = Na/L`.
