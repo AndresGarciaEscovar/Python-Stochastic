@@ -132,7 +132,7 @@ class Statistics:
         return {
             "attempts": self.attempts,
             "coverage": self.coverage,
-            "length": self.length,
+            "dimensions": self.dimensions,
             "periodic": self.periodic
         }
 
@@ -176,8 +176,12 @@ class Statistics:
         # Parameters.
         string: str = "\n    ".join([
             "Parameters:",
-            f"length: {self.length}",
-            f"periodic: {self.periodic}"
+            "dimensions:",
+            f"    length: {self.dimensions['length']}",
+            f"     width: {self.dimensions['width']}",
+            "periodic:",
+            f"    length: {self.periodic['length']}",
+            f"     width: {self.periodic['width']}",
         ]) + "\n\n"
 
         # Append the strings.
@@ -205,5 +209,5 @@ class Statistics:
         self.coverage: list = [HEADER_COVERAGE, (0, 0)]
 
         # Useful parameters.
-        self.length: int = parameters["length"]
+        self.dimensions: int = parameters["dimensions"]
         self.periodic: bool = parameters["periodic"]
