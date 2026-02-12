@@ -33,7 +33,7 @@ def _get_continuous_empty(lattice: list, number: int, periodic: bool) -> int:
         Gets the number of sites that have N (represented by the "number"
         variable) empty sites. It will consider if the variable is periodic.
         The lattice must only be made of zeros and ones, where zero (0) is
-        empty and one (1) is busy.
+        empty and one (1) is occupied.
 
         :param lattice: The lattice with the particles.
 
@@ -77,7 +77,8 @@ def _get_continuous_empty(lattice: list, number: int, periodic: bool) -> int:
 def _get_coverage(lattice: list) -> int:
     """
         Gets the number of sites that are not empty. The lattice must only
-        be made of zeros and ones, where zero (0) is empty and one (1) is busy.
+        be made of zeros and ones, where zero (0) is empty and one (1) is
+        occupied.
 
         :param lattice: The lattice with the particles.
 

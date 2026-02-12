@@ -374,8 +374,10 @@ class Simulation:
 
         # Other parameters.
         self.lattice: Lattice = Lattice(self.parameters.simulation)
-        self.results: Results = Results(self.parameters.simulation)
+        # self.results: Results = Results(self.parameters.simulation)
         self.statistics: Statistics = Statistics(self.parameters.simulation)
 
         # Finish setting other quantities.
-        self._set_working_directory()
+        # self._set_working_directory()
+
+        print(self.parameters)
