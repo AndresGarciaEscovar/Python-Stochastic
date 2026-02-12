@@ -118,7 +118,7 @@ class Simulation:
             self._save_lattice(False, attempt)
 
             # Make the move.
-            side: str = self.generator.choices(Lattice.DIRECTIONS)
+            side: str = self.generator.choice(Lattice.DIRECTIONS)
             site: int = self.generator.randint(0, total_sites)
 
             site_x: int = site // width

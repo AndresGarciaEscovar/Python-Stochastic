@@ -199,7 +199,7 @@ class Lattice:
 
         # Check all the sites.
         for site in sites:
-            flag = flag and (0 <= site[0] < length or 0 <= site[1] < width)
+            flag = flag and (0 <= site[0] < length and 0 <= site[1] < width)
             flag = flag and self.lattice[site[0]][site[1]] == Lattice.EMPTY
 
             if not flag:
