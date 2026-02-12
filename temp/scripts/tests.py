@@ -13,7 +13,7 @@ from pathlib import Path
 from shutil import rmtree
 
 # User.
-from stochastic.programs.rsa_2d_nn_exclusion.main import run
+from stochastic.programs.rsa_2d_dimers.main import run
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
