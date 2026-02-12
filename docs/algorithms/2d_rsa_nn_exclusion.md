@@ -502,8 +502,12 @@ similar to this:
 
 Date (YYYY-MM-DD hh:mm:ss): 2026-02-10 21:57:56
 Attempts: 4
-Length: 20
-Periodic: False
+Dimensions:
+    Length: 20
+    Width: 20
+Periodic:
+    Length: False
+    Width: False
 Repetitions: 10
 Seed: 1770782276
 
