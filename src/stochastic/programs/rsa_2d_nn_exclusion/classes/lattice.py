@@ -151,13 +151,15 @@ class Lattice:
             sites[4][1] = sites[4][1] % width
 
         # Check all the sites.
-        occupied: int = Lattice.OCCUPIED
-
         for site in sites:
             if site[0] not in range(length) or site[1] not in range(width):
                 continue
 
-            flag = flag and self.lattice[site[0]][site[1]] != occupied
+            flag = flag and self.lattice[site[0]][site[1]] == Lattice.EMPTY
+
+        # Set the site to occupied if it can adsorb.
+        if flag:
+            self.lattice[site_length][site_width] = Lattice.OCCUPIED
 
         return flag
 
