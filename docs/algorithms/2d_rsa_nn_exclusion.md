@@ -2,7 +2,7 @@
 
 ---
 
-# 1D Random Sequential Adsorption (RSA) with Nearest Neighbor Exclusion
+# 2D Random Sequential Adsorption (RSA) with Nearest Neighbor Exclusion
 
 ## Index
 
@@ -34,55 +34,52 @@ random sequential adsorption mechanism.
 ### Model Description
 
 <img
-    src="../images/model_1d_rsa_nn_exclusion.png"
-    alt="1D RSA with Nearest Neighbor Exclusion"
+    src="../images/model_2d_rsa.png"
+    alt="2D RSA with Nearest Neighbor Exclusion"
     width="200"
 />
 
-Consider a one-dimensional discrete substrate of length \(`L`\) where particles
-can adsorb, but cannot desorb or move once they are adsorbed. The lattice can be
-finite or infinite, i.e., in the case of an infinite lattice, it is modeled as a
-lattice with periodic boundary conditions, `x = x + L`, where `x` is the
-position on the lattice and `L` is the length of the lattice, that is also the
-period of the lattice.
+See the image to the right.
+
+Consider a two-dimensional discrete substrate of length \(`L`\) and
+width \(`W`\) where particles can adsorb, but cannot desorb or move once they
+are adsorbed. The lattice can be finite or infinite towards either dimensions,
+i.e., in the case of an infinite lattice, it is modeled as a lattice with
+periodic boundary conditions, `x = x + L` and `y = y + W`, where `x` and `y` are
+the positions of the sites along the length and width on the lattice, and `L`
+and `W` are the length and width of the lattice, that are also the
+periods of the lattice along the corresponding dimensions.
 
 Each site can have one of two states: occupied or empty, and each site can only
 be occupied by one particle. In this model, single particles are deposited onto
 the lattice at a constant rate `k`, provided that the adsorption site has not
-filled neighboring sites. Since the rate is constant, `k` can be set to 1
-without loss of generality. For a particle to be adsorbed, not only must the
-adsorption site be empty, but the neighboring site must also be empty; in the
-case of non-periodic lattices, the end sites have an advantage since the
-neighboring sites outside of the lattice count as empty sites. If the deposition
-attempt is successful, the site becomes occupied and no more particles can be
-adsorbed on the site. If the site or any of the neighboring sites where the
-particle is trying to adsorb are already occupied, the deposition attempt fails
-and the system remains unchanged.
+occupied neighboring sites (top, bottom, left, and right sites). Since the rate
+is constant, `k` can be set to 1 without loss of generality. For a particle to
+be adsorbed, not only must the adsorption site be empty, but the neighboring
+site must also be empty; in the case of non-periodic lattices, the end sites
+have an advantage since the neighboring sites outside of the lattice count as
+empty sites. If the deposition attempt is successful, the site becomes occupied
+and no more particles can be adsorbed on the site. If the site or any of the
+neighboring sites where the particle is trying to adsorb are already occupied,
+the deposition attempt fails and the system remains unchanged.
 
 The different quantities to be tracked are defined as follows:
 
 - `L`: Length of the lattice.
 
+- `W`: Width of the lattice.
+
 - `t`: The physical time of the system, that is proportional to the number of
-  of deposition attempts. The proportionality constant is the inverse length of
-  the lattice over the total rate of the system, `1/(kL)`; since the deposition
-  rate is set to 1, `k = 1`, it can be simplied to `1/L`.  Thus, the elapsed
-  time can be calculated as `t = Na/L`, where `Na` is the number of deposition
-  attempts.
+  of deposition attempts. The proportionality constant is the inverse of the
+  total number of site of the lattice over the total rate of the system,
+  `1/(kLW)`; since the deposition rate is set to 1, `k = 1`, it can be simplied
+  to `1/(LW)`. Thus, the elapsed time can be calculated as `t = Na/(LW)`, where
+  `Na` is the number of deposition attempts.
 
 - `C(t)`: The coverage of the lattice at time `t`, defined as the fraction of
-  occupied sites on the lattice. It is calculated as `C(t) = N(t)/L`, that is
+  occupied sites on the lattice. It is calculated as `C(t) = N(t)/(LW)`, that is
   the fraction of occupied sites, where `N(t)` is the number of occupied sites
   at time `t`.
-
-- `S(t)`: The fraction of single sites that are **NOT** occupied at time `t`.
-   Can be calculated as `S(t) = 1 - C(t)`.
-
-- `D(t)`: The fraction of pair sites that are **NOT** occupied at time `t`.
-
-- `T(t)`: The fraction of three consecutive sites that are **NOT** occupied at
-   time `t`. This gives an idea of how many more particles can be adsorbed on
-   the lattice at time `t`.
 
 A single simulation is not enough to determine the behavior of the system,
 since the process is stochastic and there might be multiple outcomes for the

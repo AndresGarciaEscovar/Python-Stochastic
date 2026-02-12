@@ -33,7 +33,11 @@ random sequential adsorption mechanism.
 
 ### Model Description
 
-<img src="../images/model_1d_rsa_dimers.png" alt="1D RSA of Dimers" width="200"/>
+<img
+    src="../images/model_1d_rsa_dimers.png"
+    alt="1D RSA of Dimers"
+    width="200"
+/>
 
 Consider a one-dimensional discrete substrate of length \(`L`\) where particles
 can adsorb, but cannot desorb or move once they are adsorbed. The lattice can be
@@ -77,7 +81,7 @@ The different quantities to be tracked are defined as follows:
 - `T(t)`: The fraction of three consecutive sites that are **NOT** occupied at
    time `t`.
 
-A single simulation is not enought to determine the behavior of the system,
+A single simulation is not enough to determine the behavior of the system,
 since the process is stochastic and there might be multiple outcomes for the
 same initial conditions, and number of deposition attempts. Therefore, it is
 necessary to perform multiple simulations and average the different ensembles to
