@@ -1,0 +1,533 @@
+[[Main Index](../index.md)]
+
+---
+
+# 2D Random Sequential Adsorption (RSA) with Nearest Neighbor Exclusion
+
+## Index
+
+- [Introduction](#introduction)
+   - [Model Description](#model-description)
+   - [Simulation Algorithm - Pseudocode](#simulation-algorithm---pseudocode)
+   - [Results Processing](#results-processing)
+- [Program Implementation](#program-implementation)
+   - [Setting Up the Configuration File](#setting-up-the-configuration-file)
+   - [Running the Simulation - Command Line Interface (CLI)](#running-the-simulation---command-line-interface-cli)
+   - [Running the Simulation - From a Python Script](#running-the-simulation---from-a-python-script)
+   - [Saving and Loading a Simulation](#saving-and-loading-a-simulation)
+   - [Analysis and Results](#analysis-and-results)
+
+## Introduction
+
+Random sequential adsorption (RSA) is a fundamental process in which particles
+are irreversibly, and randomly, deposited onto a substrate. Once particles are
+deposited, they cannot be removed or rearranged. As particles are added, the
+subtrate becomes populated and eventually saturates, reaching a state where no
+more particles can be added due to the constraints of the system.
+
+RSA has been widely used to model various physical, chemical, and biological
+processes, such as the adsorption of molecules on surfaces, the packing of
+colloidal particles, and the formation of thin films. RSA is useful to
+understand some litography techniques where the deposition process follows a
+random sequential adsorption mechanism.
+
+### Model Description
+
+<img
+    src="../images/model_2d_rsa_nn_exclusion.png"
+    alt="2D RSA with Nearest Neighbor Exclusion"
+    width="200"
+/>
+
+See the image to the right.
+
+Consider a two-dimensional discrete substrate of length \(`L`\) and
+width \(`W`\) where particles can adsorb, but cannot desorb or move once they
+are adsorbed. The lattice can be finite or infinite towards either dimensions,
+i.e., in the case of an infinite lattice, it is modeled as a lattice with
+periodic boundary conditions, `x = x + L` and `y = y + W`, where `x` and `y` are
+the positions of the sites along the length and width on the lattice, and `L`
+and `W` are the length and width of the lattice, that are also the
+periods of the lattice along the corresponding dimensions.
+
+Each site can have one of two states: occupied or empty, and each site can only
+be occupied by one particle. In this model, single particles are deposited onto
+the lattice at a constant rate `k`, provided that the adsorption site has not
+occupied neighboring sites (top, bottom, left, and right sites). Since the rate
+is constant, `k` can be set to 1 without loss of generality. For a particle to
+be adsorbed, not only must the adsorption site be empty, but the neighboring
+site must also be empty; in the case of non-periodic lattices, the end sites
+have an advantage since the neighboring sites outside of the lattice count as
+empty sites. If the deposition attempt is successful, the site becomes occupied
+and no more particles can be adsorbed on the site. If the site or any of the
+neighboring sites where the particle is trying to adsorb are already occupied,
+the deposition attempt fails and the system remains unchanged.
+
+The different quantities to be tracked are defined as follows:
+
+- `L`: Length of the lattice.
+
+- `W`: Width of the lattice.
+
+- `t`: The physical time of the system, that is proportional to the number of
+  of deposition attempts. The proportionality constant is the inverse of the
+  total number of site of the lattice over the total rate of the system,
+  `1/(kLW)`; since the deposition rate is set to 1, `k = 1`, it can be simplied
+  to `1/(LW)`. Thus, the elapsed time can be calculated as `t = Na/(LW)`, where
+  `Na` is the number of deposition attempts.
+
+- `C(t)`: The coverage of the lattice at time `t`, defined as the fraction of
+  occupied sites on the lattice. It is calculated as `C(t) = N(t)/(LW)`, that is
+  the fraction of occupied sites, where `N(t)` is the number of occupied sites
+  at time `t`.
+
+A single simulation is not enough to determine the behavior of the system,
+since the process is stochastic and there might be multiple outcomes for the
+same initial conditions, and number of deposition attempts. Therefore, it is
+necessary to perform multiple simulations and average the different ensembles to
+obtain a more accurate representation of the system's behavior.
+
+### Simulation Algorithm - Pseudocode
+
+The following pseudocode outlines the algorithm for simulating the 2D RSA of
+particles with nearest neighbor exclusion. Additional actions like saving the
+state of the system, or data processing are not included in the pseudocode, but
+they are implemented in the program:
+
+1. Define a lattice of length `L` and width `W`, initialized with all sites
+   empty.
+1. Setup the variables:
+   - The variables where to save the results of `C(t)`.
+   - Define a variable where to track the accumulated statistics of the
+     different repetitions of the simulation, call it `stats`, that must contain
+     the variables to save the accumulated results of `C(t)`.
+   - A variable that defines the number of repetitions of the simulation, call
+     it `nsims`.
+   - A variable that defines the number of deposition attempts, call it
+     `nattempts`.
+1. For each simulation from `1` to `nsims`:
+   1. Empty the lattice and reset the time `t` to `0`.
+   1. Empty the statistics variables `C(t)`.
+   1. For each deposition attempt from `1` to `nattempts`:
+      1. Increase the number of deposition attempts `Na` by 1, `Na = Na + 1`.
+      1. Randomly select a site `i` on the lattice, i.e., a site from `0` to
+        `LW - 1`; because the array indexing starts at `0`.
+      1. Calculate the coordinates of the selected site `i` on the lattice, that
+         is, `site_column = i % W` and `site_row = i // W`.
+      1. Attempt to deposit a particle on the selected site of coordinates
+         `(site_row, site_column)`. In the case of a periodic lattice, along the
+         given dimension, the neighboring sites of `I - 1` are `I - 2` and `0`.
+         Where `I` can be either `L` or `W`, depending on the dimension.
+      1. Increase the time `t` by 1, since integer numbers are more accurate to
+         track than floating point numbers, and the time can be calculated as
+         `t = Na/(LW)`.
+      1. Record the values of `C(t)` at the current time `t`.
+      1. If the maximum number of deposition attempts is reached, exit the loop;
+         otherwise, continue to the next deposition attempt.
+   1. Update the `stats` by accumulating the values of `C(t)` at the given
+      times.
+   1. Increment the number of simulations performed.
+   1. If the maximum number of simulations has been exceeded, exit the loop;
+1. Process the accumulated statistics in `stats` to obtain the average values of
+   `C(t)` at the different times.
+1. Save the results to a file or display them as needed.
+1. Finish the program successfully.
+
+If at any point the simulation crashes, or an error occurs, the program will be
+left to fail, and the error message will be printed to the console. Details on
+how to run the program, and how to save and load simulations are provided in the
+next section.
+
+### Results Processing
+
+#### Accumulating the Statistics
+
+For consistency, the lattice must be at least 4 sites long, along each
+dimension, since there might be redundancy when calculating the different
+quantities being tracked.
+
+The process for gathering the statistics works the same for any of the
+quantities being tracked, that is, the coverage and/or the number of attempts.
+For simplicity, the process is described for the quantity `C(t)`.
+
+For the `n`th repetition, where `1 <= n <= nsims`, of the simulation, define a
+variable `Cn`
+```text
+Cn = [[0, 0], [1, 0], [2, 0], ...,[Na, 0]]
+```
+and `Cn(t) = [t, Cn(t)]`, where `0 <= t <= Na`, and `Na` is the total number of
+deposition attempts. _After_ an attempt `i` (`0 <= i <= Na`) is made, count
+the number of occupied sites `Nn(i)` on the lattice, and register the value
+at the location `Cn(i) = [i, Nn(i)]`. Repeat this process for each deposition
+attempt. When the number of deposition attempts `Na` is reached the variable
+`Cn` will contain the values of `Cn(t)` at the different times:
+```text
+Cn = [[0, Nn(0)], [1, Nn(1)], [2, Nn(2)], ...,[Na, Nn(Na)]]
+```
+that is:
+```text
+Ci(t) = [time_i * Length, number of occupied sites at time_i]
+```
+Accumulate the values of `Cn(t)` in the variable `stats.C` such that:
+```text
+stats.C = [
+    [0, 0],
+    [1, N1[1] + N2[1] + ... + Nnsims[1]],
+    [2, N1[2] + N2[2] + ... + Nnsims[2]],
+    ...,
+    [Na, N1[Na] + N2[Na] + ... + Nnsims[Na]]
+]
+```
+that is:
+```text
+stats.C(i) = [time_i * Length, sum(1, NSims, Ni(Na))]
+```
+Thus, to convert the number of attempts to time, the first element of each pair
+in `stats.C` is multiplied by `1/L`, where `L` is the length of the lattice.
+To get the average coverage at time `t`, the second element of each pair in
+`stats.C` is divided by the number of simulations, `nsims` multiplied by the
+length of the lattice, `L`. This will turn the total coverage into the average
+fractional coverage.
+```text
+stats.c(i) = [stats.C(i)[0]/L, stats.C(i)[1]/(nsims * L)]
+```
+Such that:
+```text
+stats.c = [
+    [0, 0],
+    [time_1, average coverage fraction at time_1],
+    [time_2, average coverage fraction at time_2],
+    ...,
+    [time_Na, average coverage fraction at time_Na]
+]
+```
+The same reasoning can be applied to the other quantities being tracked, i.e.,
+`S(t)`, `D(t)`, and `T(t)`, to obtain the average values of those quantities at
+the different times.
+
+The advantage of this method of accumulating the statistics as integer numbers
+is that the numbers are always exact, until the final step of calculating the
+average values, since the integer numbers are not subject to rounding errors,
+as opposed to floating point numbers.
+
+## Program Implementation
+
+### Setting Up the Configuration File
+
+Before running the simulation, it is necessary to set up the configuration file
+that contains the different options for the simulation:
+```json
+{
+    "history": {
+        "file": "simulation.sim",
+        "frequency": 0
+    },
+    "history_lattice": {
+        "file": "lattice.txt",
+        "frequency": 0
+    },
+    "output": {
+        "file": "output.txt",
+        "working": ""
+    },
+    "simulation": {
+        "attempts": 100,
+        "dimensions": {
+            "length": 30,
+            "width": 30
+        },
+        "periodic": {
+            "length": false,
+            "width": false
+        },
+        "repetitions": 10,
+        "seed": -1
+    }
+}
+```
+The description of the different options is:
+
+- `history`: Contains the options related to periodically saving the state
+    of the simulation, in the case the simulation is interrupted, for whatever
+    reason, and needs to be resumed later.
+    - `file`: The name of the file where to save the state of the
+        simulation. This must be the name of the file, without the path, since
+        the file will be saved in the working directory defined in the
+        `output` section.
+    - `frequency`: The frequency, in terms of the number of deposition
+        attempts, at which to save the state of the simulation. If the value
+        is `0`, the state of the simulation will not be saved. If the
+        frequency is equal to the number of deposition attempts, the state of
+        the simulation will be saved at the end of each simulation repetition.
+
+- `history_lattice`: Contains the options related to periodically saving the
+    state of the lattice, in the case that instanteous snapshots of the
+    lattice are needed for visualization or analysis purposes.
+    - `file`: The name of the file where to save the state of the
+        lattice. This must be the name of the file, without the path, since
+        the file will be saved in the working directory defined in the
+        `output` section.
+    - `frequency`: The frequency, in terms of the number of deposition
+        attempts, at which to save the state of the lattice. If the value
+        is `0`, the state of the lattice will not be saved. If the
+        frequency is equal to the number of deposition attempts, the state of
+        the lattice will be saved at the end of each lattice repetition.
+
+- `output`: Contains the options related to saving the results of the
+    simulation.
+    - `file`: The name of the file where to save the final results of the
+        simulation. This must be the name of the file, without the path, since
+        the file will be saved in the working directory defined in the
+        `output` section.
+    - `working`: The path of the working directory where to save the results
+        of the simulation. If the value is an empty string, the results will
+        be saved in the current directory. For this to be properly set, the
+        path to the directory **MUST** exist.
+- `simulation`: Contains the options related to the simulation itself.
+    - `attempts`: The number of deposition attempts to perform in each
+        simulation repetition.
+    - `dimensions`: The dimensions of the lattice, that is, the length and width
+      of the lattice.
+      - `length`: The length of the lattice.
+      - `width`: The width of the lattice.
+    - `periodic`: The periodicity of the lattice along each dimension.
+      - `length`: A boolean value that indicates whether the lattice is
+        periodic along the length. True, if the lattice is periodic; False,
+        otherwise.
+      - `width`: A boolean value that indicates whether the lattice is
+        periodic along the width. True, if the lattice is periodic; False,
+        otherwise.
+    - `repetitions`: The number of repetitions to perform for the
+        simulation.
+    - `seed`: The seed to use for the random number generator. If the value
+        is `-1`, the seed will be set to the current system time, that is,
+        the seed will be different for each simulation run.
+
+The quantity types in the configuration file must match those in the default
+configuration file, otherwise, the program will fail; however, the program will
+check  these types when loading the configuration file.
+
+### Running the Simulation - Command Line Interface (CLI)
+
+With the configuration file set up, the simulation can be run from the command
+line interface (CLI) as follows:
+
+1. Open a terminal window.
+
+1. If the virtual environment where the `stochastic` package is installed is not
+   activated, activate it. Otherwise, make sure that the `stochastic` package is
+   installed in the current Python environment.
+
+1. From the terminal type the command:
+   ```bash
+   stochastic-2d-rsa-nn-exclusion -c path/to/configuration_file.json
+   ```
+   where `path/to/configuration_file.json` is the path to the configuration
+   file set up in the previous section.
+
+1. Wait for the simulation to finish. The results will be saved in the working
+   directory defined in the configuration file, with the name defined in the
+   `output` section of the configuration file.
+
+### Running the Simulation - From a Python Script
+
+The proper way to run a "2D Random Sequential Adsorption of Particles with
+Nearest Neighbor Exclusion" simulation from a Python script is to install the
+`stochastic` package in the current Python environment, and then import the
+`Simulation` class from the `stochastic.programs.rsa_2d_nn_exclusion.simulation`
+module:
+```python
+# Import the Simulation class.
+from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
+```
+After importing the `Simulation` class, a dictionary with the configuration
+options must be defined. It can be the whole configuration or a subset of the
+configuration:
+```python
+# Import the Simulation class.
+from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
+
+# Set up the configuration for the simulation.
+config: dict = {
+    "history": {
+        "file": "simulation.sim",
+        "frequency": 0
+    },
+    "history_lattice": {
+        "file": "lattice.txt",
+        "frequency": 0
+    },
+    "output": {
+        "file": "output.txt",
+        "working": ""
+    },
+    "simulation": {
+        "attempts": 100,
+        "dimensions": {
+            "length": 30,
+            "width": 30
+        },
+        "periodic": {
+            "length": False,
+            "width": False
+        },
+        "repetitions": 10,
+        "seed": -1
+    }
+}
+
+# Create the Simulation object with the configuration.
+simulation: Simulation = Simulation(config)
+```
+This will validate the configuration and set up the simulation. It is strongly
+recommended to **NOT** modify the `Simulation` object directly, since the
+configuration is validated when creating the `Simulation` object, and modifying
+the `Simulation` object directly might lead to an invalid configuration.
+
+To run the simulation, call the `run_simulations` method of the `Simulation`
+object:
+
+```python
+# Import the Simulation class.
+from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
+
+# Set up the configuration for the simulation.
+config: dict = {
+    "history": {
+        "file": "simulation.sim",
+        "frequency": 0
+    },
+    "history_lattice": {
+        "file": "lattice.txt",
+        "frequency": 0
+    },
+    "output": {
+        "file": "output.txt",
+        "working": ""
+    },
+    "simulation": {
+        "attempts": 100,
+        "dimensions": {
+            "length": 30,
+            "width": 30
+        },
+        "periodic": {
+            "length": False,
+            "width": False
+        },
+        "repetitions": 10,
+        "seed": -1
+    }
+}
+
+# Create the Simulation object with the configuration.
+simulation: Simulation = Simulation(config)
+
+# Run the simulation.
+simulation.run_simulations()
+```
+This will run the simulation with the given configuration and save the results
+in the working directory defined in the configuration file.
+
+When the simulation is done, a message will be printed to the console indicating
+that the simulation has finished successfully, along with the path to the
+directory where the results have been saved.
+
+### Saving and Loading a Simulation
+
+The simulation can be periodically saved during the simulation run. To enable
+this feature, set the `history.frequency` option in the configuration file to
+a positive integer value, that must range from `1` to the total number of
+deposition attempts (`simulation.attempts`). This will save the state of the
+simulation every such number of deposition attempts:
+
+```python
+# Import the Simulation class.
+from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
+
+# Set up the configuration for the simulation.
+config: dict = {
+    "history": {
+        "file": "history.sim",
+        "frequency": 7
+    }
+}
+
+# Create the Simulation object with the configuration.
+simulation: Simulation = Simulation(config)
+
+# Run the simulation.
+simulation.run_simulations()
+```
+In this example, the state of the simulation will be saved **after** every 7
+deposition attempts have been made, in the file `history.sim` in the working
+directory defined in the configuration file, in the `pickle` format.
+
+At one point, the simulation might be interrupted, for whatever reason, and it
+might be necessary to resume the simulation later. To do this, import the
+`load_simulation` function from the
+`stochastic.programs.rsa_2d_nn_exclusion.utils.load` module and call it with the path
+to the file where the state of the simulation was saved:
+```python
+# Import the load_simulation function.
+from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
+from stochastic.programs.rsa_2d_nn_exclusion.utils.load import load_simulation
+
+# Load the simulation.
+simulation: Simulation = load_simulation("path/to/history.sim")
+
+# UPDATE THE WORKING DIRECTORY SO THAT IT CAN SAVE THE RESULTS.
+simulation.parameters.output["working"] = "path/to/working/directory"
+
+# Start the simulation from the loaded state.
+simulation.run_simulations()
+```
+Always remember to update the working directory so that the results of the
+simulation can be saved in the correct location.
+
+It is worth noting that there is a validation process when loading the
+simulation, such that if the file does not correspond to a valid
+"2D Random Sequential Adsorption of Particles with Nearest Neighbor Exclusion"
+simulation, or if the file is corrupted, the loading process will fail.
+
+### Analysis and Results
+
+When a complete simulation is run, the results are saved in the working
+directory defined in the configuration file. A typical output file will look
+similar to this:
+```text
+# ------------------------------------------------------------------------------
+# Parameters
+# ------------------------------------------------------------------------------
+
+Date (YYYY-MM-DD hh:mm:ss): 2026-02-10 21:57:56
+Attempts: 4
+Dimensions:
+    Length: 20
+    Width: 20
+Periodic:
+    Length: False
+    Width: False
+Repetitions: 10
+Seed: 1770782276
+
+# ------------------------------------------------------------------------------
+# Attempts
+# ------------------------------------------------------------------------------
+
+         Time Elapsed | 0.0 | 0.05 | 0.1 | 0.15 |  0.2
+Successful / Attempts | 0.0 |  0.9 | 0.9 |  0.8 | 0.75
+
+# ------------------------------------------------------------------------------
+# Coverage
+# ------------------------------------------------------------------------------
+
+     Time Elapsed | 0.0 | 0.05 |  0.1 | 0.15 | 0.2
+Occupied / Length | 0.0 | 0.09 | 0.18 | 0.24 | 0.3
+```
+The values here are just an example, and they do not correspond to a thorough
+simulation, however, they show the format of the output file.
+
+This file is readable by any standard text editor, and it can be processed by
+any programming language, along with plotting software, to visualize the results
+of the simulation.
