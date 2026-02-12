@@ -107,7 +107,9 @@ class Simulation:
         attempts: int = self.parameters.simulation["attempts"]
         length: int = self.parameters.simulation["dimensions"]["length"]
         width: int = self.parameters.simulation["dimensions"]["width"]
+
         total_sites: int = length * width
+        total_sites -= 1
 
         # Start the simulation.
         for attempt in range(self.parameters.current_attempts, attempts):
