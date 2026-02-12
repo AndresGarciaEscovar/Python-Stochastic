@@ -170,14 +170,6 @@ class Results:
         - self.coverage: The array with the total number of particles and the
           inverse elapsed time, i.e., the number of attempts.
 
-        - self.empty_double: The number of sites that have an empty neighbor
-          to the left.
-
-        - self.empty_single: The number of sites that are empty.
-
-        - self.empty_triple: The number of sites that have two empty neighbors
-          to the left.
-
         - self.length: The length of the 1D lattice, a number  greater than
           zero.
 
@@ -199,9 +191,6 @@ class Results:
             "simulations": self.simulations,
             "attempts": self.attempts,
             "coverage": self.coverage,
-            "empty_single": self.empty_single,
-            "empty_double": self.empty_double,
-            "empty_triple": self.empty_triple,
         }
 
     def statistics_add(self, statistics: Statistics) -> None:
@@ -219,18 +208,10 @@ class Results:
             self.attempts = [list(x) for x in statistics.attempts]
             self.coverage = [list(x) for x in statistics.coverage]
 
-            self.empty_single = [list(x) for x in statistics.empty_single]
-            self.empty_double = [list(x) for x in statistics.empty_double]
-            self.empty_triple = [list(x) for x in statistics.empty_triple]
-
         else:
             # Update the statistics.
             _update_results(self.attempts, statistics.attempts)
             _update_results(self.coverage, statistics.coverage)
-
-            _update_results(self.empty_single, statistics.empty_single)
-            _update_results(self.empty_double, statistics.empty_double)
-            _update_results(self.empty_triple, statistics.empty_triple)
 
         # Upgrade the number of simulation.
         self.simulations += 1
@@ -241,9 +222,12 @@ class Results:
         """
         # Auxiliary variables.
         header_0: str = "Time Elapsed"
-        length_pore: int = self.parameters["length"]
+        pore_length: int = self.parameters["dimensions"]["length"]
+        pore_width: int = self.parameters["dimensions"]["width"]
+
         length_stat: int = len(self.attempts)
-        denominator: int = self.simulations * length_pore
+        total_sites: int = pore_length * pore_width
+        denominator: int = self.simulations * total_sites
 
         # For each quantity.
         for i in range(length_stat):
@@ -252,16 +236,8 @@ class Results:
                 self.attempts[i][0] = header_0
                 self.coverage[i][0] = header_0
 
-                self.empty_single[i][0] = header_0
-                self.empty_double[i][0] = header_0
-                self.empty_triple[i][0] = header_0
-
                 self.attempts[i][1] += " / Attempts"
-                self.coverage[i][1] += " / Length"
-
-                self.empty_single[i][1] += " / Length"
-                self.empty_double[i][1] += " / Length"
-                self.empty_triple[i][1] += " / Length"
+                self.coverage[i][1] += " / (Length * Width)"
 
                 continue
 
@@ -271,17 +247,9 @@ class Results:
             self.attempts[i][1] /= number if number != 0 else 1
             self.coverage[i][1] /= denominator
 
-            self.empty_single[i][1] /= denominator
-            self.empty_double[i][1] /= denominator
-            self.empty_triple[i][1] /= denominator
-
             # Turn attempts into elapsed time.
-            self.attempts[i][0] /= length_pore
-            self.coverage[i][0] /= length_pore
-
-            self.empty_single[i][0] /= length_pore
-            self.empty_double[i][0] /= length_pore
-            self.empty_triple[i][0] /= length_pore
+            self.attempts[i][0] /= total_sites
+            self.coverage[i][0] /= total_sites
 
     # /////////////////////////////////////////////////////////////////////////
     # Methods - Dunder
@@ -303,15 +271,6 @@ class Results:
         string += f"{_get_header('Coverage')}\n"
         string += _get_string_table(self.coverage)
 
-        string += f"{_get_header('Empties - Single')}\n"
-        string += _get_string_table(self.empty_single)
-
-        string += f"{_get_header('Empties - Double')}\n"
-        string += _get_string_table(self.empty_double)
-
-        string += f"{_get_header('Empties - Triple')}\n"
-        string += _get_string_table(self.empty_triple)
-
         return f"{string.strip()}\n"
 
     # /////////////////////////////////////////////////////////////////////////
@@ -332,7 +291,3 @@ class Results:
         self.simulations: int = 0
         self.attempts: list = []
         self.coverage: list = []
-
-        self.empty_single: list = []
-        self.empty_double: list = []
-        self.empty_triple: list = []
