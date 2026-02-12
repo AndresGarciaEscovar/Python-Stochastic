@@ -88,9 +88,9 @@ obtain a more accurate representation of the system's behavior.
 ### Simulation Algorithm - Pseudocode
 
 The following pseudocode outlines the algorithm for simulating the 2D RSA of
-dimers. Additional actions like saving the
-state of the system, or data processing are not included in the pseudocode, but
-they are implemented in the program:
+dimers. Additional actions like saving the state of the system, or data
+processing are not included in the pseudocode, but they are implemented in the
+program:
 
 1. Define a lattice of length `L` and width `W`, initialized with all sites
    empty.
@@ -113,9 +113,19 @@ they are implemented in the program:
       1. Calculate the coordinates of the selected site `i` on the lattice, that
          is, `site_column = i % W` and `site_row = i // W`.
       1. Attempt to deposit a particle on the selected site of coordinates
-         `(site_row, site_column)`. In the case of a periodic lattice, along the
-         given dimension, the neighboring sites of `I - 1` are `I - 2` and `0`.
-         Where `I` can be either `L` or `W`, depending on the dimension.
+         `(site_row, site_column)`, along with the orientation of the second
+         particle of the dimer, i.e., `up`, `down`, `left`, `right`. In the case
+         of a periodic lattice, along the given dimension, the neighboring sites
+         of `I - 1` are `I - 2` and `0`. Where `I` can be either `L` or `W`,
+         depending on the dimension. If the deposition attempt is successful,
+         both sites become occupied, and the system is updated; otherwise, the
+         system remains unchanged.
+
+         The reason to choose the orientation is for fairness, since when the
+         lattice is not periodic, the sites at the edges of the lattice have
+         fewer chances to be selected for a deposition, and thus, they have
+         fewer chances for a successful deposition if only two orientations are
+         allowed, instead of four.
       1. Increase the time `t` by 1, since integer numbers are more accurate to
          track than floating point numbers, and the time can be calculated as
          `t = Na/(LW)`.
