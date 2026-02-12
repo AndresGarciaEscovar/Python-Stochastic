@@ -105,7 +105,9 @@ class Simulation:
         """
         # Auxiliary variables.
         attempts: int = self.parameters.simulation["attempts"]
-        length: int = self.parameters.simulation["length"] - 1
+        length: int = self.parameters.simulation["dimensions"]["length"]
+        width: int = self.parameters.simulation["dimensions"]["width"]
+        total_sites: int = length * width
 
         # Start the simulation.
         for attempt in range(self.parameters.current_attempts, attempts):
@@ -114,8 +116,11 @@ class Simulation:
             self._save_lattice(False, attempt)
 
             # Make the move.
-            site: int = self.generator.randint(0, length)
-            successful: bool = self.lattice.particle_adsorb(site)
+            site: int = self.generator.randint(0, total_sites)
+            site_x: int = site // width
+            site_y: int = site % width
+
+            successful: bool = self.lattice.particle_adsorb(site_x, site_y)
 
             # Take the statistics and update the counter.
             self.statistics.update_statistics(self.lattice.lattice, successful)
@@ -150,7 +155,7 @@ class Simulation:
             with open(file_text, encoding="utf-8", mode="a") as stream:
                 attempts: int = self.parameters.current_attempts
                 stream.write(f"Current attempts: {attempts}\n")
-                stream.write(f"{self.lattice.get_lattice_string()}\n\n")
+                stream.write(f"{self.lattice.get_lattice_string(True)}\n\n")
 
     def _save_simulation(self, end: bool, attempts: int = 0) -> None:
         """
@@ -374,10 +379,8 @@ class Simulation:
 
         # Other parameters.
         self.lattice: Lattice = Lattice(self.parameters.simulation)
-        # self.results: Results = Results(self.parameters.simulation)
+        self.results: Results = Results(self.parameters.simulation)
         self.statistics: Statistics = Statistics(self.parameters.simulation)
 
         # Finish setting other quantities.
-        # self._set_working_directory()
-
-        print(self.parameters)
+        self._set_working_directory()
