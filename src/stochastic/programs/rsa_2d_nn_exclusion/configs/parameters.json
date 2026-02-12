@@ -22,7 +22,6 @@
             "width": false
         },
         "repetitions": 10,
-        "seed": -1,
-        "width": 100
+        "seed": -1
     }
 }

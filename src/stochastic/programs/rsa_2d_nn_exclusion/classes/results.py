@@ -54,17 +54,25 @@ def _get_string_dictionary(parameters: dict) -> str:
 
         :return: A string with the simulation parameters.
     """
-    # Auxiliary variables.
+    # Auxiliary variables .
     date: str = f"{datetime.now().strftime(DFORMAT)}"
     string: str = f"{_get_header('Parameters')}\n"
 
     # Extract the key and variables.
-    string += f"Date (YYYY-MM-DD hh:mm:ss): {date}\n"
+    string += "\n".join((
+        f"Date (YYYY-MM-DD hh:mm:ss): {date}",
+        f"Attempts: {parameters['attempts']}",
+        "Dimensions:",
+        f"    Length: {parameters['dimensions']['length']}",
+        f"    Width: {parameters['dimensions']['width']}",
+        "Periodic:",
+        f"    Length: {parameters['periodic']['length']}",
+        f"    Width: {parameters['periodic']['width']}",
+        f"Repetitions: {parameters['repetitions']}",
+        f"Seed: {parameters['seed']}",
+    ))
 
-    for key, value in parameters.items():
-        string += f"{key.title()}: {value}\n"
-
-    return f"{string}\n"
+    return f"{string}\n\n"
 
 
 def _get_string_table(table: list) -> str:
