@@ -13,8 +13,8 @@
 from importlib.resources import files as ifiles
 
 # User.
-from stochastic.programs.rsa_2d_nn_exclusion import configs
-from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
+from stochastic.programs.rsa_2d_dimers import configs
+from stochastic.programs.rsa_2d_dimers.simulation import Simulation
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

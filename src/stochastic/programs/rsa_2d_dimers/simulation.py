@@ -16,16 +16,16 @@ from datetime import datetime
 from pathlib import Path
 
 # User.
-from stochastic.programs.rsa_2d_nn_exclusion.classes.lattice import (
+from stochastic.programs.rsa_2d_dimers.classes.lattice import (
     Lattice
 )
-from stochastic.programs.rsa_2d_nn_exclusion.classes.parameters import (
+from stochastic.programs.rsa_2d_dimers.classes.parameters import (
     Parameters
 )
-from stochastic.programs.rsa_2d_nn_exclusion.classes.results import (
+from stochastic.programs.rsa_2d_dimers.classes.results import (
     Results
 )
-from stochastic.programs.rsa_2d_nn_exclusion.classes.statistics import (
+from stochastic.programs.rsa_2d_dimers.classes.statistics import (
     Statistics
 )
 
@@ -36,7 +36,7 @@ from stochastic.programs.rsa_2d_nn_exclusion.classes.statistics import (
 
 
 # Name of the program.
-PROGRAM: str = "RSA 2D Nearest Neighbor Exclusion"
+PROGRAM: str = "RSA 2D Dimers"
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
