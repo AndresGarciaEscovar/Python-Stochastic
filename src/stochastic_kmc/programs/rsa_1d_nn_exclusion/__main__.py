@@ -15,8 +15,8 @@ from argparse import ArgumentParser, Namespace
 from importlib.resources import files as ifiles
 
 # User.
-from stochastic_kmc.programs.rsa_1d_dimers import configs
-from stochastic_kmc.programs.rsa_1d_dimers.simulation import (
+from stochastic_kmc.programs.rsa_1d_nn_exclusion import configs
+from stochastic_kmc.programs.rsa_1d_nn_exclusion.simulation import (
     PROGRAM, Simulation
 )
 
