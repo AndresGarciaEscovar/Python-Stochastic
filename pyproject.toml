@@ -43,9 +43,9 @@ linting = [
 
 [project.scripts]
 stochastic-kmc-1d-rsa-dimers = "stochastic_kmc.programs.rsa_1d_dimers.__main__:main"
-stochastic-kmc-1d-rsa-nn-exclusion = "stochastic_kmc.__main__:main"
-stochastic-kmc-2d-rsa-dimers = "stochastic_kmc.__main__:main"
-stochastic-kmc-2d-rsa-nn-exclusion = "stochastic_kmc.__main__:main"
+stochastic-kmc-1d-rsa-nn-exclusion = "stochastic_kmc.programs.rsa_1d_nn_exclusion.__main__:main"
+stochastic-kmc-2d-rsa-dimers = "stochastic_kmc.programs.rsa_2d_dimers.__main__:main"
+stochastic-kmc-2d-rsa-nn-exclusion = "stochastic_kmc.programs.rsa_2d_nn_exclusion.__main__:main"
 
 
 # ------------------------------- Package URLS ------------------------------- #
