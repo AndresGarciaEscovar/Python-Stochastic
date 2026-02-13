@@ -24,19 +24,9 @@ implementations for particular models. The suite includes implementations for:
   randomly, without overlapping. The algorithm is implemented in 1 and 2
   dimensions, and can be used to study the kinetics of adsorption processes.
 
-- **Glauber Spin Dynamics**: A model for simulating the dynamics of spin systems
-  in 1 and 2 dimensions, using the Glauber model, where spins can flip according
-  to a probabilistic rule based on the local energy of the system.
-
-- **Simple Diffusion-Reaction**: A model for simulating the diffusion and
-  reaction of particles in a lattice, where particles can move and react with
-  each other according to specified rules.
-
 ## Requirements
 
 - Python 3.11.14 or higher (mandatory)
-- NumPy 2.4.1 or higher (optional, but recommended for performance)
-- Matplotlib 3.10.8 or higher (optional, for visualization)
 
 ## Installation
 

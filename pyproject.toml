@@ -15,7 +15,7 @@ build-backend = "setuptools.build_meta"
 
 
 [project]
-name = "stochastic"
+name = "stochastic-kmc"
 authors = [
     {name = "Andres Garcia Escovar", email = "andrumen1@yahoo.com"},
 ]
