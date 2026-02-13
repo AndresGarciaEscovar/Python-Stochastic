@@ -96,7 +96,7 @@ class Lattice:
             raise ValueError(
                 f"The adsorption site for a particle to adsorb is not in the "
                 f"proper range; the site must be inside the lattice "
-                f"(0 <= site < {self.length}); {site = }."
+                f"(0 <= site < {self.length}); site = {site}."
             )
 
         # Auxliary variables.
