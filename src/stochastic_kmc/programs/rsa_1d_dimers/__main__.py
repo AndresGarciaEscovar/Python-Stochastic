@@ -16,7 +16,9 @@ from importlib.resources import files as ifiles
 
 # User.
 from stochastic_kmc.programs.rsa_1d_dimers import configs
-from stochastic_kmc.programs.rsa_1d_dimers.simulation import Simulation
+from stochastic_kmc.programs.rsa_1d_dimers.simulation import (
+    PROGRAM, Simulation
+)
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -33,8 +35,8 @@ def _get_arguments() -> dict:
     """
     # Auxiliary variables.
     parser: ArgumentParser = ArgumentParser(
-        prog=Simulation.PROGRAM,
-        description=f"Runs a simulation for the {Simulation.PROGRAM}",
+        prog=PROGRAM,
+        description=f"Runs a simulation for the {PROGRAM}",
     )
 
     # Arguments: Positional.
@@ -42,7 +44,6 @@ def _get_arguments() -> dict:
         "file",
         default="",
         nargs="?",
-        type="str",
         help="The name of the file where the configuration options are stored."
     )
 
@@ -60,7 +61,7 @@ def _get_arguments() -> dict:
     # Get the arguments and validate them.
     arguments: Namespace = parser.parse_args()
 
-    if arguments.file is not None and arguments.print:
+    if arguments.file.strip() != "" and arguments.print:
         raise ValueError(
             "Two arguments are being simultaneosly used, use one at a time."
         )
