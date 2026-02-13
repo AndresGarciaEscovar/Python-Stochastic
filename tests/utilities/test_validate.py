@@ -13,7 +13,7 @@ import copy as cp
 import unittest
 
 # User.
-from stochastic.utilities.validate import (
+from stochastic_kmc.utilities.validate import (
     validate_dictionary,
     validate_dictionary_sub
 )

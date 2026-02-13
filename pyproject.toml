@@ -15,7 +15,7 @@ build-backend = "setuptools.build_meta"
 
 
 [project]
-name = "stochastic"
+name = "stochastic_kmc"
 authors = [
     {name = "Andres Garcia Escovar", email = "andrumen1@yahoo.com"},
 ]
@@ -42,7 +42,10 @@ linting = [
 
 
 [project.scripts]
-ccheckers = "ccheckers.__main__:main"
+stochastic-kmc-1d-rsa-dimers = "stochastic_kmc.programs.rsa_1d_dimers.__main__:main"
+stochastic-kmc-1d-rsa-nn-exclusion = "stochastic_kmc.programs.rsa_1d_nn_exclusion.__main__:main"
+stochastic-kmc-2d-rsa-dimers = "stochastic_kmc.programs.rsa_2d_dimers.__main__:main"
+stochastic-kmc-2d-rsa-nn-exclusion = "stochastic_kmc.programs.rsa_2d_nn_exclusion.__main__:main"
 
 
 # ------------------------------- Package URLS ------------------------------- #

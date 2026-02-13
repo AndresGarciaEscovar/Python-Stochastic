@@ -160,7 +160,7 @@ variable `Cn`
 ```text
 Cn = [[0, 0], [1, 0], [2, 0], ...,[Na, 0]]
 ```
-and `Cn(t) = [t, Cn(t)]`, where `0 <= t <= Na`, and `Na` is the total number of
+and `Cn(t) = [t, Nn(t)]`, where `0 <= t <= Na`, and `Na` is the total number of
 deposition attempts. _After_ an attempt `i` (`0 <= i <= Na`) is made, count
 the number of occupied sites `Nn(i)` on the lattice, and register the value
 at the location `Cn(i) = [i, Nn(i)]`. Repeat this process for each deposition
@@ -185,7 +185,7 @@ stats.C = [
 ```
 that is:
 ```text
-stats.C(i) = [time_i * Length, sum(1, NSims, Ni(Na))]
+stats.C(i) = [time_i * Length, sum(i = 1, NSims, Ni(Na))]
 ```
 Thus, to convert the number of attempts to time, the first element of each pair
 in `stats.C` is multiplied by `1/L`, where `L` is the length of the lattice.
@@ -311,10 +311,11 @@ line interface (CLI) as follows:
 
 1. From the terminal type the command:
    ```bash
-   stochastic-1d-rsa-nn-exclusion -c path/to/configuration_file.json
+   stochastic-kmc-1d-rsa-nn-exclusion path/to/configuration_file.json
    ```
    where `path/to/configuration_file.json` is the path to the configuration
-   file set up in the previous section.
+   file set up in the previous section. If no path is provided, the program will
+   use the default configuration.
 
 1. Wait for the simulation to finish. The results will be saved in the working
    directory defined in the configuration file, with the name defined in the
@@ -329,14 +330,14 @@ Nearest Neighbor Exclusion" simulation from a Python script is to install the
 module:
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
+from stochastic_kmc.programs.rsa_1d_nn_exclusion.simulation import Simulation
 ```
 After importing the `Simulation` class, a dictionary with the configuration
 options must be defined. It can be the whole configuration or a subset of the
 configuration:
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
+from stochastic_kmc.programs.rsa_1d_nn_exclusion.simulation import Simulation
 
 # Set up the configuration for the simulation.
 config: dict = {
@@ -374,7 +375,7 @@ object:
 
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
+from stochastic_kmc.programs.rsa_1d_nn_exclusion.simulation import Simulation
 
 # Set up the configuration for the simulation.
 config: dict = {
@@ -422,7 +423,7 @@ simulation every such number of deposition attempts:
 
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
+from stochastic_kmc.programs.rsa_1d_nn_exclusion.simulation import Simulation
 
 # Set up the configuration for the simulation.
 config: dict = {
@@ -449,8 +450,8 @@ might be necessary to resume the simulation later. To do this, import the
 to the file where the state of the simulation was saved:
 ```python
 # Import the load_simulation function.
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
-from stochastic.programs.rsa_1d_nn_exclusion.utils.load import load_simulation
+from stochastic_kmc.programs.rsa_1d_nn_exclusion.simulation import Simulation
+from stochastic_kmc.programs.rsa_1d_nn_exclusion.utils.load import load_simulation
 
 # Load the simulation.
 simulation: Simulation = load_simulation("path/to/history.sim")
