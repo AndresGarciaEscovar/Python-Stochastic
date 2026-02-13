@@ -157,7 +157,7 @@ variable `Cn`
 ```text
 Cn = [[0, 0], [1, 0], [2, 0], ...,[Na, 0]]
 ```
-and `Cn(t) = [t, Cn(t)]`, where `0 <= t <= Na`, and `Na` is the total number of
+and `Cn(t) = [t, Nn(t)]`, where `0 <= t <= Na`, and `Na` is the total number of
 deposition attempts. _After_ an attempt `i` (`0 <= i <= Na`) is made, count
 the number of occupied sites `Nn(i)` on the lattice, and register the value
 at the location `Cn(i) = [i, Nn(i)]`. Repeat this process for each deposition
@@ -182,7 +182,7 @@ stats.C = [
 ```
 that is:
 ```text
-stats.C(i) = [time_i * Length, sum(1, NSims, Ni(Na))]
+stats.C(i) = [time_i * Length, sum(i = 1, NSims, Ni(Na))]
 ```
 Thus, to convert the number of attempts to time, the first element of each pair
 in `stats.C` is multiplied by `1/L`, where `L` is the length of the lattice.

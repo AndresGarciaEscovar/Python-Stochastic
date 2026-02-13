@@ -40,12 +40,12 @@ random sequential adsorption mechanism.
 />
 
 Consider a two-dimensional discrete substrate of length \(`L`\) and
-width \(`W`\) where particles can adsorb, but cannot desorb or move once they
-are adsorbed. The lattice can be finite or infinite towards either dimensions,
-i.e., in the case of an infinite lattice, it is modeled as a lattice with
-periodic boundary conditions, `x = x + L` and `y = y + W`, where `x` and `y` are
-the positions of the sites along the length and width on the lattice, and `L`
-and `W` are the length and width of the lattice, that are also the
+width \(`W`\) where particles can adsorb, but cannot desorb or move once
+they are adsorbed. The lattice can be finite or infinite towards either
+dimension, i.e., in the case of an infinite lattice, it is modeled as a lattice
+with periodic boundary conditions, `x = x + L` and `y = y + W`, where `x` and
+`y` are the positions of the sites along the length and width on the lattice,
+and `L` and `W` are the length and width of the lattice, that are also the
 periods of the lattice along the corresponding dimensions.
 
 Each site can have one of two states: occupied or empty, and each site can only
@@ -69,7 +69,7 @@ The different quantities to be tracked are defined as follows:
 
 - `t`: The physical time of the system, that is proportional to the number of
   of deposition attempts. The proportionality constant is the inverse of the
-  total number of site of the lattice over the total rate of the system,
+  total number of sites of the lattice over the total rate of the system,
   `1/(kLW)`; since the deposition rate is set to 1, `k = 1`, it can be simplied
   to `1/(LW)`. Thus, the elapsed time can be calculated as `t = Na/(LW)`, where
   `Na` is the number of deposition attempts.
@@ -153,7 +153,7 @@ variable `Cn`
 ```text
 Cn = [[0, 0], [1, 0], [2, 0], ...,[Na, 0]]
 ```
-and `Cn(t) = [t, Cn(t)]`, where `0 <= t <= Na`, and `Na` is the total number of
+and `Cn(t) = [t, Nn(t)]`, where `0 <= t <= Na`, and `Na` is the total number of
 deposition attempts. _After_ an attempt `i` (`0 <= i <= Na`) is made, count
 the number of occupied sites `Nn(i)` on the lattice, and register the value
 at the location `Cn(i) = [i, Nn(i)]`. Repeat this process for each deposition
@@ -178,7 +178,7 @@ stats.C = [
 ```
 that is:
 ```text
-stats.C(i) = [time_i * Length, sum(1, NSims, Ni(Na))]
+stats.C(i) = [time_i * Length, sum(i = 1, NSims, Ni(Na))]
 ```
 Thus, to convert the number of attempts to time, the first element of each pair
 in `stats.C` is multiplied by `1/L`, where `L` is the length of the lattice.
