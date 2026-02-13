@@ -39,8 +39,6 @@ random sequential adsorption mechanism.
     width="200"
 />
 
-See the image to the right.
-
 Consider a two-dimensional discrete substrate of length \(`L`\) and
 width \(`W`\) where particles can adsorb, but cannot desorb or move once they
 are adsorbed. The lattice can be finite or infinite towards either dimensions,
