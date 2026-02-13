@@ -12,8 +12,8 @@
 import pickle
 
 # User.
-from stochastic.programs.rsa_1d_nn_exclusion.simulation import Simulation
-from stochastic.programs.rsa_1d_nn_exclusion.validation.load import (
+from stochastic_kmc.programs.rsa_1d_nn_exclusion.simulation import Simulation
+from stochastic_kmc.programs.rsa_1d_nn_exclusion.validation.load import (
     validate_parameters
 )
 

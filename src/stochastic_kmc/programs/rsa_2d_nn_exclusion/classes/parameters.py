@@ -9,10 +9,10 @@
 
 
 # User.
-from stochastic.programs.rsa_2d_nn_exclusion.validation.parameters import (
+from stochastic_kmc.programs.rsa_2d_nn_exclusion.validation.parameters import (
     validate
 )
-from stochastic.utilities.general import convert_dict_to_str
+from stochastic_kmc.utilities.general import convert_dict_to_str
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

@@ -9,7 +9,7 @@
 
 
 # User.
-from stochastic.programs.rsa_2d_nn_exclusion.classes.lattice import Lattice
+from stochastic_kmc.programs.rsa_2d_nn_exclusion.classes.lattice import Lattice
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

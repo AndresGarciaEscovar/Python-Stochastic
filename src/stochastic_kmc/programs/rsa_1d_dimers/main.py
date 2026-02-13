@@ -12,8 +12,8 @@
 from importlib.resources import files as ifiles
 
 # User.
-from stochastic.programs.rsa_1d_dimers import configs
-from stochastic.programs.rsa_1d_dimers.simulation import Simulation
+from stochastic_kmc.programs.rsa_1d_dimers import configs
+from stochastic_kmc.programs.rsa_1d_dimers.simulation import Simulation
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

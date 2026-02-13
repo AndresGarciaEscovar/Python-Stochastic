@@ -9,7 +9,7 @@
 
 
 # User.
-from stochastic.programs.rsa_1d_dimers.classes.lattice import Lattice
+from stochastic_kmc.programs.rsa_1d_dimers.classes.lattice import Lattice
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

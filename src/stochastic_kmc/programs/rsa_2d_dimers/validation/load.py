@@ -13,7 +13,7 @@ from datetime import datetime
 from typing import Any
 
 # User.
-from stochastic.programs.rsa_2d_dimers.simulation import PROGRAM, Simulation
+from stochastic_kmc.programs.rsa_2d_dimers.simulation import PROGRAM, Simulation
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

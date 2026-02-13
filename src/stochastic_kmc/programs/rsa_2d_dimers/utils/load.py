@@ -12,8 +12,8 @@
 import pickle
 
 # User.
-from stochastic.programs.rsa_2d_dimers.simulation import Simulation
-from stochastic.programs.rsa_2d_dimers.validation.load import (
+from stochastic_kmc.programs.rsa_2d_dimers.simulation import Simulation
+from stochastic_kmc.programs.rsa_2d_dimers.validation.load import (
     validate_parameters
 )
 

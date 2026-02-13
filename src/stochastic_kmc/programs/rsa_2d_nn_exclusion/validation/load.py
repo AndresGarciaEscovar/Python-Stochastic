@@ -13,7 +13,7 @@ from datetime import datetime
 from typing import Any
 
 # User.
-from stochastic.programs.rsa_2d_nn_exclusion.simulation import (
+from stochastic_kmc.programs.rsa_2d_nn_exclusion.simulation import (
     PROGRAM, Simulation
 )
 

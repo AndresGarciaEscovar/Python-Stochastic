@@ -18,9 +18,9 @@ from pathlib import Path
 from typing import Any
 
 # User.
-from stochastic.programs.rsa_2d_dimers import configs
-from stochastic.utilities.general import format_dictionary
-from stochastic.utilities.validate import validate_dictionary_sub
+from stochastic_kmc.programs.rsa_2d_dimers import configs
+from stochastic_kmc.utilities.general import format_dictionary
+from stochastic_kmc.utilities.validate import validate_dictionary_sub
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

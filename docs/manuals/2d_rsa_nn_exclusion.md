@@ -336,14 +336,14 @@ Nearest Neighbor Exclusion" simulation from a Python script is to install the
 module:
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
+from stochastic_kmc.programs.rsa_2d_nn_exclusion.simulation import Simulation
 ```
 After importing the `Simulation` class, a dictionary with the configuration
 options must be defined. It can be the whole configuration or a subset of the
 configuration:
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
+from stochastic_kmc.programs.rsa_2d_nn_exclusion.simulation import Simulation
 
 # Set up the configuration for the simulation.
 config: dict = {
@@ -387,7 +387,7 @@ object:
 
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
+from stochastic_kmc.programs.rsa_2d_nn_exclusion.simulation import Simulation
 
 # Set up the configuration for the simulation.
 config: dict = {
@@ -441,7 +441,7 @@ simulation every such number of deposition attempts:
 
 ```python
 # Import the Simulation class.
-from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
+from stochastic_kmc.programs.rsa_2d_nn_exclusion.simulation import Simulation
 
 # Set up the configuration for the simulation.
 config: dict = {
@@ -468,8 +468,8 @@ might be necessary to resume the simulation later. To do this, import the
 to the file where the state of the simulation was saved:
 ```python
 # Import the load_simulation function.
-from stochastic.programs.rsa_2d_nn_exclusion.simulation import Simulation
-from stochastic.programs.rsa_2d_nn_exclusion.utils.load import load_simulation
+from stochastic_kmc.programs.rsa_2d_nn_exclusion.simulation import Simulation
+from stochastic_kmc.programs.rsa_2d_nn_exclusion.utils.load import load_simulation
 
 # Load the simulation.
 simulation: Simulation = load_simulation("path/to/history.sim")

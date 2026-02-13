@@ -12,7 +12,7 @@
 from datetime import datetime
 
 # User.
-from stochastic.programs.rsa_2d_dimers.classes.statistics import Statistics
+from stochastic_kmc.programs.rsa_2d_dimers.classes.statistics import Statistics
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

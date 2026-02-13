@@ -13,7 +13,7 @@ import copy as cp
 import unittest
 
 # User.
-from stochastic.utilities.general import format_dictionary
+from stochastic_kmc.utilities.general import format_dictionary
 
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
