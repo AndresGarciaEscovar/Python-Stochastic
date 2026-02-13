@@ -1,6 +1,6 @@
 """
     Code to run random sequential adsorption of particles with nearest neighbor
-    exclusion into a 2D lattice.
+    exclusion onto a 2D lattice.
 """
 
 

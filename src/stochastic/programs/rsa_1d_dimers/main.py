@@ -1,5 +1,5 @@
 """
-    Code to run random sequential adsorption of dimers into a 1D lattice.
+    Code to run random sequential adsorption of dimers onto a 1D lattice.
 """
 
 
