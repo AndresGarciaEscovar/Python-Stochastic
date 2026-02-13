@@ -51,14 +51,14 @@ periods of the lattice along the corresponding dimensions.
 Each site can have one of two states: occupied or empty, and each site can only
 be occupied by one particle. In this model, dimer particles are deposited onto
 the lattice at a constant rate `k`, provided that both adsorption sites, that
-must be adjacent to each other (nearest neighbors), are not occupied. Since the
-rate is constant, `k` can be set to 1 without loss of generality. For a particle
-to be adsorbed, both adsorption sites must be empty, they must be next to each
-other, vertically or horizontally, and must be inside the lattice. If the
-deposition attempt is successful, both sites become occupied and no more
-particles can be adsorbed on the sites. If any of the sites sites where the
-dimer particle is trying to adsorb are already occupied, the deposition attempt
-fails and the system remains unchanged.
+must be adjacent to each other (nearest neighbors), in the requested direction,
+are not occupied. Since the rate is constant, `k` can be set to 1 without loss
+of generality. For a particle to be adsorbed, both adsorption sites must be
+empty, they must be next to each other, vertically or horizontally, and must be
+inside the lattice. If the deposition attempt is successful, both sites become
+occupied and no more particles can be adsorbed on the sites. If any of the sites
+where the dimer particle is trying to adsorb are already occupied, the
+deposition attempt fails and the system remains unchanged.
 
 The different quantities to be tracked are defined as follows:
 
@@ -328,10 +328,11 @@ line interface (CLI) as follows:
 
 1. From the terminal type the command:
    ```bash
-   stochastic-2d-rsa-nn-exclusion -c path/to/configuration_file.json
+   stochastic-kmc-2d-rsa-dimers path/to/configuration_file.json
    ```
    where `path/to/configuration_file.json` is the path to the configuration
-   file set up in the previous section.
+   file set up in the previous section. If no path is provided, the program will
+   use the default configuration.
 
 1. Wait for the simulation to finish. The results will be saved in the working
    directory defined in the configuration file, with the name defined in the
