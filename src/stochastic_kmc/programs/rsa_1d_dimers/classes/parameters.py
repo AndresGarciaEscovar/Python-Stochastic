@@ -9,7 +9,9 @@
 
 
 # User.
-from stochastic_kmc.programs.rsa_1d_dimers.validation.parameters import validate
+from stochastic_kmc.programs.rsa_1d_dimers.validation.parameters import (
+    validate
+)
 from stochastic_kmc.utilities.general import convert_dict_to_str
 
 
