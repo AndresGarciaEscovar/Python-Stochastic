@@ -332,7 +332,16 @@ line interface (CLI) as follows:
    ```
    where `path/to/configuration_file.json` is the path to the configuration
    file set up in the previous section. If no path is provided, the program will
-   use the default configuration.
+   use the default configuration.  To view the default configuration, use the
+   `-p` flag:
+   ```bash
+   stochastic-kmc-2d-rsa-dimers -p
+   ```
+   To view the help message with the description of the different options, use
+   the `-h` flag:
+   ```bash
+    stochastic-kmc-2d-rsa-dimers -h
+    ```
 
 1. Wait for the simulation to finish. The results will be saved in the working
    directory defined in the configuration file, with the name defined in the
