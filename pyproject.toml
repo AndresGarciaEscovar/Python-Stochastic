@@ -15,7 +15,7 @@ build-backend = "setuptools.build_meta"
 
 
 [project]
-name = "stochastic-kmc"
+name = "stochastic_kmc"
 authors = [
     {name = "Andres Garcia Escovar", email = "andrumen1@yahoo.com"},
 ]
@@ -42,7 +42,10 @@ linting = [
 
 
 [project.scripts]
-ccheckers = "ccheckers.__main__:main"
+stochastic-kmc--rsa-dimers = "ccheckers.__main__:main"
+stochastic-kmc-2d-rsa-dimers = "ccheckers.__main__:main"
+stochastic-kmc-2d-rsa-dimers = "ccheckers.__main__:main"
+stochastic-kmc-2d-rsa-dimers = "ccheckers.__main__:main"
 
 
 # ------------------------------- Package URLS ------------------------------- #
