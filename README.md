@@ -4,6 +4,9 @@
 
 - [Information](#information)
 - [Overview](#overview)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Manual](#manual)
 
 ## Information
 
@@ -60,7 +63,7 @@ There are two ways to install the Stochastic suite:
 2. **Using pip**: If the package is published on PyPI, you can install it
    directly using pip:
     ```bash
-    pip install stochastic
+    pip install stochastic_kmc
     ```
 While the latter method is more convenient, the manual installation method
 allows you to use the latest version of the code directly from the repository,
