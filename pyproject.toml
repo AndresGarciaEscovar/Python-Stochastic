@@ -1,4 +1,4 @@
-# This is the installation script for the package "stochastic" For more
+# This is the installation script for the package stochastic_kmc For more
 # information on how more parameters can be added, see:
 # https://setuptools.readthedocs.io/en/latest/userguide/declarative_config.html
 
@@ -21,21 +21,11 @@ authors = [
 ]
 description = "A suite where multiple types of stochastic simulations can be performed."
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11.8"
 keywords = ["", "stochastic"]
 license = {text = "MIT"}
 dependencies = []
 version = "0.0.1"
-
-
-# ----------------------------- Package Commands ----------------------------- #
-
-
-[project.optional-dependencies]
-linting = [
-    "flake8",
-    "pylint"
-]
 
 
 # ----------------------------- Package Commands ----------------------------- #
