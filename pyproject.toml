@@ -31,16 +31,6 @@ version = "0.0.1"
 # ----------------------------- Package Commands ----------------------------- #
 
 
-[project.optional-dependencies]
-linting = [
-    "flake8",
-    "pylint"
-]
-
-
-# ----------------------------- Package Commands ----------------------------- #
-
-
 [project.scripts]
 stochastic-kmc-1d-rsa-dimers = "stochastic_kmc.programs.rsa_1d_dimers.__main__:main"
 stochastic-kmc-1d-rsa-nn-exclusion = "stochastic_kmc.programs.rsa_1d_nn_exclusion.__main__:main"
